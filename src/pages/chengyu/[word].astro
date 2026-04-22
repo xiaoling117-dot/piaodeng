@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { CHENGYU_DATA } from '../../data/chengyu.js';
+import { CLASSIC_STORIES } from '../../data/classicStories.js';
 
 export function getStaticPaths() {
   const allWords = CHENGYU_DATA.flatMap(cat =>
@@ -26,6 +27,7 @@ function stripBraces(text) {
 }
 
 const storyCnText = stripBraces(word.sZ);
+const classic = CLASSIC_STORIES[word.w] || null;
 const exZText = word.exZ ? stripBraces(word.exZ) : '';
 const exDialogueText = word.exL ? word.exL.map(l => stripBraces(l.tx)).join('。') : '';
 ---
@@ -140,9 +142,38 @@ const exDialogueText = word.exL ? word.exL.map(l => stripBraces(l.tx)).join('。
       )}
     </div>
 
+    {classic && (
+      <section class="classic-section">
+        <h2 class="section-title">古典の物語</h2>
+        <div class="classic-source">
+          <span class="source-label">出典</span>
+          <span class="source-text">{classic.source}</span>
+        </div>
+        {classic.originalText && (
+          <div class="classic-original">
+            <div class="original-cn-wrap">
+              <p class="original-cn">{classic.originalText}</p>
+              {classic.originalText.length > 5 && (
+                <button class="audio-btn audio-sm" data-text={classic.originalText} data-lang="zh-CN" title="原文を聞く">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                  </svg>
+                </button>
+              )}
+            </div>
+            {classic.originalReading && (
+              <p class="original-reading">{classic.originalReading}</p>
+            )}
+          </div>
+        )}
+        <div class="classic-story">{classic.story}</div>
+      </section>
+    )}
+
     {word.ori && (
       <section class="origin-section">
-        <h2 class="section-title">語源・由来</h2>
+        <h2 class="section-title">字義・語構成</h2>
         <p class="origin-text">{word.ori}</p>
       </section>
     )}
@@ -254,6 +285,60 @@ const exDialogueText = word.exL ? word.exL.map(l => stripBraces(l.tx)).join('。
     .relation-word:hover { color: var(--color-gold); }
     .relation-pinyin { font-size: 0.7rem; color: var(--color-muted); }
     .relation-meaning { font-size: 0.75rem; color: var(--color-muted); width: 100%; line-height: 1.6; }
+
+    .classic-section {
+      margin-bottom: 2.5rem;
+    }
+    .classic-source {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding: 0.6rem 1rem;
+      background: rgba(212,168,67,0.06);
+      border: 1px solid rgba(212,168,67,0.2);
+    }
+    .source-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--color-gold);
+      white-space: nowrap;
+    }
+    .source-text {
+      font-size: 0.82rem;
+      color: var(--color-muted);
+    }
+    .classic-original {
+      border: 1px solid var(--color-navy);
+      border-left: 3px solid rgba(212,168,67,0.5);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .original-cn-wrap {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .original-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1rem;
+      line-height: 2;
+      color: var(--color-moon);
+      flex: 1;
+    }
+    .original-reading {
+      font-size: 0.75rem;
+      color: rgba(212,168,67,0.6);
+      margin-top: 0.5rem;
+      letter-spacing: 0.03em;
+    }
+    .classic-story {
+      font-size: 0.88rem;
+      line-height: 2.2;
+      color: var(--color-moon);
+      opacity: 0.85;
+      white-space: pre-line;
+    }
 
     .origin-section { margin-bottom: 3rem; }
     .origin-text { font-size: 0.88rem; line-height: 2; color: var(--color-muted); padding: 1.2rem; border: 1px solid var(--color-navy); }
