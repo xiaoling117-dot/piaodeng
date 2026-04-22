@@ -262,7 +262,7 @@ export const CLASSIC_STORIES = {
 
   "情有独钟": {
     source: "《世说新语·任诞》　南朝宋（5世紀）",
-    originalText: "桓子野每闻清歌，辄唤"奈何"！谢公闻之曰："子野可谓一往有深情。"",
+    originalText: `桓子野每闻清歌，辄唤"奈何"！谢公闻之曰："子野可谓一往有深情。"`,
     originalReading: "Huán Zǐyě měi wén qīng gē, zhé huàn 'nài hé'! Xiè Gōng wén zhī yuē: 'Zǐyě kě wèi yī wǎng yǒu shēn qíng.'",
     story: `東晋の桓子野は、音楽に異常なほど深く感動する人だった。清らかな歌声を聞くたびに、思わず「ああ、どうしよう！」と叫んでしまう。それを見た名士・謝安は言った——「子野は、（音楽に）ひたむきな深い情を持っている」。
 
