@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="飄燈">
+  <section style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4rem 2rem;">
+    <p style="color: var(--color-muted); font-size: 0.85rem; letter-spacing: 0.3em; margin-bottom: 1.5rem;">piāo dēng</p>
+    <h1 style="font-size: clamp(3rem, 8vw, 6rem); letter-spacing: 0.3em; color: var(--color-moon); margin-bottom: 1rem;">飄燈</h1>
+    <p style="color: var(--color-gold); font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 3rem;">月と灯り、中国語の世界へ</p>
+    <p style="color: var(--color-muted); max-width: 480px; line-height: 2; font-size: 0.95rem;">
+      耽美と漢詩を入り口に、<br />
+      中国語の美しさをあなたに届けます。
+    </p>
+    <div style="margin-top: 3rem; display: flex; gap: 1.5rem;">
+      <a href="/piaodeng/blog/" style="border: 1px solid var(--color-gold); padding: 0.75rem 2rem; color: var(--color-gold); letter-spacing: 0.1em; font-size: 0.9rem;">読み物へ</a>
+      <a href="/piaodeng/chengyu/" style="border: 1px solid var(--color-navy); padding: 0.75rem 2rem; color: var(--color-muted); letter-spacing: 0.1em; font-size: 0.9rem;">成語辞書</a>
+    </div>
+  </section>
+</BaseLayout>

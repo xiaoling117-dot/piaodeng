@@ -1,0 +1,55 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = '飄燈 — 中国語の世界へ、ようこそ' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title} | 飄燈</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-moon: #E8EEF4;
+      --color-navy: #1A2F5A;
+      --color-lantern: #C8401A;
+      --color-gold: #D4A843;
+      --color-bg: #0D1520;
+      --color-text: #E8EEF4;
+      --color-muted: #8899AA;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      font-family: 'Noto Serif JP', serif;
+      min-height: 100vh;
+    }
+    a { color: var(--color-gold); text-decoration: none; }
+    a:hover { color: var(--color-lantern); }
+  </style>
+</head>
+<body>
+  <header style="border-bottom: 1px solid var(--color-navy); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;">
+    <a href="/piaodeng/" style="font-size: 1.5rem; letter-spacing: 0.2em; color: var(--color-moon);">飄燈</a>
+    <nav style="display: flex; gap: 2rem; font-size: 0.9rem; color: var(--color-muted);">
+      <a href="/piaodeng/blog/">読み物</a>
+      <a href="/piaodeng/chengyu/">成語辞書</a>
+      <a href="/piaodeng/about/">について</a>
+    </nav>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer style="border-top: 1px solid var(--color-navy); padding: 2rem; text-align: center; color: var(--color-muted); font-size: 0.8rem; margin-top: 4rem;">
+    <p>飄燈 piāodēng &nbsp;|&nbsp; 月と灯り、中国語の世界へ</p>
+  </footer>
+</body>
+</html>
