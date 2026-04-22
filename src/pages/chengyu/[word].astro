@@ -7,7 +7,7 @@ export function getStaticPaths() {
     cat.words.map(w => ({ ...w, catId: cat.id, catName: cat.name }))
   );
   return allWords.map(word => ({
-    params: { word: encodeURIComponent(word.w) },
+    params: { word: word.w },
     props: { word },
   }));
 }
@@ -69,7 +69,7 @@ function highlightWord(text, w) {
           <div class="relation-list">
             {word.syn.map(s => (
               <div class="relation-item">
-                <a href={`/piaodeng/chengyu/${encodeURIComponent(s.w)}/`} class="relation-word">{s.w}</a>
+                <a href={`/piaodeng/chengyu/${s.w}/`} class="relation-word">{s.w}</a>
                 <span class="relation-pinyin">{s.p}</span>
                 <span class="relation-meaning">{s.m}</span>
               </div>

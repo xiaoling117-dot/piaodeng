@@ -7,6 +7,11 @@ const allWords = CHENGYU_DATA.flatMap(cat =>
 );
 
 const categories = CHENGYU_DATA.map(cat => ({ id: cat.id, name: cat.name, count: cat.words.length }));
+
+function stripBraces(text) {
+  if (!text) return '';
+  return text.replace(/\{([^}]+)\}/g, '$1').slice(0, 50);
+}
 ---
 <BaseLayout title="成語辞書" description="耽美小説で出会う100の成語。物語と共に覚える中国語成語辞書。">
   <div class="chengyu-page">
@@ -27,7 +32,7 @@ const categories = CHENGYU_DATA.map(cat => ({ id: cat.id, name: cat.name, count:
 
     <section class="grid" id="chengyuGrid">
       {allWords.map(word => (
-        <a class="card" href={`/piaodeng/chengyu/${encodeURIComponent(word.w)}/`} data-cat={word.catId} data-sentiment={word.st.c}>
+        <a class="card" href={`/piaodeng/chengyu/${word.w}/`} data-cat={word.catId} data-sentiment={word.st.c}>
           <div class="card-inner">
             <div class="card-header">
               <span class="sentiment-tag" data-sentiment={word.st.c}>{word.st.e} {word.st.l}</span>
@@ -37,7 +42,7 @@ const categories = CHENGYU_DATA.map(cat => ({ id: cat.id, name: cat.name, count:
             <div class="card-pinyin">{word.p}</div>
             <div class="card-meaning">{word.m.length > 40 ? word.m.slice(0, 40) + '…' : word.m}</div>
             {word.sZ && (
-              <div class="card-story">{word.sZ.replace(/\{[^}]+\}/g, m => m.slice(1,-1)).slice(0, 50)}…</div>
+              <div class="card-story">{stripBraces(word.sZ)}…</div>
             )}
           </div>
         </a>
