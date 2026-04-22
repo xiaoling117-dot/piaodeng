@@ -1,9 +1,205 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CHENGYU_DATA } from '../../data/chengyu.js';
+
+const allWords = CHENGYU_DATA.flatMap(cat =>
+  cat.words.map(w => ({ ...w, catId: cat.id, catName: cat.name }))
+);
+
+const categories = CHENGYU_DATA.map(cat => ({ id: cat.id, name: cat.name, count: cat.words.length }));
 ---
-<BaseLayout title="成語辞書">
-  <section style="max-width: 720px; margin: 0 auto; padding: 4rem 2rem;">
-    <h1 style="font-size: 2rem; letter-spacing: 0.2em; margin-bottom: 3rem; color: var(--color-moon);">成語辞書</h1>
-    <p style="color: var(--color-muted); line-height: 2;">準備中です。もうしばらくお待ちください。</p>
-  </section>
+<BaseLayout title="成語辞書" description="耽美小説で出会う100の成語。物語と共に覚える中国語成語辞書。">
+  <div class="chengyu-page">
+    <section class="hero">
+      <p class="hero-sub">耽美成語辞書</p>
+      <h1>物語で覚える<br /><span class="cn">一百個成語</span></h1>
+      <p class="hero-desc">耽美の世界に流れる言葉を、物語と共に。</p>
+    </section>
+
+    <section class="filter-bar">
+      <button class="filter-btn active" data-cat="all">すべて <span class="count">{allWords.length}</span></button>
+      {categories.map(cat => (
+        <button class="filter-btn" data-cat={cat.id}>
+          {cat.name} <span class="count">{cat.count}</span>
+        </button>
+      ))}
+    </section>
+
+    <section class="grid" id="chengyuGrid">
+      {allWords.map(word => (
+        <a class="card" href={`/piaodeng/chengyu/${encodeURIComponent(word.w)}/`} data-cat={word.catId} data-sentiment={word.st.c}>
+          <div class="card-inner">
+            <div class="card-header">
+              <span class="sentiment-tag" data-sentiment={word.st.c}>{word.st.e} {word.st.l}</span>
+              <span class="cat-name">{word.catName.replace(/^.{2}/, '')}</span>
+            </div>
+            <div class="card-word">{word.w}</div>
+            <div class="card-pinyin">{word.p}</div>
+            <div class="card-meaning">{word.m.length > 40 ? word.m.slice(0, 40) + '…' : word.m}</div>
+            {word.sZ && (
+              <div class="card-story">{word.sZ.replace(/\{[^}]+\}/g, m => m.slice(1,-1)).slice(0, 50)}…</div>
+            )}
+          </div>
+        </a>
+      ))}
+    </section>
+  </div>
+
+  <style>
+    .chengyu-page { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+
+    .hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--color-navy);
+    }
+    .hero-sub {
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      color: var(--color-gold);
+      margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      letter-spacing: 0.15em;
+      color: var(--color-moon);
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+    .hero h1 .cn {
+      font-size: 0.75em;
+      color: var(--color-gold);
+    }
+    .hero-desc {
+      color: var(--color-muted);
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 2rem 0 1.5rem;
+    }
+    .filter-btn {
+      background: none;
+      border: 1px solid var(--color-navy);
+      color: var(--color-muted);
+      padding: 0.4rem 1rem;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.8rem;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover, .filter-btn.active {
+      background: var(--color-navy);
+      color: var(--color-moon);
+      border-color: var(--color-navy);
+    }
+    .filter-btn .count {
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin-left: 0.3rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      display: block;
+      text-decoration: none;
+      border: 1px solid var(--color-navy);
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--color-navy);
+      transform: translateY(100%);
+      transition: transform 0.3s;
+      z-index: 0;
+    }
+    .card:hover::before { transform: translateY(0); }
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      padding: 1.5rem;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .sentiment-tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+    .sentiment-tag[data-sentiment="tender"] { background: rgba(200,64,26,0.15); color: #e06040; }
+    .sentiment-tag[data-sentiment="longing"] { background: rgba(212,168,67,0.15); color: var(--color-gold); }
+    .sentiment-tag[data-sentiment="sad"] { background: rgba(80,100,160,0.2); color: #8899cc; }
+    .sentiment-tag[data-sentiment="neutral"] { background: rgba(232,238,244,0.1); color: var(--color-muted); }
+    .cat-name { font-size: 0.65rem; color: var(--color-muted); }
+
+    .card-word {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      color: var(--color-moon);
+      margin-bottom: 0.3rem;
+      transition: color 0.2s;
+    }
+    .card:hover .card-word { color: var(--color-gold); }
+    .card-pinyin {
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+    .card-meaning {
+      font-size: 0.82rem;
+      color: var(--color-moon);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+      opacity: 0.85;
+    }
+    .card-story {
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      line-height: 1.7;
+      font-style: italic;
+      border-top: 1px solid rgba(26,47,90,0.5);
+      padding-top: 0.75rem;
+    }
+    .card:hover .card-story { border-color: rgba(232,238,244,0.1); }
+
+    @media (max-width: 600px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+      .filter-bar { gap: 0.4rem; }
+      .filter-btn { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+    }
+  </style>
+
+  <script>
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.card');
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        cards.forEach(card => {
+          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+        });
+      });
+    });
+  </script>
 </BaseLayout>

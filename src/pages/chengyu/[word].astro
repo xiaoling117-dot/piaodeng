@@ -1,0 +1,289 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CHENGYU_DATA } from '../../data/chengyu.js';
+
+export function getStaticPaths() {
+  const allWords = CHENGYU_DATA.flatMap(cat =>
+    cat.words.map(w => ({ ...w, catId: cat.id, catName: cat.name }))
+  );
+  return allWords.map(word => ({
+    params: { word: encodeURIComponent(word.w) },
+    props: { word },
+  }));
+}
+
+const { word } = Astro.props;
+
+function highlightWord(text, w) {
+  if (!text) return '';
+  return text.replace(new RegExp(`\\{${w}\\}`, 'g'), `<em class="hl">${w}</em>`)
+             .replace(new RegExp(w, 'g'), `<em class="hl">${w}</em>`);
+}
+---
+<BaseLayout title={word.w} description={word.m}>
+  <article class="chengyu-detail">
+
+    <nav class="breadcrumb">
+      <a href="/piaodeng/chengyu/">← 成語辞書へ戻る</a>
+    </nav>
+
+    <header class="detail-hero">
+      <div class="sentiment-badge" data-sentiment={word.st.c}>{word.st.e} {word.st.l}</div>
+      <h1 class="chengyu-word">{word.w}</h1>
+      <p class="chengyu-pinyin">{word.p}</p>
+      <p class="chengyu-meaning">{word.m}</p>
+    </header>
+
+    {word.sZ && (
+      <section class="story-section">
+        <h2 class="section-title">{word.sTi || '📜 物語'}</h2>
+        <div class="story-cn" set:html={highlightWord(word.sZ, word.w)} />
+        <div class="story-jp">{word.sJ}</div>
+      </section>
+    )}
+
+    <section class="example-section">
+      <h2 class="section-title">例文</h2>
+      {word.exT === 'd' && word.exL ? (
+        <div class="dialogue">
+          {word.exL.map((line) => (
+            <div class={`dialogue-line ${line.sd === 'l' ? 'left' : 'right'}`}>
+              <span class="speaker">{line.sp}</span>
+              <span class="line-text" set:html={highlightWord(line.tx, word.w)} />
+            </div>
+          ))}
+          <div class="example-jp">{word.exJ}</div>
+        </div>
+      ) : word.exZ ? (
+        <div class="prose-example">
+          <p class="example-cn" set:html={highlightWord(word.exZ, word.w)} />
+          <p class="example-jp">{word.exJ}</p>
+        </div>
+      ) : null}
+    </section>
+
+    <div class="word-relations">
+      {word.syn && word.syn.length > 0 && (
+        <section class="relation-section">
+          <h2 class="section-title">類義語</h2>
+          <div class="relation-list">
+            {word.syn.map(s => (
+              <div class="relation-item">
+                <a href={`/piaodeng/chengyu/${encodeURIComponent(s.w)}/`} class="relation-word">{s.w}</a>
+                <span class="relation-pinyin">{s.p}</span>
+                <span class="relation-meaning">{s.m}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {word.ant && word.ant.length > 0 && (
+        <section class="relation-section">
+          <h2 class="section-title">対義語</h2>
+          <div class="relation-list">
+            {word.ant.map(a => (
+              <div class="relation-item">
+                <a href={`/piaodeng/chengyu/${encodeURIComponent(a.w)}/`} class="relation-word">{a.w}</a>
+                <span class="relation-pinyin">{a.p}</span>
+                <span class="relation-meaning">{a.m}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+
+    {word.ori && (
+      <section class="origin-section">
+        <h2 class="section-title">語源・由来</h2>
+        <p class="origin-text">{word.ori}</p>
+      </section>
+    )}
+
+    <footer class="detail-footer">
+      <a href="/piaodeng/chengyu/" class="back-link">← 成語辞書一覧へ</a>
+    </footer>
+  </article>
+
+  <style>
+    .chengyu-detail {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 5rem;
+    }
+    .breadcrumb {
+      margin-bottom: 3rem;
+      font-size: 0.8rem;
+    }
+    .breadcrumb a { color: var(--color-muted); }
+    .breadcrumb a:hover { color: var(--color-gold); }
+
+    .detail-hero {
+      text-align: center;
+      padding: 2rem 0 3rem;
+      border-bottom: 1px solid var(--color-navy);
+      margin-bottom: 3rem;
+    }
+    .sentiment-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 2px;
+      margin-bottom: 1.5rem;
+    }
+    .sentiment-badge[data-sentiment="tender"] { background: rgba(200,64,26,0.15); color: #e06040; border: 1px solid rgba(200,64,26,0.3); }
+    .sentiment-badge[data-sentiment="longing"] { background: rgba(212,168,67,0.15); color: var(--color-gold); border: 1px solid rgba(212,168,67,0.3); }
+    .sentiment-badge[data-sentiment="sad"] { background: rgba(80,100,160,0.2); color: #8899cc; border: 1px solid rgba(80,100,160,0.3); }
+    .sentiment-badge[data-sentiment="neutral"] { background: rgba(232,238,244,0.05); color: var(--color-muted); border: 1px solid var(--color-navy); }
+
+    .chengyu-word {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      letter-spacing: 0.2em;
+      color: var(--color-moon);
+      margin-bottom: 0.5rem;
+    }
+    .chengyu-pinyin {
+      font-size: 1rem;
+      color: var(--color-gold);
+      letter-spacing: 0.15em;
+      margin-bottom: 1.5rem;
+    }
+    .chengyu-meaning {
+      font-size: 1rem;
+      color: var(--color-moon);
+      line-height: 1.8;
+      max-width: 500px;
+      margin: 0 auto;
+      opacity: 0.9;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      color: var(--color-gold);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(212,168,67,0.2);
+    }
+
+    .story-section {
+      background: rgba(26,47,90,0.2);
+      border: 1px solid var(--color-navy);
+      border-left: 3px solid var(--color-gold);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .story-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1rem;
+      line-height: 2;
+      color: var(--color-moon);
+      margin-bottom: 1.2rem;
+    }
+    .story-jp {
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--color-muted);
+      padding-top: 1rem;
+      border-top: 1px solid rgba(26,47,90,0.5);
+    }
+
+    .example-section {
+      margin-bottom: 2.5rem;
+    }
+    .dialogue {
+      border: 1px solid var(--color-navy);
+      padding: 1.5rem;
+    }
+    .dialogue-line {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .dialogue-line.right { flex-direction: row-reverse; }
+    .speaker {
+      font-size: 0.7rem;
+      color: var(--color-gold);
+      white-space: nowrap;
+      min-width: 3em;
+    }
+    .line-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.95rem;
+      color: var(--color-moon);
+      line-height: 1.7;
+    }
+    .example-jp {
+      font-size: 0.82rem;
+      color: var(--color-muted);
+      line-height: 1.8;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(26,47,90,0.5);
+    }
+    .prose-example {
+      border: 1px solid var(--color-navy);
+      padding: 1.5rem;
+    }
+    .example-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1rem;
+      line-height: 2;
+      color: var(--color-moon);
+      margin-bottom: 1rem;
+    }
+
+    .word-relations {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .relation-section {}
+    .relation-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .relation-item {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      border: 1px solid var(--color-navy);
+    }
+    .relation-word {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1rem;
+      color: var(--color-moon);
+    }
+    .relation-word:hover { color: var(--color-gold); }
+    .relation-pinyin { font-size: 0.7rem; color: var(--color-muted); }
+    .relation-meaning { font-size: 0.75rem; color: var(--color-muted); width: 100%; line-height: 1.6; }
+
+    .origin-section {
+      margin-bottom: 3rem;
+    }
+    .origin-text {
+      font-size: 0.88rem;
+      line-height: 2;
+      color: var(--color-muted);
+      padding: 1.2rem;
+      border: 1px solid var(--color-navy);
+    }
+
+    .detail-footer { padding-top: 2rem; border-top: 1px solid var(--color-navy); }
+    .back-link { font-size: 0.85rem; color: var(--color-muted); }
+    .back-link:hover { color: var(--color-gold); }
+
+    :global(.hl) {
+      color: var(--color-gold);
+      font-style: normal;
+      font-weight: 600;
+    }
+
+    @media (max-width: 600px) {
+      .word-relations { grid-template-columns: 1fr; }
+    }
+  </style>
+</BaseLayout>
