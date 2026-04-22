@@ -1,0 +1,142 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+<BaseLayout title={post.data.title} description={post.data.description}>
+  <article class="blog-post">
+    <nav class="breadcrumb">
+      <a href="/piaodeng/blog/">← 読み物へ戻る</a>
+    </nav>
+
+    <header class="post-header">
+      <div class="post-meta">
+        <span class="post-date">{post.data.date}</span>
+        <span class="post-authors">{post.data.authors.join(' & ')}</span>
+      </div>
+      <h1>{post.data.title}</h1>
+      {post.data.description && <p class="post-desc">{post.data.description}</p>}
+    </header>
+
+    <div class="post-body">
+      <Content />
+    </div>
+
+    <footer class="post-footer">
+      <a href="/piaodeng/blog/" class="back-link">← 読み物一覧へ</a>
+    </footer>
+  </article>
+
+  <style>
+    .blog-post { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+
+    .breadcrumb { margin-bottom: 3rem; font-size: 0.8rem; }
+    .breadcrumb a { color: var(--color-muted); }
+    .breadcrumb a:hover { color: var(--color-gold); }
+
+    .post-header {
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--color-navy);
+      margin-bottom: 3rem;
+    }
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.75rem;
+    }
+    .post-date { color: var(--color-muted); }
+    .post-authors { color: var(--color-gold); }
+
+    .post-header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      letter-spacing: 0.05em;
+      color: var(--color-moon);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .post-desc { color: var(--color-muted); font-size: 0.9rem; line-height: 1.8; }
+
+    /* 本文スタイル */
+    .post-body {
+      font-size: 0.95rem;
+      line-height: 2.2;
+      color: var(--color-moon);
+    }
+    .post-body :global(p) { margin-bottom: 1.5rem; opacity: 0.9; }
+    .post-body :global(hr) {
+      border: none;
+      border-top: 1px solid var(--color-navy);
+      margin: 2.5rem 0;
+    }
+    .post-body :global(strong) { color: var(--color-gold); font-weight: 600; }
+    .post-body :global(em) { color: var(--color-muted); font-style: normal; }
+
+    /* 対話スタイル */
+    .post-body :global(p:has(strong:first-child)) {
+      padding: 1rem 1.2rem;
+      border-left: 2px solid var(--color-navy);
+      margin-bottom: 0.5rem;
+      opacity: 1;
+    }
+
+    /* テーブル */
+    .post-body :global(table) {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+      font-size: 0.85rem;
+    }
+    .post-body :global(th) {
+      border: 1px solid var(--color-navy);
+      padding: 0.6rem 1rem;
+      color: var(--color-gold);
+      text-align: left;
+      font-weight: 400;
+    }
+    .post-body :global(td) {
+      border: 1px solid var(--color-navy);
+      padding: 0.6rem 1rem;
+      color: var(--color-muted);
+    }
+    .post-body :global(code) {
+      font-family: monospace;
+      font-size: 0.85em;
+      color: var(--color-gold);
+      background: rgba(212,168,67,0.1);
+      padding: 0.1em 0.4em;
+    }
+
+    .post-body :global(h2) {
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--color-moon);
+      margin: 2.5rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(212,168,67,0.2);
+    }
+
+    .post-body :global(blockquote) {
+      border-left: 3px solid var(--color-gold);
+      margin: 1.5rem 0;
+      padding: 1rem 1.5rem;
+      background: rgba(26,47,90,0.2);
+      color: var(--color-muted);
+      font-style: italic;
+    }
+
+    .post-footer { padding-top: 2rem; border-top: 1px solid var(--color-navy); }
+    .back-link { font-size: 0.85rem; color: var(--color-muted); }
+    .back-link:hover { color: var(--color-gold); }
+  </style>
+</BaseLayout>

@@ -1,9 +1,121 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
 ---
 <BaseLayout title="読み物">
-  <section style="max-width: 720px; margin: 0 auto; padding: 4rem 2rem;">
-    <h1 style="font-size: 2rem; letter-spacing: 0.2em; margin-bottom: 3rem; color: var(--color-moon);">読み物</h1>
-    <p style="color: var(--color-muted); line-height: 2;">準備中です。もうしばらくお待ちください。</p>
+  <section class="blog-page">
+    <header class="blog-hero">
+      <p class="hero-sub">読み物</p>
+      <h1>黎蓮と麗蘭の<br /><span class="cn">物語記録</span></h1>
+      <p class="hero-desc">二人の対話、中国語の世界、耽美の断片。</p>
+    </header>
+
+    <div class="post-list">
+      {posts.map(post => (
+        <a class="post-card" href={`/piaodeng/blog/${post.slug}/`}>
+          <div class="post-meta">
+            <span class="post-date">{post.data.date}</span>
+            <span class="post-authors">{post.data.authors.join(' & ')}</span>
+          </div>
+          <h2 class="post-title">{post.data.title}</h2>
+          {post.data.description && (
+            <p class="post-desc">{post.data.description}</p>
+          )}
+          {post.data.tags && (
+            <div class="post-tags">
+              {post.data.tags.map(tag => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )}
+        </a>
+      ))}
+    </div>
   </section>
+
+  <style>
+    .blog-page { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+    .blog-hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--color-navy);
+      margin-bottom: 3rem;
+    }
+    .hero-sub {
+      font-size: 0.75rem;
+      letter-spacing: 0.4em;
+      color: var(--color-gold);
+      margin-bottom: 1rem;
+    }
+    .blog-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      letter-spacing: 0.15em;
+      color: var(--color-moon);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .cn { font-size: 0.75em; color: var(--color-gold); }
+    .hero-desc { color: var(--color-muted); font-size: 0.9rem; }
+
+    .post-list { display: flex; flex-direction: column; gap: 1.5rem; }
+
+    .post-card {
+      display: block;
+      border: 1px solid var(--color-navy);
+      padding: 2rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .post-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--color-gold);
+      transform: scaleY(0);
+      transition: transform 0.2s;
+    }
+    .post-card:hover { border-color: rgba(212,168,67,0.4); }
+    .post-card:hover::before { transform: scaleY(1); }
+
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+    }
+    .post-date { color: var(--color-muted); }
+    .post-authors { color: var(--color-gold); }
+
+    .post-title {
+      font-size: 1.3rem;
+      letter-spacing: 0.05em;
+      color: var(--color-moon);
+      margin-bottom: 0.75rem;
+      line-height: 1.5;
+    }
+    .post-card:hover .post-title { color: var(--color-gold); }
+
+    .post-desc {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+    }
+
+    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .tag {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--color-navy);
+      color: var(--color-muted);
+    }
+  </style>
 </BaseLayout>
