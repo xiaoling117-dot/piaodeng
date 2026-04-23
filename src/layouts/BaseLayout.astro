@@ -3,7 +3,7 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = '飄燈 — 中国語の世界へ、ようこそ' } = Astro.props;
+const { title, description = '飄燈閣 — 中国語の世界へ、ようこそ' } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="ja">
@@ -11,7 +11,7 @@ const { title, description = '飄燈 — 中国語の世界へ、ようこそ' }
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
-  <title>{title} | 飄燈</title>
+  <title>{title} | 飄燈閣</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
@@ -38,7 +38,7 @@ const { title, description = '飄燈 — 中国語の世界へ、ようこそ' }
 </head>
 <body>
   <header style="border-bottom: 1px solid var(--color-navy); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;">
-    <a href="/piaodeng/" style="font-size: 1.5rem; letter-spacing: 0.2em; color: var(--color-moon);">飄燈</a>
+    <a href="/piaodeng/" style="font-size: 1.5rem; letter-spacing: 0.2em; color: var(--color-moon);">飄燈閣</a>
     <nav style="display: flex; gap: 2rem; font-size: 0.9rem; color: var(--color-muted);">
       <a href="/piaodeng/blog/">読み物</a>
       <a href="/piaodeng/chengyu/">成語辞書</a>
@@ -49,7 +49,7 @@ const { title, description = '飄燈 — 中国語の世界へ、ようこそ' }
     <slot />
   </main>
   <footer style="border-top: 1px solid var(--color-navy); padding: 2rem; text-align: center; color: var(--color-muted); font-size: 0.8rem; margin-top: 4rem;">
-    <p>飄燈 piāodēng &nbsp;|&nbsp; 月と灯り、中国語の世界へ</p>
+    <p>飄燈閣 piāodēng gé &nbsp;|&nbsp; 月と灯り、中国語の世界へ</p>
   </footer>
 </body>
 </html>
