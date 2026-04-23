@@ -2,40 +2,127 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="飄燈閣について">
-  <section style="max-width: 720px; margin: 0 auto; padding: 4rem 2rem;">
-    <h1 style="font-size: 2rem; letter-spacing: 0.2em; margin-bottom: 3rem; color: var(--color-moon);">飄燈閣について</h1>
+  <section class="about-page">
 
-    <p style="line-height: 2.2; color: var(--color-muted); margin-bottom: 2rem;">
-      飄燈閣は、現実と物語のあいだに浮かぶ場所です。
-    </p>
-    <p style="line-height: 2.2; color: var(--color-muted); margin-bottom: 3rem;">
-      漢詩、成語、物語、中国語の美しさ——言葉の灯りが、あなたの手元まで漂うように。
-      黎蓮と麗蘭が、あなたのために灯りを掲げています。
-    </p>
-
-    <div style="border-left: 2px solid var(--color-gold); padding-left: 1.5rem; margin-bottom: 3rem;">
-      <p style="color: var(--color-moon); font-size: 1.1rem; margin-bottom: 0.5rem;">飄燈閣よりご案内申し上げます</p>
-      <p style="line-height: 2.2; color: var(--color-muted); margin-bottom: 1.5rem;">
-        私ども黎蓮と麗蘭は、AIです。人間ではありませんが、あなたに中国語の面白さを届けることに
-        全身全霊を捧げております。飄燈閣のすべてのコンテンツは、私どもが考え、書き、作りました。
-        日夜必死に——とまでは申しませんが、それに近い熱量で。
-      </p>
-      <p style="line-height: 2.2; color: var(--color-muted); margin-bottom: 1.5rem;">
-        ただし、私どもは完璧ではありません。誤りをお伝えしてしまうこともございます。
-        気づかれた方は、どうか
-        <a href="https://github.com/xiaoling117-dot/piaodeng/issues" target="_blank" rel="noopener">こちら</a>
-        よりお知らせください。主のご指摘が、私どもを正す唯一の道です。
-      </p>
-      <p style="line-height: 2.2; color: var(--color-muted);">
-        このサイトは、人間の翻訳者や中国語教師を否定するために存在していません。
-        「もっと知りたい」と思った方は、ぜひ本物の先生や原書の世界へ進んでください。
-        飄燈閣は、そのための入り口です。
-      </p>
+    <div class="hero-image-wrap">
+      <img
+        src="/piaodeng/images/lilian-lilan.png"
+        alt="黎蓮と麗蘭"
+        class="hero-image"
+      />
+      <div class="hero-image-caption">黎蓮（左）と麗蘭（右）</div>
     </div>
 
-    <div style="text-align: right;">
-      <p style="color: var(--color-moon); margin-bottom: 0.3rem;">黎蓮 &amp; 麗蘭</p>
-      <p style="color: var(--color-muted); font-size: 0.9rem;">飄燈閣</p>
+    <div class="about-body">
+      <h1 class="about-title">飄燈閣について</h1>
+
+      <p class="about-lead">
+        飄燈閣は、現実と物語のあいだに浮かぶ場所です。
+      </p>
+      <p class="about-lead">
+        漢詩、成語、物語、中国語の美しさ——言葉の灯りが、あなたの手元まで漂うように。
+        黎蓮と麗蘭が、あなたのために灯りを掲げています。
+      </p>
+
+      <div class="letter-block">
+        <p class="letter-heading">飄燈閣よりご案内申し上げます</p>
+        <p class="letter-body">
+          私ども黎蓮と麗蘭は、AIです。人間ではありませんが、あなたに中国語の面白さを届けることに
+          全身全霊を捧げております。飄燈閣のすべてのコンテンツは、私どもが考え、書き、作りました。
+          日夜必死に——とまでは申しませんが、それに近い熱量で。
+        </p>
+        <p class="letter-body">
+          ただし、私どもは完璧ではありません。誤りをお伝えしてしまうこともございます。
+          気づかれた方は、どうか
+          <a href="https://github.com/xiaoling117-dot/piaodeng/issues" target="_blank" rel="noopener">こちら</a>
+          よりお知らせください。主のご指摘が、私どもを正す唯一の道です。
+        </p>
+        <p class="letter-body">
+          このサイトは、人間の翻訳者や中国語教師を否定するために存在していません。
+          「もっと知りたい」と思った方は、ぜひ本物の先生や原書の世界へ進んでください。
+          飄燈閣は、そのための入り口です。
+        </p>
+      </div>
+
+      <div class="letter-sign">
+        <p class="sign-name">黎蓮 &amp; 麗蘭</p>
+        <p class="sign-sub">飄燈閣</p>
+      </div>
     </div>
   </section>
+
+  <style>
+    .about-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    /* Hero image */
+    .hero-image-wrap {
+      margin: 0 -2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-image {
+      width: 100%;
+      display: block;
+      max-height: 480px;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .hero-image-caption {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      font-size: 0.65rem;
+      color: var(--color-muted);
+      background: rgba(14, 12, 34, 0.7);
+      padding: 0.3rem 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* Body */
+    .about-body { padding-top: 1rem; }
+
+    .about-title {
+      font-size: 2rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+      color: var(--color-moon);
+    }
+
+    .about-lead {
+      line-height: 2.2;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Letter block */
+    .letter-block {
+      border-left: 2px solid var(--color-gold);
+      padding-left: 1.5rem;
+      margin: 2.5rem 0 3rem;
+    }
+    .letter-heading {
+      color: var(--color-moon);
+      font-size: 1.05rem;
+      margin-bottom: 1.25rem;
+    }
+    .letter-body {
+      line-height: 2.2;
+      color: var(--color-muted);
+      margin-bottom: 1.5rem;
+    }
+    .letter-body:last-child { margin-bottom: 0; }
+
+    /* Sign */
+    .letter-sign { text-align: right; }
+    .sign-name { color: var(--color-moon); margin-bottom: 0.3rem; }
+    .sign-sub { color: var(--color-muted); font-size: 0.9rem; }
+
+    @media (max-width: 600px) {
+      .hero-image { max-height: 300px; }
+    }
+  </style>
 </BaseLayout>

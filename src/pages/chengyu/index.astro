@@ -1,62 +1,73 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { CHENGYU_DATA } from '../../data/chengyu.js';
-
-const allWords = CHENGYU_DATA.flatMap(cat =>
-  cat.words.map(w => ({ ...w, catId: cat.id, catName: cat.name }))
-);
-
-const categories = CHENGYU_DATA.map(cat => ({ id: cat.id, name: cat.name, count: cat.words.length }));
-
-function stripBraces(text) {
-  if (!text) return '';
-  return text.replace(/\{([^}]+)\}/g, '$1').slice(0, 50);
-}
 ---
-<BaseLayout title="成語辞書" description="耽美小説で出会う100の成語。物語と共に覚える中国語成語辞書。">
+<BaseLayout title="成語辞書" description="耽美小説で出会う100の成語。フリップカードで覚える中国語成語辞書。">
   <div class="chengyu-page">
+
     <section class="hero">
       <p class="hero-sub">耽美成語辞書</p>
       <h1>物語で覚える<br /><span class="cn">一百個成語</span></h1>
-      <p class="hero-desc">耽美の世界に流れる言葉を、物語と共に。</p>
+      <p class="hero-desc">テーマを選んで、灯籠をめくる。</p>
     </section>
 
-    <section class="filter-bar">
-      <button class="filter-btn active" data-cat="all">すべて <span class="count">{allWords.length}</span></button>
-      {categories.map(cat => (
-        <button class="filter-btn" data-cat={cat.id}>
-          {cat.name} <span class="count">{cat.count}</span>
-        </button>
-      ))}
-    </section>
+    <!-- Theme grid -->
+    <div id="theme-view">
+      <div class="theme-grid">
+        {CHENGYU_DATA.map(cat => {
+          const icon = cat.name.slice(0, 2);
+          const label = cat.name.slice(2).trim();
+          const preview = cat.words.slice(0, 4).map(w => w.w).join('　');
+          return (
+            <button class="theme-tile" data-theme-id={cat.id}>
+              <span class="tt-icon">{icon}</span>
+              <span class="tt-label">{label}</span>
+              <span class="tt-count">{cat.words.length}語</span>
+              <span class="tt-preview">{preview}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
 
-    <section class="grid" id="chengyuGrid">
-      {allWords.map(word => (
-        <a class="card" href={`/piaodeng/chengyu/${word.w}/`} data-cat={word.catId} data-sentiment={word.st.c}>
-          <div class="card-inner">
-            <div class="card-header">
-              <span class="sentiment-tag" data-sentiment={word.st.c}>{word.st.e} {word.st.l}</span>
-              <span class="cat-name">{word.catName.replace(/^.{2}/, '')}</span>
-            </div>
-            <div class="card-word">{word.w}</div>
-            <div class="card-pinyin">{word.p}</div>
-            <div class="card-meaning">{word.m.length > 40 ? word.m.slice(0, 40) + '…' : word.m}</div>
-            {word.sZ && (
-              <div class="card-story">{stripBraces(word.sZ)}…</div>
-            )}
-          </div>
-        </a>
-      ))}
-    </section>
+    <!-- Card view (hidden until theme selected) -->
+    <div id="card-view" hidden>
+      <div class="card-view-header">
+        <button class="back-btn" id="back-btn">← テーマへ</button>
+        <span class="card-theme-label" id="card-theme-label"></span>
+        <span class="card-counter" id="card-counter">1 / 1</span>
+      </div>
+
+      <div class="fc-scene">
+        <div class="fc-card" id="fc-card">
+          <div class="fc-face fc-front" id="fc-front"></div>
+          <div class="fc-face fc-back" id="fc-back"></div>
+        </div>
+      </div>
+
+      <div class="card-nav">
+        <button class="nav-btn" id="prev-btn">← 前</button>
+        <button class="nav-btn nav-flip" id="flip-btn">めくる</button>
+        <button class="nav-btn" id="next-btn">次 →</button>
+      </div>
+      <p class="key-hint">← → キー移動　Space めくる</p>
+    </div>
+
   </div>
 
   <style>
-    .chengyu-page { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 4rem; }
+    .chengyu-page {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
 
+    /* Hero */
     .hero {
       text-align: center;
       padding: 4rem 0 3rem;
       border-bottom: 1px solid var(--color-navy);
+      margin-bottom: 2.5rem;
     }
     .hero-sub {
       font-size: 0.75rem;
@@ -71,140 +82,521 @@ function stripBraces(text) {
       line-height: 1.4;
       margin-bottom: 1rem;
     }
-    .hero h1 .cn {
-      font-size: 0.75em;
-      color: var(--color-gold);
-    }
-    .hero-desc {
-      color: var(--color-muted);
-      font-size: 0.9rem;
-      letter-spacing: 0.1em;
-    }
+    .hero h1 .cn { font-size: 0.75em; color: var(--color-gold); }
+    .hero-desc { color: var(--color-muted); font-size: 0.9rem; letter-spacing: 0.1em; }
 
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      padding: 2rem 0 1.5rem;
-    }
-    .filter-btn {
-      background: none;
-      border: 1px solid var(--color-navy);
-      color: var(--color-muted);
-      padding: 0.4rem 1rem;
-      font-family: 'Noto Serif JP', serif;
-      font-size: 0.8rem;
-      cursor: pointer;
-      letter-spacing: 0.05em;
-      transition: all 0.2s;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      background: var(--color-navy);
-      color: var(--color-moon);
-      border-color: var(--color-navy);
-    }
-    .filter-btn .count {
-      font-size: 0.7rem;
-      opacity: 0.6;
-      margin-left: 0.3rem;
-    }
-
-    .grid {
+    /* Theme grid */
+    .theme-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 1rem;
     }
-    .card {
-      display: block;
-      text-decoration: none;
+    .theme-tile {
+      background: rgba(26, 47, 90, 0.25);
       border: 1px solid var(--color-navy);
+      padding: 1.5rem 1.25rem;
+      cursor: pointer;
+      text-align: left;
       transition: all 0.25s;
       position: relative;
       overflow: hidden;
     }
-    .card::before {
+    .theme-tile::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: var(--color-navy);
+      background: rgba(212, 168, 67, 0.06);
       transform: translateY(100%);
       transition: transform 0.3s;
-      z-index: 0;
     }
-    .card:hover::before { transform: translateY(0); }
-    .card-inner {
+    .theme-tile:hover { border-color: var(--color-gold); }
+    .theme-tile:hover::before { transform: translateY(0); }
+    .tt-icon { font-size: 1.4rem; display: block; margin-bottom: 0.5rem; position: relative; }
+    .tt-label {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.88rem;
+      color: var(--color-moon);
+      display: block;
+      margin-bottom: 0.3rem;
       position: relative;
-      z-index: 1;
+    }
+    .tt-count {
+      font-family: monospace;
+      font-size: 0.65rem;
+      color: var(--color-gold);
+      display: block;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+    .tt-preview {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.68rem;
+      color: var(--color-muted);
+      display: block;
+      line-height: 1.9;
+      position: relative;
+    }
+
+    /* Card view header */
+    .card-view-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--color-navy);
+    }
+    .back-btn {
+      background: none;
+      border: 1px solid var(--color-navy);
+      color: var(--color-muted);
+      padding: 0.4rem 0.9rem;
+      font-size: 0.78rem;
+      font-family: 'Noto Serif JP', serif;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .back-btn:hover { border-color: var(--color-gold); color: var(--color-gold); }
+    .card-theme-label { font-size: 0.85rem; color: var(--color-gold); }
+    .card-counter { font-family: monospace; font-size: 0.8rem; color: var(--color-muted); }
+
+    /* Flip card */
+    .fc-scene {
+      perspective: 1200px;
+      width: min(440px, 100%);
+      height: 530px;
+      margin: 0 auto;
+    }
+    .fc-card {
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      position: relative;
+    }
+    .fc-card.flipped { transform: rotateY(180deg); }
+    .fc-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--color-navy);
+    }
+    .fc-front {
+      background: rgba(14, 12, 34, 0.97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    .fc-back {
+      background: rgba(10, 9, 28, 0.98);
+      transform: rotateY(180deg);
+      overflow-y: auto;
       padding: 1.5rem;
     }
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .sentiment-tag {
+    .fc-back::-webkit-scrollbar { width: 3px; }
+    .fc-back::-webkit-scrollbar-thumb { background: var(--color-navy); border-radius: 2px; }
+
+    /* Front content */
+    .fc-sentiment {
       font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
+      padding: 0.25rem 0.75rem;
       border-radius: 2px;
+      margin-bottom: 1.5rem;
     }
-    .sentiment-tag[data-sentiment="tender"] { background: rgba(200,64,26,0.15); color: #e06040; }
-    .sentiment-tag[data-sentiment="longing"] { background: rgba(212,168,67,0.15); color: var(--color-gold); }
-    .sentiment-tag[data-sentiment="sad"] { background: rgba(80,100,160,0.2); color: #8899cc; }
-    .sentiment-tag[data-sentiment="neutral"] { background: rgba(232,238,244,0.1); color: var(--color-muted); }
-    .cat-name { font-size: 0.65rem; color: var(--color-muted); }
-
-    .card-word {
+    .fc-sentiment[data-sentiment="tender"]  { background: rgba(200,64,26,0.15); color: #e06040; border: 1px solid rgba(200,64,26,0.3); }
+    .fc-sentiment[data-sentiment="longing"] { background: rgba(212,168,67,0.15); color: var(--color-gold); border: 1px solid rgba(212,168,67,0.3); }
+    .fc-sentiment[data-sentiment="sad"]     { background: rgba(80,100,160,0.2); color: #8899cc; border: 1px solid rgba(80,100,160,0.3); }
+    .fc-sentiment[data-sentiment="neutral"] { background: rgba(232,238,244,0.06); color: var(--color-muted); border: 1px solid var(--color-navy); }
+    .word-audio-row {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .fc-chars {
       font-family: 'Noto Serif SC', serif;
-      font-size: 2rem;
-      letter-spacing: 0.1em;
+      font-size: clamp(3rem, 9vw, 4.5rem);
+      letter-spacing: 0.15em;
       color: var(--color-moon);
-      margin-bottom: 0.3rem;
-      transition: color 0.2s;
+      line-height: 1;
+      white-space: nowrap;
     }
-    .card:hover .card-word { color: var(--color-gold); }
-    .card-pinyin {
-      font-size: 0.75rem;
+    .fc-pinyin { font-size: 0.9rem; color: var(--color-gold); letter-spacing: 0.1em; }
+    .fc-flip-hint {
+      font-size: 0.62rem;
       color: var(--color-muted);
+      opacity: 0.45;
+      margin-top: auto;
+      padding-top: 1.5rem;
       letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
     }
-    .card-meaning {
-      font-size: 0.82rem;
-      color: var(--color-moon);
-      line-height: 1.6;
-      margin-bottom: 0.75rem;
-      opacity: 0.85;
-    }
-    .card-story {
-      font-size: 0.75rem;
-      color: var(--color-muted);
-      line-height: 1.7;
-      font-style: italic;
-      border-top: 1px solid rgba(26,47,90,0.5);
-      padding-top: 0.75rem;
-    }
-    .card:hover .card-story { border-color: rgba(232,238,244,0.1); }
 
-    @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr 1fr; }
-      .filter-bar { gap: 0.4rem; }
-      .filter-btn { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
+    /* Back content */
+    .fc-meaning {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.88rem;
+      color: var(--color-moon);
+      line-height: 1.9;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(26, 47, 90, 0.8);
+      margin-bottom: 0.75rem;
+    }
+    .fc-section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--color-gold);
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+    .fc-ex-section { margin-bottom: 0.75rem; }
+    .fc-dialogue {
+      border: 1px solid var(--color-navy);
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .fc-dl-line {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+      align-items: flex-start;
+    }
+    .fc-dl-line.right { flex-direction: row-reverse; }
+    .fc-dl-sp {
+      font-size: 0.62rem;
+      color: var(--color-gold);
+      white-space: nowrap;
+      min-width: 2.5em;
+      padding-top: 0.2rem;
+    }
+    .fc-dl-tx {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.85rem;
+      color: var(--color-moon);
+      line-height: 1.7;
+    }
+    .fc-ex-pinyin-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.4rem 0;
+    }
+    .fc-ex-pinyin {
+      font-size: 0.7rem;
+      color: rgba(212, 168, 67, 0.7);
+      letter-spacing: 0.05em;
+      line-height: 1.8;
+      flex: 1;
+    }
+    .fc-ex-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.76rem;
+      color: var(--color-muted);
+      line-height: 1.9;
+      padding-top: 0.4rem;
+      border-top: 1px solid rgba(26, 47, 90, 0.6);
+    }
+    .fc-prose-cn-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+    .fc-prose-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.88rem;
+      color: var(--color-moon);
+      line-height: 1.9;
+      flex: 1;
+    }
+    .fc-story {
+      background: rgba(26, 47, 90, 0.2);
+      border-left: 2px solid var(--color-gold);
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .fc-story-cn-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .fc-story-cn {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.8rem;
+      color: var(--color-moon);
+      line-height: 2;
+      flex: 1;
+    }
+    .fc-story-jp {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.74rem;
+      color: var(--color-muted);
+      line-height: 2;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(26, 47, 90, 0.5);
+    }
+    .fc-relations { margin-bottom: 0.75rem; }
+    .fc-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.4rem; }
+    .fc-syn-chip, .fc-ant-chip {
+      font-size: 0.68rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 2px;
+      line-height: 1.5;
+    }
+    .fc-syn-chip { border: 1px solid rgba(80,160,120,0.4); color: rgba(100,200,150,0.9); }
+    .fc-ant-chip { border: 1px solid rgba(160,80,80,0.4); color: rgba(200,100,100,0.9); }
+    .fc-chip-zh { font-family: 'Noto Serif SC', serif; font-weight: 600; }
+    .fc-chip-p  { font-size: 0.85em; opacity: 0.7; }
+    .fc-chip-m  { font-family: 'Noto Serif JP', serif; font-size: 0.9em; opacity: 0.8; }
+    .fc-origin {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.7rem;
+      color: var(--color-muted);
+      line-height: 1.9;
+      padding-top: 0.5rem;
+      border-top: 1px solid rgba(26, 47, 90, 0.5);
+    }
+
+    /* Audio button */
+    .audio-btn {
+      background: none;
+      border: 1px solid var(--color-navy);
+      color: var(--color-muted);
+      cursor: pointer;
+      border-radius: 50%;
+      width: 1.8rem;
+      height: 1.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+    .audio-btn svg { width: 0.75rem; height: 0.75rem; }
+    .audio-btn:hover { border-color: var(--color-gold); color: var(--color-gold); }
+    .audio-btn-lg { width: 2.2rem; height: 2.2rem; }
+    .audio-btn-lg svg { width: 1rem; height: 1rem; }
+
+    :global(.hl) { color: var(--color-gold); font-style: normal; font-weight: 600; }
+
+    /* Navigation */
+    .card-nav {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    .nav-btn {
+      background: none;
+      border: 1px solid var(--color-navy);
+      color: var(--color-muted);
+      padding: 0.5rem 1.5rem;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .nav-btn:hover { border-color: var(--color-gold); color: var(--color-gold); }
+    .nav-flip { color: var(--color-gold); border-color: rgba(212, 168, 67, 0.35); }
+    .key-hint {
+      text-align: center;
+      font-size: 0.62rem;
+      color: var(--color-muted);
+      opacity: 0.45;
+      margin-top: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 640px) {
+      .theme-grid { grid-template-columns: 1fr 1fr; }
+      .fc-scene { height: 500px; }
+      .fc-chars { font-size: clamp(2.5rem, 13vw, 3.5rem); }
     }
   </style>
 
-  <script>
-    const btns = document.querySelectorAll('.filter-btn');
-    const cards = document.querySelectorAll('.card');
-    btns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        btns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const cat = btn.dataset.cat;
-        cards.forEach(card => {
-          card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+  <script define:vars={{ CHENGYU_DATA }}>
+    let currentTheme = null;
+    let currentIndex = 0;
+    let isFlipped = false;
+
+    const themeView  = document.getElementById('theme-view');
+    const cardView   = document.getElementById('card-view');
+    const fcCard     = document.getElementById('fc-card');
+    const fcFront    = document.getElementById('fc-front');
+    const fcBack     = document.getElementById('fc-back');
+    const cardCounter     = document.getElementById('card-counter');
+    const cardThemeLabel  = document.getElementById('card-theme-label');
+
+    const SPKR = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+    </svg>`;
+
+    function esc(s) {
+      return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    function strip(s) { return s ? s.replace(/\{([^}]+)\}/g, '$1') : ''; }
+    function hl(s, w)  {
+      if (!s) return '';
+      return s.replace(/\{([^}]+)\}/g, (_, c) => c === w ? `<em class="hl">${c}</em>` : c);
+    }
+    function aBtn(text, extra='') {
+      return `<button class="audio-btn ${extra}" data-speak="${esc(text)}" title="発音を聞く">${SPKR}</button>`;
+    }
+
+    function renderFront(word) {
+      const sc = word.st.c || 'neutral';
+      fcFront.innerHTML = `
+        <div class="fc-sentiment" data-sentiment="${sc}">${word.st.e} ${word.st.l}</div>
+        <div class="word-audio-row">
+          <div class="fc-chars">${word.w}</div>
+          ${aBtn(word.w, 'audio-btn-lg')}
+        </div>
+        <div class="fc-pinyin">${word.p}</div>
+        <div class="fc-flip-hint">クリック / Space でめくる</div>
+      `;
+    }
+
+    function renderBack(word) {
+      let h = `<div class="fc-meaning">${word.m}</div>`;
+
+      h += `<div class="fc-ex-section"><div class="fc-section-label">例文</div>`;
+      if (word.exT === 'd' && word.exL) {
+        h += `<div class="fc-dialogue">`;
+        word.exL.slice(0, 3).forEach(line => {
+          h += `<div class="fc-dl-line ${line.sd === 'r' ? 'right' : ''}">
+            <span class="fc-dl-sp">${line.sp}</span>
+            <span class="fc-dl-tx">${hl(line.tx, word.w)}</span>
+          </div>`;
         });
+        h += `</div>`;
+        if (word.exP) {
+          const spoken = word.exL.map(l => strip(l.tx)).join('。');
+          h += `<div class="fc-ex-pinyin-row">
+            <div class="fc-ex-pinyin">${word.exP}</div>
+            ${aBtn(spoken)}
+          </div>`;
+        }
+      } else if (word.exZ) {
+        h += `<div class="fc-prose-cn-row">
+          <div class="fc-prose-cn">${hl(word.exZ, word.w)}</div>
+          ${aBtn(strip(word.exZ))}
+        </div>`;
+        if (word.exP) h += `<div class="fc-ex-pinyin">${word.exP}</div>`;
+      }
+      if (word.exJ) h += `<div class="fc-ex-jp">${word.exJ}</div>`;
+      h += `</div>`;
+
+      if (word.sZ) {
+        h += `<div class="fc-story">
+          <div class="fc-section-label">${word.sTi || '📜 情景'}</div>
+          <div class="fc-story-cn-row">
+            <div class="fc-story-cn">${hl(word.sZ, word.w)}</div>
+            ${aBtn(strip(word.sZ))}
+          </div>
+          <div class="fc-story-jp">${word.sJ}</div>
+        </div>`;
+      }
+
+      const hasSyn = word.syn && word.syn.length > 0;
+      const hasAnt = word.ant && word.ant.length > 0;
+      if (hasSyn || hasAnt) {
+        h += `<div class="fc-relations">`;
+        if (hasSyn) {
+          h += `<div class="fc-section-label">類義語</div><div class="fc-chips">`;
+          word.syn.forEach(s => {
+            h += `<div class="fc-syn-chip"><span class="fc-chip-zh">${s.w}</span> <span class="fc-chip-p">${s.p}</span><br><span class="fc-chip-m">${s.m}</span></div>`;
+          });
+          h += `</div>`;
+        }
+        if (hasAnt) {
+          h += `<div class="fc-section-label" style="margin-top:0.4rem">対義語</div><div class="fc-chips">`;
+          word.ant.forEach(a => {
+            h += `<div class="fc-ant-chip"><span class="fc-chip-zh">${a.w}</span> <span class="fc-chip-p">${a.p}</span><br><span class="fc-chip-m">${a.m}</span></div>`;
+          });
+          h += `</div>`;
+        }
+        h += `</div>`;
+      }
+
+      if (word.ori) h += `<div class="fc-origin">${word.ori}</div>`;
+
+      fcBack.innerHTML = h;
+    }
+
+    function loadCard(word) {
+      isFlipped = false;
+      fcCard.classList.remove('flipped');
+      renderFront(word);
+      renderBack(word);
+      fcBack.scrollTop = 0;
+    }
+
+    function updateCounter() {
+      cardCounter.textContent = `${currentIndex + 1} / ${currentTheme.words.length}`;
+    }
+
+    function goTo(i) {
+      const n = currentTheme.words.length;
+      currentIndex = ((i % n) + n) % n;
+      updateCounter();
+      loadCard(currentTheme.words[currentIndex]);
+    }
+
+    function flipCard() {
+      isFlipped = !isFlipped;
+      fcCard.classList.toggle('flipped', isFlipped);
+    }
+
+    document.querySelectorAll('.theme-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        currentTheme = CHENGYU_DATA.find(t => t.id === tile.dataset.themeId);
+        currentIndex = 0;
+        cardThemeLabel.textContent = currentTheme.name;
+        themeView.hidden = true;
+        cardView.hidden = false;
+        updateCounter();
+        loadCard(currentTheme.words[0]);
       });
+    });
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+      themeView.hidden = false;
+      cardView.hidden = true;
+      currentTheme = null;
+    });
+
+    document.getElementById('prev-btn').addEventListener('click', () => goTo(currentIndex - 1));
+    document.getElementById('next-btn').addEventListener('click', () => goTo(currentIndex + 1));
+    document.getElementById('flip-btn').addEventListener('click', flipCard);
+
+    fcCard.addEventListener('click', e => {
+      if (!e.target.closest('.audio-btn')) flipCard();
+    });
+
+    document.addEventListener('click', e => {
+      const btn = e.target.closest('.audio-btn');
+      if (!btn) return;
+      e.stopPropagation();
+      const text = btn.dataset.speak;
+      if (!text) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN';
+      u.rate = 0.85;
+      window.speechSynthesis.speak(u);
+    });
+
+    document.addEventListener('keydown', e => {
+      if (!currentTheme) return;
+      if (e.key === 'ArrowLeft')  goTo(currentIndex - 1);
+      else if (e.key === 'ArrowRight') goTo(currentIndex + 1);
+      else if (e.key === ' ')     { e.preventDefault(); flipCard(); }
     });
   </script>
 </BaseLayout>
