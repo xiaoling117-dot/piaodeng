@@ -127,6 +127,114 @@ export function getLunarInfo(date) {
   };
 }
 
+// ── Four Pillars (四柱八字) ────────────────────────────────────
+// 五行: 甲乙=木, 丙丁=火, 戊己=土, 庚辛=金, 壬癸=水
+const STEM_ELEMENT   = [0,0,1,1,2,2,3,3,4,4];
+// 子丑寅卯辰巳午未申酉戌亥: 水土木木土火火土金金土水
+const BRANCH_ELEMENT = [4,2,0,0,2,1,1,2,3,3,2,4];
+
+export const WU_XING = ['木','火','土','金','水'];
+export const WU_XING_EN = ['wood','fire','earth','metal','water'];
+
+// 十二時辰 名称
+export const SHICHEN = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+// 日主（日柱天干）の一言
+export const RIZU_DESC = [
+  '大樹の木。根を張り、空へ向かう意志の強さ',
+  '草花の木。しなやかで粘り強く、どこでも根付く',
+  '太陽の火。惜しみなく照らし、人を温める輝き',
+  '燭台の火。静かに、しかし消えない。内なる光',
+  '大山の土。どっしりと安定し、万物を支える',
+  '田畑の土。柔らかく肥沃。静かに種を育む',
+  '鋼鉄の金。揺るぎない意志と鋭さ',
+  '宝石の金。美意識と感性。磨かれるほど深まる',
+  '大海の水。深く広く、万物を包み込む',
+  '霧雨の水。静かに浸透し、渇いたものを潤す',
+];
+
+function _hourToBranchIdx(hour) {
+  if (hour >= 23 || hour < 1) return 0;
+  return Math.floor((hour + 1) / 2);
+}
+
+function _monthBranchIdx(m, d) {
+  // 節 (solar term) で月支を決定 (近似)
+  if (m === 12 && d >= 7) return 0;   // 子月
+  if (m === 1  && d <= 5) return 0;
+  if (m === 1)             return 1;   // 丑月
+  if (m === 2  && d <= 3)  return 1;
+  if (m === 2)             return 2;   // 寅月
+  if (m === 3  && d <= 5)  return 2;
+  if (m === 3)             return 3;   // 卯月
+  if (m === 4  && d <= 4)  return 3;
+  if (m === 4)             return 4;   // 辰月
+  if (m === 5  && d <= 5)  return 4;
+  if (m === 5)             return 5;   // 巳月
+  if (m === 6  && d <= 5)  return 5;
+  if (m === 6)             return 6;   // 午月
+  if (m === 7  && d <= 6)  return 6;
+  if (m === 7)             return 7;   // 未月
+  if (m === 8  && d <= 6)  return 7;
+  if (m === 8)             return 8;   // 申月
+  if (m === 9  && d <= 7)  return 8;
+  if (m === 9)             return 9;   // 酉月
+  if (m === 10 && d <= 7)  return 9;
+  if (m === 10)            return 10;  // 戌月
+  if (m === 11 && d <= 6)  return 10;
+  return 11;                           // 亥月
+}
+
+// 四柱を返す。hour は 0-23 の数値（省略可）
+export function getBazi(date, hour = null) {
+  const lunarInfo = getLunarInfo(date);
+  if (!lunarInfo) return null;
+
+  // 年柱
+  const yearSI = ((lunarInfo.lunarYear - 4) % 10 + 10) % 10;
+  const yearBI = ((lunarInfo.lunarYear - 4) % 12 + 12) % 12;
+
+  // 月柱
+  const monthBI = _monthBranchIdx(date.getMonth() + 1, date.getDate());
+  const monthStemBase = [2, 4, 6, 8, 0][yearSI % 5]; // 寅月の天干
+  const monthSI = (monthStemBase + ((monthBI - 2 + 12) % 12)) % 10;
+
+  // 日柱 (基準: 2024年2月10日 = 壬午 = index 18, offset=48)
+  const refMs = Date.UTC(1900, 0, 1);
+  const tgtMs = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+  const days   = Math.round((tgtMs - refMs) / 86400000);
+  const dayIdx = ((days + 48) % 60 + 60) % 60;
+  const daySI  = dayIdx % 10;
+  const dayBI  = dayIdx % 12;
+
+  // 時柱
+  let hourSI = null, hourBI = null;
+  if (hour !== null) {
+    hourBI = _hourToBranchIdx(hour);
+    const hourBase = [0, 2, 4, 6, 8][daySI % 5];
+    hourSI = (hourBase + hourBI) % 10;
+  }
+
+  return {
+    year:  { si: yearSI,  bi: yearBI,  stem: TIANGAN[yearSI],  branch: DIZHI[yearBI]  },
+    month: { si: monthSI, bi: monthBI, stem: TIANGAN[monthSI], branch: DIZHI[monthBI] },
+    day:   { si: daySI,   bi: dayBI,   stem: TIANGAN[daySI],   branch: DIZHI[dayBI]   },
+    hour:  hourSI !== null
+      ? { si: hourSI, bi: hourBI, stem: TIANGAN[hourSI], branch: DIZHI[hourBI] }
+      : null,
+  };
+}
+
+// 八字の五行カウント [木,火,土,金,水]
+export function countWuXing(bazi) {
+  const counts = [0, 0, 0, 0, 0];
+  for (const p of [bazi.year, bazi.month, bazi.day, bazi.hour].filter(Boolean)) {
+    counts[STEM_ELEMENT[p.si]]++;
+    counts[BRANCH_ELEMENT[p.bi]]++;
+  }
+  return counts;
+}
+
 // ── Current lunar month's day list ────────────────────────────
 export function getLunarMonthDays(today) {
   const info = getLunarInfo(today);

@@ -1,10 +1,10 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="旧暦検索">
+<BaseLayout title="旧暦・四柱検索">
 <style>
   .cal-page {
-    max-width: 560px;
+    max-width: 580px;
     margin: 0 auto;
     padding: 3rem 2rem;
   }
@@ -18,7 +18,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   .cal-sub {
     font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: var(--text-faint);
     letter-spacing: 0.15em;
     text-align: center;
@@ -26,16 +26,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   .cal-form {
     display: flex;
-    gap: 0.5rem;
+    flex-direction: column;
+    gap: 0.6rem;
     align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
     margin-bottom: 2rem;
   }
-  .cal-form label {
+  .form-row {
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .form-label {
     font-family: var(--mono);
-    font-size: 0.62rem;
+    font-size: 0.6rem;
     color: var(--text-faint);
+    letter-spacing: 0.05em;
+    min-width: 80px;
+    text-align: right;
   }
   .cal-input {
     background: var(--surface2);
@@ -45,16 +54,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: var(--mono);
     font-size: 0.82rem;
     padding: 6px 10px;
-    width: 80px;
+    width: 76px;
     text-align: center;
     outline: none;
     transition: border-color 0.2s;
   }
   .cal-input:focus { border-color: var(--gold-dim); }
-  .cal-sep {
-    color: var(--text-faint);
+  .cal-input.narrow { width: 58px; }
+  .cal-sep { color: var(--text-faint); font-family: var(--mono); }
+  .form-hint {
     font-family: var(--mono);
-    font-size: 0.9rem;
+    font-size: 0.55rem;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
   }
   .cal-btn {
     background: var(--surface2);
@@ -64,66 +76,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-family: var(--serif-zh);
     font-size: 0.85rem;
     letter-spacing: 0.1em;
-    padding: 6px 18px;
+    padding: 6px 20px;
     cursor: pointer;
     transition: all 0.2s;
+    margin-top: 0.3rem;
   }
   .cal-btn:hover { background: var(--surface3); }
-  .cal-result {
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    background: oklch(0.20 0.10 263 / 0.5);
-    padding: 1.5rem 2rem;
-    text-align: center;
-    display: none;
-  }
-  .cal-result.visible { display: block; animation: fadeup 0.3s ease; }
-  @keyframes fadeup { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
-  .res-date-gr {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--text-faint);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.8rem;
-  }
-  .res-moon {
-    font-size: 2.5rem;
-    line-height: 1;
-    margin-bottom: 0.6rem;
-  }
-  .res-year {
-    font-family: var(--serif-zh);
-    font-size: 1.05rem;
-    color: var(--gold);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.25rem;
-  }
-  .res-zodiac {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    color: var(--text-faint);
-    margin-bottom: 0.8rem;
-  }
-  .res-day {
-    font-family: var(--serif-zh);
-    font-size: 1.5rem;
-    color: var(--text);
-    letter-spacing: 0.08em;
-  }
-  .res-solar {
-    font-family: var(--serif-zh);
-    font-size: 0.75rem;
-    color: var(--jade);
-    margin-top: 0.5rem;
-    letter-spacing: 0.1em;
-  }
-  .res-moon-name {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--text-faint);
-    margin-top: 0.4rem;
-    letter-spacing: 0.1em;
-  }
+
   .cal-error {
     font-family: var(--mono);
     font-size: 0.7rem;
@@ -133,50 +92,245 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: none;
   }
   .cal-error.visible { display: block; }
+
+  /* ── Result card ── */
+  .cal-result {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: oklch(0.20 0.10 263 / 0.5);
+    padding: 1.5rem 1.5rem;
+    display: none;
+  }
+  .cal-result.visible { display: block; animation: fadeup 0.3s ease; }
+  @keyframes fadeup { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+  /* 旧暦サマリー */
+  .lunar-summary {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .res-date-gr {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.7rem;
+  }
+  .res-moon    { font-size: 2.2rem; line-height: 1; margin-bottom: 0.5rem; }
+  .res-year    { font-family: var(--serif-zh); font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; }
+  .res-zodiac  { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); margin: 0.2rem 0 0.6rem; }
+  .res-day     { font-family: var(--serif-zh); font-size: 1.4rem; color: var(--text); letter-spacing: 0.08em; }
+  .res-solar   { font-family: var(--serif-zh); font-size: 0.72rem; color: var(--jade); margin-top: 0.4rem; }
+  .res-moon-name { font-family: var(--mono); font-size: 0.58rem; color: var(--text-faint); margin-top: 0.3rem; }
+
+  /* ── 四柱 ── */
+  .bazi-section { display: none; }
+  .bazi-section.visible { display: block; animation: fadeup 0.3s ease; }
+  .bazi-title {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .bazi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 1rem;
+  }
+  .pillar {
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    padding: 10px 4px 8px;
+    text-align: center;
+    background: oklch(0.18 0.09 263 / 0.6);
+    position: relative;
+  }
+  .pillar.is-day {
+    border-color: var(--gold-dim);
+    box-shadow: 0 0 10px var(--gold-glow);
+  }
+  .pillar.no-hour { opacity: 0.3; }
+  .pillar-label {
+    font-family: var(--mono);
+    font-size: 0.48rem;
+    color: var(--text-faint);
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+  }
+  .pillar-stem {
+    font-family: var(--serif-zh);
+    font-size: 1.7rem;
+    font-weight: 600;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+  .pillar-branch {
+    font-family: var(--serif-zh);
+    font-size: 1.7rem;
+    line-height: 1;
+    margin-bottom: 6px;
+    color: var(--text-dim);
+  }
+  .pillar-wx {
+    font-family: var(--mono);
+    font-size: 0.45rem;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+  }
+  .pillar-shichen {
+    font-family: var(--mono);
+    font-size: 0.45rem;
+    color: var(--text-faint);
+    margin-top: 3px;
+  }
+
+  /* 五行カラー */
+  .wx-0 { color: #6aaa56; }
+  .wx-1 { color: #e06c6c; }
+  .wx-2 { color: #d4a017; }
+  .wx-3 { color: #9aa0a6; }
+  .wx-4 { color: #5b9bd5; }
+
+  /* 日主説明 */
+  .daymaster-box {
+    background: oklch(0.24 0.10 263 / 0.5);
+    border-left: 2px solid var(--gold-dim);
+    padding: 0.6rem 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .daymaster-title {
+    font-family: var(--mono);
+    font-size: 0.52rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .daymaster-stem {
+    font-family: var(--serif-zh);
+    font-size: 1.1rem;
+    margin-right: 0.4rem;
+  }
+  .daymaster-desc {
+    font-family: var(--serif-jp);
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  /* 五行カウント */
+  .wuxing-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    margin-top: 0.6rem;
+  }
+  .wx-cell {
+    text-align: center;
+    border: 1px solid var(--border-dim);
+    border-radius: 3px;
+    padding: 6px 2px;
+    background: oklch(0.18 0.09 263 / 0.4);
+  }
+  .wx-cell-name {
+    font-family: var(--serif-zh);
+    font-size: 0.95rem;
+    margin-bottom: 3px;
+  }
+  .wx-cell-count {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    color: var(--text-faint);
+  }
+  .wx-cell-bar {
+    height: 3px;
+    border-radius: 2px;
+    margin: 4px 4px 0;
+    background: currentColor;
+    opacity: 0.5;
+    transition: width 0.4s ease;
+  }
+
   .cal-note {
     font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     color: var(--text-faint);
     text-align: center;
     margin-top: 2rem;
-    line-height: 1.8;
+    line-height: 1.9;
     letter-spacing: 0.05em;
   }
 </style>
 
 <div class="cal-page">
-  <h1 class="cal-heading">旧暦検索</h1>
-  <p class="cal-sub">GREGORIAN → LUNAR CALENDAR</p>
+  <h1 class="cal-heading">旧暦・四柱検索</h1>
+  <p class="cal-sub">GREGORIAN → LUNAR · FOUR PILLARS</p>
 
   <form class="cal-form" id="cal-form">
-    <input class="cal-input" id="inp-year"  type="number" placeholder="年" min="1930" max="2035" />
-    <span class="cal-sep">/</span>
-    <input class="cal-input" id="inp-month" type="number" placeholder="月" min="1"    max="12"   style="width:64px" />
-    <span class="cal-sep">/</span>
-    <input class="cal-input" id="inp-day"   type="number" placeholder="日" min="1"    max="31"   style="width:64px" />
+    <div class="form-row">
+      <span class="form-label">生年月日:</span>
+      <input class="cal-input" id="inp-year"  type="number" placeholder="年" min="1930" max="2035" />
+      <span class="cal-sep">/</span>
+      <input class="cal-input narrow" id="inp-month" type="number" placeholder="月" min="1" max="12" />
+      <span class="cal-sep">/</span>
+      <input class="cal-input narrow" id="inp-day"   type="number" placeholder="日" min="1" max="31" />
+    </div>
+    <div class="form-row">
+      <span class="form-label">生まれた時刻:</span>
+      <input class="cal-input narrow" id="inp-hour"   type="number" placeholder="時" min="0" max="23" />
+      <span class="cal-sep">:</span>
+      <input class="cal-input narrow" id="inp-minute" type="number" placeholder="分" min="0" max="59" />
+      <span class="form-hint">（任意・四柱の時柱に使用）</span>
+    </div>
     <button class="cal-btn" type="submit">調べる</button>
   </form>
 
   <div class="cal-error" id="cal-error">その日付は対応範囲外です（1930〜2035年）</div>
 
   <div class="cal-result" id="cal-result">
-    <div class="res-date-gr" id="res-date-gr"></div>
-    <div class="res-moon"    id="res-moon"></div>
-    <div class="res-year"    id="res-year"></div>
-    <div class="res-zodiac"  id="res-zodiac"></div>
-    <div class="res-day"     id="res-day"></div>
-    <div class="res-solar"   id="res-solar"></div>
-    <div class="res-moon-name" id="res-moon-name"></div>
+    <!-- 旧暦サマリー -->
+    <div class="lunar-summary">
+      <div class="res-date-gr"    id="res-date-gr"></div>
+      <div class="res-moon"       id="res-moon"></div>
+      <div class="res-year"       id="res-year"></div>
+      <div class="res-zodiac"     id="res-zodiac"></div>
+      <div class="res-day"        id="res-day"></div>
+      <div class="res-solar"      id="res-solar"></div>
+      <div class="res-moon-name"  id="res-moon-name"></div>
+    </div>
+
+    <!-- 四柱八字 -->
+    <div class="bazi-section" id="bazi-section">
+      <div class="bazi-title">四 柱 八 字</div>
+      <div class="bazi-grid" id="bazi-grid"></div>
+      <div class="daymaster-box" id="daymaster-box">
+        <div class="daymaster-title">日主（あなたの核）</div>
+        <div class="daymaster-desc" id="daymaster-desc"></div>
+      </div>
+      <div class="bazi-title" style="margin-top:0.4rem">五 行</div>
+      <div class="wuxing-row" id="wuxing-row"></div>
+    </div>
   </div>
 
   <p class="cal-note">
     対応範囲: 1930年〜2035年（現在から約96年前まで）<br>
-    旧暦は概算です。実際の暦と1〜2日ずれる場合があります
+    旧暦・四柱はいずれも概算です。節気の前後1〜2日ずれる場合があります
   </p>
 </div>
 
 <script>
-  import { getLunarInfo, getMoonPhase, getMoonEmoji, getMoonName, getSolarTerm } from '../scripts/lunar.js';
+  import {
+    getLunarInfo, getMoonPhase, getMoonEmoji, getMoonName, getSolarTerm,
+    getBazi, countWuXing,
+    WU_XING, RIZU_DESC, SHICHEN,
+  } from '../scripts/lunar.js';
+
+  const WX_CLASS = ['wx-0','wx-1','wx-2','wx-3','wx-4'];
 
   const form     = document.getElementById('cal-form');
   const errorEl  = document.getElementById('cal-error');
@@ -187,31 +341,88 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     errorEl?.classList.remove('visible');
     resultEl?.classList.remove('visible');
 
-    const y = parseInt((document.getElementById('inp-year')  as HTMLInputElement).value);
-    const m = parseInt((document.getElementById('inp-month') as HTMLInputElement).value);
-    const d = parseInt((document.getElementById('inp-day')   as HTMLInputElement).value);
+    const y = parseInt((document.getElementById('inp-year')   as HTMLInputElement).value);
+    const m = parseInt((document.getElementById('inp-month')  as HTMLInputElement).value);
+    const d = parseInt((document.getElementById('inp-day')    as HTMLInputElement).value);
+    const hRaw = (document.getElementById('inp-hour')   as HTMLInputElement).value;
+    const minRaw = (document.getElementById('inp-minute') as HTMLInputElement).value;
 
     if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) return;
 
     const date = new Date(y, m - 1, d);
     const info = getLunarInfo(date);
-
-    if (!info) {
-      errorEl?.classList.add('visible');
-      return;
-    }
+    if (!info) { errorEl?.classList.add('visible'); return; }
 
     const phase = getMoonPhase(date);
     const solar = getSolarTerm(date);
+    const pad   = (n: number) => String(n).padStart(2,'0');
 
-    const pad = (n: number) => String(n).padStart(2, '0');
-    (document.getElementById('res-date-gr')   as HTMLElement).textContent = `${y}.${pad(m)}.${pad(d)}`;
-    (document.getElementById('res-moon')      as HTMLElement).textContent = getMoonEmoji(phase);
-    (document.getElementById('res-year')      as HTMLElement).textContent = `${info.stemBranch}年`;
-    (document.getElementById('res-zodiac')    as HTMLElement).textContent = `${info.zodiac}年 / ${info.lunarYear}年`;
-    (document.getElementById('res-day')       as HTMLElement).textContent = `${info.monthName}${info.dayName}`;
-    (document.getElementById('res-solar')     as HTMLElement).textContent = solar ?? '';
-    (document.getElementById('res-moon-name') as HTMLElement).textContent = getMoonName(phase);
+    // 旧暦サマリー
+    (document.getElementById('res-date-gr')  as HTMLElement).textContent = `${y}.${pad(m)}.${pad(d)}`;
+    (document.getElementById('res-moon')     as HTMLElement).textContent = getMoonEmoji(phase);
+    (document.getElementById('res-year')     as HTMLElement).textContent = `${info.stemBranch}年`;
+    (document.getElementById('res-zodiac')   as HTMLElement).textContent = `${info.zodiac}年 / ${info.lunarYear}年`;
+    (document.getElementById('res-day')      as HTMLElement).textContent = `${info.monthName}${info.dayName}`;
+    (document.getElementById('res-solar')    as HTMLElement).textContent = solar ?? '';
+    (document.getElementById('res-moon-name')as HTMLElement).textContent = getMoonName(phase);
+
+    // 四柱
+    const hasTime = hRaw !== '' && minRaw !== '';
+    const hour    = hasTime ? (parseInt(hRaw) + Math.round(parseInt(minRaw || '0') / 60 * 10) / 10) : null;
+    // hourは0-23の整数（分は四捨五入して繰り上げ考慮不要。時辰は2時間枠）
+    const hourInt = hasTime ? parseInt(hRaw) : null;
+    const bazi    = getBazi(date, hourInt);
+
+    const baziSection = document.getElementById('bazi-section');
+    if (bazi && baziSection) {
+      baziSection.classList.add('visible');
+
+      const pillars = [
+        { key: 'year',  label: '年柱', p: bazi.year,  isDay: false },
+        { key: 'month', label: '月柱', p: bazi.month, isDay: false },
+        { key: 'day',   label: '日柱', p: bazi.day,   isDay: true  },
+        { key: 'hour',  label: '時柱', p: bazi.hour,  isDay: false },
+      ];
+
+      const grid = document.getElementById('bazi-grid') as HTMLElement;
+      grid.innerHTML = pillars.map(({ label, p, isDay }) => {
+        if (!p) {
+          return `<div class="pillar no-hour">
+            <div class="pillar-label">${label}</div>
+            <div style="padding:1.5rem 0;font-family:var(--mono);font-size:0.55rem;color:var(--text-faint)">未入力</div>
+          </div>`;
+        }
+        const stemWx  = [0,0,1,1,2,2,3,3,4,4][p.si];
+        const branchWx = [4,2,0,0,2,1,1,2,3,3,2,4][p.bi];
+        const shichen  = label === '時柱' ? SHICHEN[p.bi] + '時' : '';
+        return `<div class="pillar${isDay ? ' is-day' : ''}">
+          <div class="pillar-label">${label}</div>
+          <div class="pillar-stem ${WX_CLASS[stemWx]}">${p.stem}</div>
+          <div class="pillar-branch ${WX_CLASS[branchWx]}">${p.branch}</div>
+          <div class="pillar-wx">${WU_XING[stemWx]}・${WU_XING[branchWx]}</div>
+          ${shichen ? `<div class="pillar-shichen">${shichen}</div>` : ''}
+        </div>`;
+      }).join('');
+
+      // 日主
+      const dayMasterEl = document.getElementById('daymaster-desc') as HTMLElement;
+      dayMasterEl.innerHTML =
+        `<span class="daymaster-stem ${WX_CLASS[[0,0,1,1,2,2,3,3,4,4][bazi.day.si]]}">${bazi.day.stem}</span>` +
+        RIZU_DESC[bazi.day.si];
+
+      // 五行
+      const counts = countWuXing(bazi);
+      const total  = counts.reduce((a,b) => a+b, 0);
+      const wxRow  = document.getElementById('wuxing-row') as HTMLElement;
+      wxRow.innerHTML = WU_XING.map((name, i) => {
+        const pct = total > 0 ? Math.round(counts[i] / total * 100) : 0;
+        return `<div class="wx-cell ${WX_CLASS[i]}">
+          <div class="wx-cell-name">${name}</div>
+          <div class="wx-cell-count">${counts[i]}</div>
+          <div class="wx-cell-bar" style="width:${pct}%"></div>
+        </div>`;
+      }).join('');
+    }
 
     resultEl?.classList.add('visible');
   });
