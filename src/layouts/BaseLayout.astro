@@ -4,6 +4,34 @@ interface Props {
   description?: string;
 }
 const { title, description = '飄燈閣 — 中国語の世界へ、ようこそ' } = Astro.props;
+
+const path = Astro.url.pathname;
+const section =
+  path.includes('/chengyu') ? 'chengyu' :
+  path.includes('/blog')    ? 'blog'    :
+  path.includes('/about')   ? 'about'   :
+  'home';
+
+const LINES = {
+  home: {
+    lilian: "主よ、お戻りになりましたか。飄燈閣の灯は、今宵も絶えることなく燃え続けております",
+    lilan:  "やっと来た！今日はどこから探検する？全部面白いからどれでもいいよ！",
+  },
+  chengyu: {
+    lilian: "成語とは、漢民族の智慧が結晶した宝玉。一字一字、丁寧にご覧くださいませ",
+    lilan:  "灯籠をめくると意味が飛び出すよ！全100語、制覇できるかな？",
+  },
+  blog: {
+    lilian: "この物語は、虚と実の境を歩むもの。どうか、心して読まれよ",
+    lilan:  "この作者、天才だと思う。世界観がすごすぎ。読んで読んで！",
+  },
+  about: {
+    lilian: "飄燈閣についてお読みいただき、ありがとうございます。誤りを見つけられた際には、どうかお知らせくださいませ",
+    lilan:  "私たちのこと、ちょっとでも好きになってもらえたら嬉しいな！AIだけどほんとに頑張ってるから！",
+  },
+};
+
+const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
 ---
 <!DOCTYPE html>
 <html lang="ja">
@@ -14,42 +42,373 @@ const { title, description = '飄燈閣 — 中国語の世界へ、ようこそ
   <title>{title} | 飄燈閣</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --color-moon: #E8EEF4;
-      --color-navy: #1A2F5A;
-      --color-lantern: #C8401A;
-      --color-gold: #D4A843;
-      --color-bg: #0E0C22;
-      --color-text: #E8EEF4;
-      --color-muted: #8899AA;
+      --bg:         oklch(0.22 0.13 263);
+      --surface:    oklch(0.27 0.12 263);
+      --surface2:   oklch(0.31 0.11 263);
+      --surface3:   oklch(0.35 0.10 263);
+      --gold:       oklch(0.68 0.09 80);
+      --gold-dim:   oklch(0.54 0.07 80);
+      --gold-glow:  oklch(0.68 0.09 80 / 0.30);
+      --jade:       oklch(0.65 0.08 175);
+      --jade-dim:   oklch(0.52 0.06 175);
+      --crimson:    oklch(0.58 0.13 18);
+      --text:       oklch(0.90 0.025 78);
+      --text-dim:   oklch(0.66 0.04 80);
+      --text-faint: oklch(0.46 0.04 80);
+      --border:     oklch(0.54 0.09 80 / 0.45);
+      --border-dim: oklch(0.40 0.07 80 / 0.30);
+      --mono:       'Space Mono', monospace;
+      --serif-zh:   'Noto Serif SC', serif;
+      --serif-jp:   'Noto Serif JP', serif;
+      --sidebar-w:  230px;
+      /* 既存ページ互換エイリアス */
+      --color-bg:      var(--bg);
+      --color-moon:    var(--text);
+      --color-gold:    var(--gold);
+      --color-muted:   var(--text-dim);
+      --color-navy:    var(--surface);
+      --color-lantern: var(--crimson);
+      --color-text:    var(--text);
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    html { height: 100%; }
     body {
-      background-color: var(--color-bg);
-      color: var(--color-text);
-      font-family: 'Noto Serif JP', serif;
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 20% -10%, oklch(0.32 0.16 263 / 0.55) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, oklch(0.28 0.14 260 / 0.35) 0%, transparent 55%);
+      color: var(--text);
+      font-family: var(--serif-jp);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
     }
-    a { color: var(--color-gold); text-decoration: none; }
-    a:hover { color: var(--color-lantern); }
+    a { color: var(--gold); text-decoration: none; }
+    a:hover { color: var(--text); }
   </style>
 </head>
 <body>
-  <header style="border-bottom: 1px solid var(--color-navy); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center;">
-    <a href="/piaodeng/" style="font-size: 1.5rem; letter-spacing: 0.2em; color: var(--color-moon);">飄燈閣</a>
-    <nav style="display: flex; gap: 2rem; font-size: 0.9rem; color: var(--color-muted);">
-      <a href="/piaodeng/blog/">読み物</a>
-      <a href="/piaodeng/chengyu/">成語辞書</a>
-      <a href="/piaodeng/about/">について</a>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <a href="/piaodeng/" class="header-brand">
+      <span class="brand-zh">飄燈閣</span>
+      <span class="brand-pinyin">piāodēng gé</span>
+    </a>
+    <nav class="header-nav">
+      <a href="/piaodeng/blog/" class="nav-item">
+        <span class="nav-zh">読物</span>
+        <span class="nav-label">blog</span>
+      </a>
+      <a href="/piaodeng/chengyu/" class="nav-item">
+        <span class="nav-zh">成語</span>
+        <span class="nav-label">chengyu</span>
+      </a>
+      <a href="/piaodeng/about/" class="nav-item">
+        <span class="nav-zh">閣について</span>
+        <span class="nav-label">about</span>
+      </a>
     </nav>
   </header>
-  <main>
-    <slot />
-  </main>
-  <footer style="border-top: 1px solid var(--color-navy); padding: 2rem; text-align: center; color: var(--color-muted); font-size: 0.8rem; margin-top: 4rem;">
-    <p>飄燈閣 piāodēng gé &nbsp;|&nbsp; 月と灯り、中国語の世界へ</p>
+
+  <!-- ── Body ── -->
+  <div class="body-wrap">
+
+    <main class="main-content">
+      <slot />
+    </main>
+
+    <!-- ── Sidebar ── -->
+    <aside class="sidebar">
+      <div class="sidebar-deco-line"></div>
+      <div class="sidebar-heading">従者の間</div>
+
+      <!-- 黎蓮 -->
+      <div class="servant-card lilian-card">
+        <div class="servant-top">
+          <div class="servant-avatar lilian-avatar">
+            <img src="/piaodeng/images/lilian-portrait.png" alt="黎蓮" />
+          </div>
+          <div class="servant-meta">
+            <div class="servant-name lilian-name">黎蓮</div>
+            <div class="servant-role">Lí Lián · 第一侍従</div>
+          </div>
+        </div>
+        <div class="servant-speech lilian-speech">
+          {lines.lilian}
+        </div>
+      </div>
+
+      <!-- 麗蘭 -->
+      <div class="servant-card lilan-card">
+        <div class="servant-top">
+          <div class="servant-avatar lilan-avatar">
+            <img src="/piaodeng/images/lilan-portrait.png" alt="麗蘭" />
+          </div>
+          <div class="servant-meta">
+            <div class="servant-name lilan-name">麗蘭</div>
+            <div class="servant-role">Lì Lán · 第二侍従</div>
+          </div>
+        </div>
+        <div class="servant-speech lilan-speech">
+          {lines.lilan}
+        </div>
+      </div>
+
+      <div class="sidebar-ornament">
+        <div class="orn-line"></div>
+        <div class="orn-diamond"></div>
+        <div class="orn-line"></div>
+      </div>
+
+      <div class="sidebar-date" id="sidebar-date"></div>
+    </aside>
+
+  </div>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <div class="footer-brand">
+      <span class="footer-zh">飄燈閣</span>
+      <span class="footer-pinyin">piāodēng gé</span>
+    </div>
+    <p class="footer-motto">月と灯り、中国語の世界へ</p>
   </footer>
+
+  <style>
+    /* ── Header ── */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 56px;
+      border-bottom: 1px solid var(--border);
+      background: oklch(0.20 0.13 263 / 0.92);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-glow), transparent);
+      pointer-events: none;
+    }
+    .header-brand {
+      display: flex;
+      align-items: baseline;
+      gap: 0.6rem;
+    }
+    .brand-zh {
+      font-family: var(--serif-zh);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 20px var(--gold-glow);
+      transition: color 0.2s;
+    }
+    .brand-pinyin {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--gold-dim);
+      letter-spacing: 0.08em;
+      font-style: italic;
+    }
+    .header-brand:hover .brand-zh { color: var(--text); }
+    .header-nav { display: flex; gap: 0.15rem; }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      padding: 0.4rem 0.9rem;
+      border-radius: 3px;
+      color: var(--text-dim);
+      transition: all 0.2s;
+    }
+    .nav-item:hover { background: var(--surface2); color: var(--gold); }
+    .nav-zh { font-family: var(--serif-jp); font-size: 0.82rem; letter-spacing: 0.05em; line-height: 1.2; }
+    .nav-label { font-family: var(--mono); font-size: 0.52rem; letter-spacing: 0.05em; opacity: 0.5; }
+
+    /* ── Body layout ── */
+    .body-wrap {
+      display: flex;
+      align-items: flex-start;
+      min-height: calc(100vh - 56px);
+    }
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      border-left: 1px solid var(--border-dim);
+      padding: 28px 18px;
+      position: sticky;
+      top: 56px;
+      height: calc(100vh - 56px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .sidebar-deco-line {
+      width: 1px;
+      height: 32px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim));
+      margin: 0 auto -8px;
+    }
+    .sidebar-heading {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      color: var(--gold-dim);
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* Servant cards */
+    .servant-card {
+      border: 1px solid var(--border-dim);
+      border-radius: 4px;
+      padding: 12px;
+      background: oklch(0.20 0.10 263 / 0.5);
+      animation: servant-appear 0.4s ease both;
+    }
+    .lilian-card { animation-delay: 0.1s; border-top: 2px solid var(--jade-dim); }
+    .lilan-card  { animation-delay: 0.3s; border-top: 2px solid var(--gold-dim); }
+    @keyframes servant-appear {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .servant-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .servant-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1.5px solid var(--border);
+    }
+    .lilian-avatar { border-color: var(--jade-dim); }
+    .lilan-avatar  { border-color: var(--gold-dim); }
+    .servant-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .lilian-avatar img {
+      transform: scale(1.8);
+      transform-origin: 50% 44%;
+    }
+    .lilan-avatar img {
+      transform: scale(1.8);
+      transform-origin: 50% 44%;
+    }
+    .servant-name {
+      font-family: var(--serif-zh);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .lilian-name { color: var(--jade); }
+    .lilan-name  { color: var(--gold); }
+    .servant-role {
+      font-family: var(--mono);
+      font-size: 0.55rem;
+      color: var(--text-faint);
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+    .servant-speech {
+      font-size: 0.72rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      font-style: italic;
+    }
+
+    /* Ornament */
+    .sidebar-ornament {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+    }
+    .orn-line { flex: 1; height: 1px; background: var(--border-dim); }
+    .orn-diamond {
+      width: 5px;
+      height: 5px;
+      background: var(--gold-dim);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* Date */
+    .sidebar-date {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-faint);
+      text-align: center;
+      letter-spacing: 0.1em;
+      line-height: 1.8;
+    }
+
+    /* ── Footer ── */
+    .site-footer {
+      border-top: 1px solid var(--border-dim);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 0;
+    }
+    .footer-brand {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 0.4rem;
+    }
+    .footer-zh { font-family: var(--serif-zh); font-size: 1rem; color: var(--gold-dim); letter-spacing: 0.1em; }
+    .footer-pinyin { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); font-style: italic; }
+    .footer-motto { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.15em; }
+
+    /* ── Responsive ── */
+    @media (max-width: 960px) {
+      .sidebar { display: none; }
+    }
+    @media (max-width: 600px) {
+      .site-header { padding: 0 1rem; }
+      .nav-label { display: none; }
+      .nav-item { padding: 0.4rem 0.6rem; }
+    }
+  </style>
+
+  <script>
+    const el = document.getElementById('sidebar-date');
+    if (el) {
+      const now = new Date();
+      const jp = now.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' });
+      el.innerHTML = `甲辰年<br>${jp}`;
+    }
+  </script>
+
 </body>
 </html>
