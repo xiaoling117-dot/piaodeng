@@ -95,6 +95,8 @@ const { story } = Astro.props;
 
     </div>
 
+    <p class="audio-note">※ 音声はブラウザの中国語音声エンジンを使用しています。お使いの環境によって声が異なる場合や、再生できない場合があります。</p>
+
     <!-- 黎蓮の手記 link -->
     <div class="memoir-link-wrap">
       <div class="memoir-deco">
@@ -143,15 +145,21 @@ const { story } = Astro.props;
     return activePanel?.querySelector('.zh-text') as HTMLElement ?? null;
   }
 
+  function buildRubyHtml(line: string): string {
+    return [...line].map(char => {
+      if (/[一-鿿㐀-䶿]/.test(char)) {
+        const py = pinyin(char, { toneType: 'symbol' });
+        return `<ruby>${char}<rt>${py}</rt></ruby>`;
+      }
+      return char;
+    }).join('');
+  }
+
   function renderWithPinyin(body: HTMLElement) {
     const raw = body.dataset.zh ?? '';
-    const lines = raw.split('\n');
-    body.innerHTML = lines.map(line => {
-      if (!line.trim()) return '<p></p>';
-      // pinyin-pro: HTML ruby 出力
-      const html = pinyin(line, { type: 'html' });
-      return `<p>${html}</p>`;
-    }).join('');
+    body.innerHTML = raw.split('\n').map(line =>
+      `<p>${buildRubyHtml(line)}</p>`
+    ).join('');
   }
 
   function renderPlain(body: HTMLElement) {
@@ -456,6 +464,17 @@ const { story } = Astro.props;
     font-size: 0.8rem;
     color: var(--text-dim);
     letter-spacing: 0.03em;
+  }
+
+  /* Audio note */
+  .audio-note {
+    font-family: var(--serif-jp);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    padding: 0 0.25rem;
   }
 
   /* Memoir link */
