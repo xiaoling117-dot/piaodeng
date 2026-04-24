@@ -149,7 +149,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <p class="cal-sub">GREGORIAN → LUNAR CALENDAR</p>
 
   <form class="cal-form" id="cal-form">
-    <input class="cal-input" id="inp-year"  type="number" placeholder="年" min="2019" max="2035" />
+    <input class="cal-input" id="inp-year"  type="number" placeholder="年" min="1930" max="2035" />
     <span class="cal-sep">/</span>
     <input class="cal-input" id="inp-month" type="number" placeholder="月" min="1"    max="12"   style="width:64px" />
     <span class="cal-sep">/</span>
@@ -157,7 +157,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <button class="cal-btn" type="submit">調べる</button>
   </form>
 
-  <div class="cal-error" id="cal-error">その日付は対応範囲外です（2019〜2035年）</div>
+  <div class="cal-error" id="cal-error">その日付は対応範囲外です（1930〜2035年）</div>
 
   <div class="cal-result" id="cal-result">
     <div class="res-date-gr" id="res-date-gr"></div>
@@ -170,7 +170,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   </div>
 
   <p class="cal-note">
-    対応範囲: 2019年〜2035年<br>
+    対応範囲: 1930年〜2035年（現在から約96年前まで）<br>
     旧暦は概算です。実際の暦と1〜2日ずれる場合があります
   </p>
 </div>
