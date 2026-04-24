@@ -15,7 +15,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         id="hero-still"
         src="/piaodeng/images/hero-still.png"
         alt="黎蓮と麗蘭"
-        class="hero-image hero-still-hidden"
+        class="hero-image hero-still-overlay"
       />
       <div class="hero-image-caption">黎蓮（左）と麗蘭（右）</div>
     </div>
@@ -80,8 +80,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           const elapsed = Date.now() - startTime;
           const remaining = Math.max(0, durationMs - elapsed);
           setTimeout(() => {
-            gif.style.display = 'none';
-            still.classList.remove('hero-still-hidden');
+            still.style.opacity = '1';
+            gif.style.opacity = '0';
           }, remaining);
         });
       })();
@@ -145,8 +145,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       object-fit: cover;
       object-position: center top;
     }
-    .hero-still-hidden {
-      display: none;
+    .hero-still-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      opacity: 0;
     }
     .hero-image-caption {
       position: absolute;
