@@ -141,7 +141,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   .daymaster-label { font-family: var(--mono); font-size: 0.5rem; color: var(--gold-dim); letter-spacing: 0.1em; margin-bottom: 4px; }
   .daymaster-sub   { font-family: var(--mono); font-size: 0.5rem; color: var(--text-faint); letter-spacing: 0.04em; margin-bottom: 6px; }
-  .daymaster-stem  { font-family: var(--serif-zh); font-size: 1.05rem; margin-right: 0.4rem; }
+  .daymaster-stem  {
+    font-family: var(--serif-zh); font-size: 2.2rem; font-weight: 700;
+    margin-right: 0.5rem; line-height: 1;
+    text-shadow: 0 0 18px currentColor;
+    vertical-align: middle;
+  }
   .daymaster-desc  { font-family: var(--serif-jp); font-size: 0.72rem; color: var(--text-dim); line-height: 1.7; font-style: italic; }
 
   /* 五行 */
@@ -276,6 +281,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <td>自己の本質（日主）・人生の構造・五行のバランス</td>
         </tr>
         <tr>
+          <td class="col-head">普及地域</td>
+          <td>日本で主流（中国ではほぼ使われない）</td>
+          <td>中国・台湾・東南アジアで主流</td>
+        </tr>
+        <tr>
           <td class="col-head">起源</td>
           <td>中国発祥・日本で独自発展</td>
           <td>中国の命理学（四柱推命）</td>
@@ -286,6 +296,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <td>時刻まで入れると個人差が大きく出る</td>
         </tr>
       </table>
+      <div class="kyusei-caution" style="margin-top:0.8rem">
+        ※ 中国・台湾では四柱八字（命理学）が占いの主流。九星気学は日本で独自に発展した体系で、現代中国ではほとんど使われていない。
+      </div>
     </div>
 
   </div><!-- /.cal-result -->
