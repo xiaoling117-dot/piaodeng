@@ -6,12 +6,86 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="hero-image-wrap">
       <img
-        src="/piaodeng/images/lilian-lilan.png"
+        id="hero-gif"
+        src="/piaodeng/images/hero-loop.gif"
         alt="黎蓮と麗蘭"
         class="hero-image"
       />
+      <img
+        id="hero-still"
+        src="/piaodeng/images/hero-still.png"
+        alt="黎蓮と麗蘭"
+        class="hero-image hero-still-hidden"
+      />
       <div class="hero-image-caption">黎蓮（左）と麗蘭（右）</div>
     </div>
+
+    <script>
+      (function () {
+        const gif = document.getElementById('hero-gif');
+        const still = document.getElementById('hero-still');
+        if (!gif || !still) return;
+
+        const startTime = Date.now();
+
+        // GIFバイナリを解析して全フレームの遅延時間合計（ms）を返す
+        async function getGifDurationMs(src) {
+          const res = await fetch(src);
+          const b = new Uint8Array(await res.arrayBuffer());
+          let i = 6; // "GIF89a" ヘッダーをスキップ
+
+          // Logical Screen Descriptor (7 bytes)
+          const lsdFlags = b[i + 4];
+          i += 7;
+          if ((lsdFlags >> 7) & 1) i += 3 * (2 << (lsdFlags & 7)); // Global Color Table
+
+          let totalMs = 0;
+          outer: while (i < b.length) {
+            switch (b[i]) {
+              case 0x3B: break outer; // Trailer
+              case 0x21: { // Extension
+                i++;
+                const label = b[i++];
+                if (label === 0xF9) { // Graphic Control Extension
+                  i++;     // block size (= 4)
+                  i++;     // packed field
+                  totalMs += (b[i] | (b[i + 1] << 8)) * 10; // delay × 10ms
+                  i += 2;  // delay
+                  i++;     // transparent color index
+                  i++;     // terminator
+                } else {
+                  while (b[i]) { i += b[i] + 1; }
+                  i++; // terminator
+                }
+                break;
+              }
+              case 0x2C: { // Image Descriptor
+                i++;
+                const flags = b[i + 8];
+                i += 9; // left, top, width, height (8 bytes) + packed field
+                if ((flags >> 7) & 1) i += 3 * (2 << (flags & 7)); // Local Color Table
+                i++; // LZW minimum code size
+                while (b[i]) { i += b[i] + 1; }
+                i++; // terminator
+                break;
+              }
+              default: break outer;
+            }
+          }
+          return totalMs;
+        }
+
+        getGifDurationMs(gif.src).then(durationMs => {
+          if (durationMs <= 0) return;
+          const elapsed = Date.now() - startTime;
+          const remaining = Math.max(0, durationMs - elapsed);
+          setTimeout(() => {
+            gif.style.display = 'none';
+            still.classList.remove('hero-still-hidden');
+          }, remaining);
+        });
+      })();
+    </script>
 
     <div class="about-body">
       <h1 class="about-title">飄燈閣について</h1>
@@ -70,6 +144,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       max-height: 480px;
       object-fit: cover;
       object-position: center top;
+    }
+    .hero-still-hidden {
+      display: none;
     }
     .hero-image-caption {
       position: absolute;
