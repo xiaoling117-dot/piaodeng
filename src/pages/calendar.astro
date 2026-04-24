@@ -137,16 +137,17 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   /* 日主 */
   .daymaster-box {
     background: oklch(0.24 0.10 263 / 0.5); border-left: 2px solid var(--gold-dim);
-    padding: 0.6rem 0.9rem; margin-bottom: 1rem;
+    padding: 0.8rem 0.9rem; margin-bottom: 1rem;
+    display: flex; gap: 1rem; align-items: center;
   }
-  .daymaster-label { font-family: var(--mono); font-size: 0.5rem; color: var(--gold-dim); letter-spacing: 0.1em; margin-bottom: 4px; }
-  .daymaster-sub   { font-family: var(--mono); font-size: 0.5rem; color: var(--text-faint); letter-spacing: 0.04em; margin-bottom: 6px; }
-  .daymaster-stem  {
-    font-family: var(--serif-zh); font-size: 2.2rem; font-weight: 700;
-    margin-right: 0.5rem; line-height: 1;
-    text-shadow: 0 0 18px currentColor;
-    vertical-align: middle;
+  .daymaster-char {
+    font-family: var(--serif-zh); font-size: 3rem; font-weight: 700;
+    line-height: 1; flex-shrink: 0;
+    text-shadow: 0 0 20px currentColor;
   }
+  .daymaster-info { flex: 1; }
+  .daymaster-label { font-family: var(--mono); font-size: 0.5rem; color: var(--gold-dim); letter-spacing: 0.1em; margin-bottom: 3px; }
+  .daymaster-sub   { font-family: var(--mono); font-size: 0.48rem; color: var(--text-faint); letter-spacing: 0.04em; margin-bottom: 5px; }
   .daymaster-desc  { font-family: var(--serif-jp); font-size: 0.72rem; color: var(--text-dim); line-height: 1.7; font-style: italic; }
 
   /* 五行 */
@@ -243,11 +244,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       </div>
       <div class="bazi-grid" id="bazi-grid"></div>
 
-      <div class="daymaster-box" id="daymaster-box">
-        <div class="daymaster-label">日主（にちしゅ）</div>
-        <div class="daymaster-sub">日柱の天干 ＝ あなたという存在の核。命式全体を読む出発点</div>
-        <div class="daymaster-desc" id="daymaster-desc"></div>
-      </div>
+      <div class="daymaster-box" id="daymaster-box"></div>
 
       <div class="wuxing-label">五行バランス — 八字に現れる木・火・土・金・水の気の配分</div>
       <div class="wuxing-row" id="wuxing-row"></div>
@@ -393,8 +390,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }).join('');
 
       const dayWxCls = WX_CLASS[STEM_EL[bazi.day.si]];
-      document.getElementById('daymaster-desc')!.innerHTML =
-        `<span class="daymaster-stem ${dayWxCls}">${bazi.day.stem}</span>${RIZU_DESC[bazi.day.si]}`;
+      document.getElementById('daymaster-box')!.innerHTML =
+        `<div class="daymaster-char ${dayWxCls}">${bazi.day.stem}</div>
+         <div class="daymaster-info">
+           <div class="daymaster-label">日主（にちしゅ）</div>
+           <div class="daymaster-sub">日柱の天干 ＝ あなたという存在の核</div>
+           <div class="daymaster-desc">${RIZU_DESC[bazi.day.si]}</div>
+         </div>`;
 
       const counts = countWuXing(bazi);
       const total  = counts.reduce((a, b) => a + b, 0);
