@@ -1,0 +1,382 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { STORIES } from '../../data/stories.js';
+
+export function getStaticPaths() {
+  return STORIES.map(story => ({
+    params: { slug: story.slug },
+    props: { story },
+  }));
+}
+
+const { story } = Astro.props;
+---
+<BaseLayout title={story.title} description={story.desc}>
+  <div class="story-page">
+
+    <nav class="story-breadcrumb">
+      <a href="/piaodeng/story/">← 物語廊</a>
+    </nav>
+
+    <section class="story-hero">
+      <p class="story-chengyu">
+        <span class="chengyu-zh">{story.chengyu}</span>
+        <span class="chengyu-reading">{story.chengyu_reading}</span>
+        <span class="chengyu-meaning">{story.chengyu_meaning}</span>
+      </p>
+      <h1 class="story-title-zh">{story.zh_title}</h1>
+      <p class="story-title-jp">{story.title}</p>
+      <p class="story-desc">{story.desc}</p>
+    </section>
+
+    <div class="reader-wrap">
+
+      <!-- Level tabs -->
+      <div class="level-tabs" role="tablist">
+        {story.levels.map((lv, i) => (
+          <button
+            class={`level-tab ${i === 0 ? 'active' : ''}`}
+            data-level={lv.id}
+            role="tab"
+          >
+            <span class="lt-label">{lv.label}</span>
+            <span class="lt-zh">{lv.zh_label}</span>
+          </button>
+        ))}
+      </div>
+
+      <!-- Language tabs -->
+      <div class="lang-tabs">
+        <button class="lang-tab active" data-lang="zh">中国語</button>
+        <button class="lang-tab" data-lang="ja">日本語訳</button>
+        <button class="lang-tab" data-lang="vocab">単語</button>
+      </div>
+
+      <!-- Content panels -->
+      {story.levels.map((lv, i) => (
+        <div class={`level-panel ${i === 0 ? 'active' : ''}`} data-level={lv.id}>
+
+          <div class="lang-panel active" data-lang="zh">
+            <div class="text-body zh-text">
+              {lv.zh.split('\n').map(line => <p>{line}</p>)}
+            </div>
+          </div>
+
+          <div class="lang-panel" data-lang="ja">
+            <div class="text-body ja-text">
+              {lv.ja.split('\n').map(line => <p>{line}</p>)}
+            </div>
+          </div>
+
+          <div class="lang-panel" data-lang="vocab">
+            <div class="vocab-grid">
+              {lv.vocab.map(v => (
+                <div class="vocab-item">
+                  <span class="vocab-zh">{v.zh}</span>
+                  <span class="vocab-p">{v.p}</span>
+                  <span class="vocab-j">{v.j}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+      ))}
+
+    </div>
+
+    <!-- 黎蓮の手記 link -->
+    <div class="memoir-link-wrap">
+      <div class="memoir-deco">
+        <div class="ml-line"></div>
+        <div class="ml-diamond"></div>
+        <div class="ml-line"></div>
+      </div>
+      <div class="memoir-label">特集：黎蓮の手記</div>
+      <p class="memoir-desc">黎蓮が綴る、飄燈閣の記録と思索。</p>
+      <a href="/piaodeng/blog/" class="memoir-btn">天燈報で読む →</a>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll('.level-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const level = (tab as HTMLElement).dataset.level;
+      document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.level-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelector(`.level-panel[data-level="${level}"]`)?.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('.lang-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const lang = (tab as HTMLElement).dataset.lang;
+      document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.lang-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.querySelectorAll(`.lang-panel[data-lang="${lang}"]`).forEach(p => p.classList.add('active'));
+    });
+  });
+</script>
+
+<style is:global>
+  .story-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .story-breadcrumb {
+    padding: 1.5rem 0 0;
+  }
+  .story-breadcrumb a {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--gold-dim);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: color 0.2s;
+  }
+  .story-breadcrumb a:hover { color: var(--gold); }
+
+  /* Hero */
+  .story-hero {
+    text-align: center;
+    padding: 2.5rem 0 2.5rem;
+    border-bottom: 1px solid var(--border-dim);
+    margin-bottom: 2rem;
+  }
+  .story-chengyu {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  .chengyu-zh {
+    font-family: var(--serif-zh);
+    font-size: 1.1rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .chengyu-reading {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--jade-dim);
+    letter-spacing: 0.08em;
+  }
+  .chengyu-meaning {
+    font-family: var(--serif-jp);
+    font-size: 0.75rem;
+    color: var(--text-faint);
+  }
+  .story-title-zh {
+    font-family: var(--serif-zh);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 30px var(--gold-glow);
+    margin-bottom: 0.4rem;
+  }
+  .story-title-jp {
+    font-family: var(--serif-jp);
+    font-size: 1.1rem;
+    color: var(--text-dim);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+  .story-desc {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+  }
+
+  /* Reader */
+  .reader-wrap {
+    background: oklch(0.20 0.10 263 / 0.5);
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+
+  /* Level tabs */
+  .level-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-dim);
+  }
+  .level-tab {
+    flex: 1;
+    padding: 12px 8px;
+    background: none;
+    border: none;
+    border-right: 1px solid var(--border-dim);
+    color: var(--text-faint);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.2s;
+  }
+  .level-tab:last-child { border-right: none; }
+  .level-tab:hover { background: var(--surface2); color: var(--text-dim); }
+  .level-tab.active {
+    background: var(--surface2);
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+  }
+  .lt-label {
+    font-family: var(--serif-jp);
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+  }
+  .lt-zh {
+    font-family: var(--mono);
+    font-size: 0.55rem;
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+  }
+
+  /* Language tabs */
+  .lang-tabs {
+    display: flex;
+    gap: 0;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-dim);
+    background: var(--surface);
+  }
+  .lang-tab {
+    padding: 5px 14px;
+    background: none;
+    border: 1px solid var(--border-dim);
+    color: var(--text-faint);
+    font-family: var(--serif-jp);
+    font-size: 0.75rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .lang-tab:first-child { border-radius: 3px 0 0 3px; }
+  .lang-tab:last-child { border-radius: 0 3px 3px 0; }
+  .lang-tab + .lang-tab { border-left: none; }
+  .lang-tab:hover { color: var(--text-dim); }
+  .lang-tab.active { background: var(--surface2); border-color: var(--gold-dim); color: var(--gold); }
+
+  /* Panels */
+  .level-panel { display: none; }
+  .level-panel.active { display: block; }
+  .lang-panel { display: none; padding: 2rem; }
+  .lang-panel.active { display: block; }
+
+  /* Text */
+  .text-body { line-height: 2.2; }
+  .text-body p { margin-bottom: 0.75rem; }
+  .text-body p:last-child { margin-bottom: 0; }
+  .zh-text {
+    font-family: var(--serif-zh);
+    font-size: 1.1rem;
+    color: var(--text);
+    letter-spacing: 0.08em;
+  }
+  .ja-text {
+    font-family: var(--serif-jp);
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+
+  /* Vocab */
+  .vocab-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .vocab-item {
+    background: var(--surface2);
+    border: 1px solid var(--border-dim);
+    border-radius: 3px;
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .vocab-zh {
+    font-family: var(--serif-zh);
+    font-size: 1rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .vocab-p {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--jade-dim);
+    letter-spacing: 0.08em;
+  }
+  .vocab-j {
+    font-family: var(--serif-jp);
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+  }
+
+  /* Memoir link */
+  .memoir-link-wrap {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .memoir-deco {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto 1.5rem;
+    max-width: 200px;
+  }
+  .ml-line { flex: 1; height: 1px; background: var(--border-dim); }
+  .ml-diamond {
+    width: 6px; height: 6px;
+    background: var(--gold-dim);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+  .memoir-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .memoir-desc {
+    font-family: var(--serif-jp);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.05em;
+  }
+  .memoir-btn {
+    display: inline-block;
+    padding: 10px 28px;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: var(--serif-jp);
+    font-size: 0.85rem;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+  .memoir-btn:hover { background: var(--gold-glow); color: var(--text); }
+
+  @media (max-width: 600px) {
+    .lt-zh { display: none; }
+    .lang-panel { padding: 1.5rem 1rem; }
+    .story-chengyu { gap: 0.4rem; }
+  }
+</style>

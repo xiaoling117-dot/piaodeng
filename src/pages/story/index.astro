@@ -1,193 +1,55 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-
-// 同一シチュエーション「再会の夜」を4レベルで
-const SCENARIO = {
-  title: "再会の夜",
-  zh_title: "重逢之夜",
-  desc: "長い別れの後、ふたりが再び出会う——同じ場面を、4つの難易度で読む",
-  levels: [
-    {
-      id: "beginner",
-      label: "初級",
-      zh_label: "初级",
-      zh: `他回来了。\n我很高兴。\n他说："我想你了。"\n我说："我也想你。"\n我们两个人都很高兴。`,
-      ja: `彼が帰ってきた。\n私はとても嬉しかった。\n彼は言った。「会いたかった。」\n私は言った。「私もよ。」\n二人ともとても嬉しかった。`,
-      vocab: [
-        { zh: "回来", p: "huí lái", j: "帰ってくる" },
-        { zh: "高兴", p: "gāo xìng", j: "嬉しい" },
-        { zh: "想", p: "xiǎng", j: "恋しく思う・会いたい" },
-        { zh: "两个人", p: "liǎng gè rén", j: "二人" },
-      ],
-    },
-    {
-      id: "intermediate",
-      label: "中級",
-      zh_label: "中级",
-      zh: `三年后，他终于回来了。\n推开门的瞬间，我们两个人都愣了一下。\n他比以前瘦了，但眼神还是一样。\n"等很久了吗？"他问。\n"还好，"我说，"你回来就好。"`,
-      ja: `三年後、彼はついに帰ってきた。\n扉を開けた瞬間、二人とも少しの間呆然とした。\n彼は以前より痩せていたが、目は変わらなかった。\n「ずっと待っていたか？」と彼は聞いた。\n「まあね」と私は言った。「帰ってきてくれればそれでいい。」`,
-      vocab: [
-        { zh: "终于", p: "zhōng yú", j: "ついに・やっと" },
-        { zh: "愣", p: "lèng", j: "呆然とする・固まる" },
-        { zh: "瘦", p: "shòu", j: "痩せている" },
-        { zh: "眼神", p: "yǎn shén", j: "目の表情・眼差し" },
-        { zh: "回来就好", p: "huí lái jiù hǎo", j: "帰ってきてくれればそれでいい" },
-      ],
-    },
-    {
-      id: "advanced",
-      label: "上級",
-      zh_label: "高级",
-      zh: `那是一个落雪的夜晚，他站在门口，风雪拍打着他的肩膀。\n我们相视片刻，什么都没说——有些重逢，是不需要语言的。\n他走进来，把还沾着雪花的外套挂在了熟悉的那个位置。\n仿佛这三年，不过是一场漫长的梦。`,
-      ja: `それは雪の降る夜だった。彼は戸口に立ち、風雪が肩を打っていた。\n私たちはしばし見つめ合い、何も言わなかった——言葉を必要としない再会がある。\n彼は中に入り、まだ雪の残るコートを、あの見慣れた場所に掛けた。\nまるでこの三年が、長い夢の一つだったかのように。`,
-      vocab: [
-        { zh: "落雪", p: "luò xuě", j: "雪が降る" },
-        { zh: "相视", p: "xiāng shì", j: "見つめ合う" },
-        { zh: "重逢", p: "chóng féng", j: "再会する" },
-        { zh: "沾着", p: "zhān zhe", j: "付いたまま・まとわりついている" },
-        { zh: "仿佛", p: "fǎng fú", j: "まるで〜のようだ" },
-        { zh: "不过是", p: "bù guò shì", j: "〜に過ぎない" },
-      ],
-    },
-    {
-      id: "literary",
-      label: "文学",
-      zh_label: "文学",
-      zh: `雪夜无声，只有风过檐角的细响。\n他立于门槛之外，眉间积了薄薄的霜。三年，对于相思的人而言，每一日都是漫长的劫。\n我们没有拥抱，没有言语，只是彼此看了很久。\n有些重量，唯有沉默才能承担。他终于迈进门来，挂上了那件沾雪的青衫，一如往昔——\n仿佛他从来没有离开过，而我，也从来没有等过。`,
-      ja: `雪の夜は音もなく、軒先を過ぎる風の細い響きだけがある。\n彼は敷居の外に立ち、眉間には薄く霜が積もっていた。三年——相思の者にとって、一日一日が長い劫難だ。\n私たちは抱き合わなかった。言葉もなかった。ただ、互いを長い間見つめた。\nある重さは、沈黙にしか担えない。彼はついに中へ踏み入り、雪の染みた青い衣を掛けた、かつてのように——\nまるで彼が去ったことなど一度もなく、私も待ったことなど一度もなかったかのように。`,
-      vocab: [
-        { zh: "无声", p: "wú shēng", j: "音がない・無音" },
-        { zh: "檐角", p: "yán jiǎo", j: "軒の端・軒先" },
-        { zh: "相思", p: "xiāng sī", j: "恋しく思う・相思相愛" },
-        { zh: "漫长的劫", p: "màn cháng de jié", j: "長い試練・長い苦しみ" },
-        { zh: "唯有", p: "wéi yǒu", j: "〜だけが・ただ〜のみ" },
-        { zh: "一如往昔", p: "yī rú wǎng xī", j: "かつてと同じように" },
-      ],
-    },
-  ],
-};
+import { STORIES } from '../../data/stories.js';
 ---
-
 <BaseLayout title="物語廊" description="同じ場面を4つの難易度で読む。中日対訳リーダー。">
-  <div class="story-page">
+  <div class="story-index">
 
-    <section class="story-hero">
-      <p class="story-eyebrow">物語廊</p>
-      <h1 class="story-title-zh">{SCENARIO.zh_title}</h1>
-      <p class="story-title-jp">{SCENARIO.title}</p>
-      <p class="story-desc">{SCENARIO.desc}</p>
+    <section class="index-hero">
+      <p class="index-eyebrow">物語廊</p>
+      <h1 class="index-title-zh">故事廊</h1>
+      <p class="index-title-jp">物語廊</p>
+      <p class="index-desc">同じ場面を、4つの難易度で読む。<br/>成語が生きた言葉になる場所。</p>
     </section>
 
-    <div class="reader-wrap">
-
-      <!-- Level tabs -->
-      <div class="level-tabs" role="tablist">
-        {SCENARIO.levels.map((lv, i) => (
-          <button
-            class={`level-tab ${i === 0 ? 'active' : ''}`}
-            data-level={lv.id}
-            role="tab"
-          >
-            <span class="lt-label">{lv.label}</span>
-            <span class="lt-zh">{lv.zh_label}</span>
-          </button>
-        ))}
-      </div>
-
-      <!-- Language tabs -->
-      <div class="lang-tabs">
-        <button class="lang-tab active" data-lang="zh">中国語</button>
-        <button class="lang-tab" data-lang="ja">日本語訳</button>
-        <button class="lang-tab" data-lang="vocab">単語</button>
-      </div>
-
-      <!-- Content panels -->
-      {SCENARIO.levels.map((lv, i) => (
-        <div class={`level-panel ${i === 0 ? 'active' : ''}`} data-level={lv.id}>
-
-          <div class="lang-panel active" data-lang="zh">
-            <div class="text-body zh-text">
-              {lv.zh.split('\n').map(line => <p>{line}</p>)}
+    <ul class="story-list">
+      {STORIES.map((story, i) => (
+        <li class="story-card">
+          <a href={`/piaodeng/story/${story.slug}/`} class="story-card-link">
+            <span class="card-num">0{i + 1}</span>
+            <div class="card-body">
+              <p class="card-chengyu">
+                <span class="card-chengyu-zh">{story.chengyu}</span>
+                <span class="card-chengyu-reading">{story.chengyu_reading}</span>
+                <span class="card-chengyu-meaning">{story.chengyu_meaning}</span>
+              </p>
+              <h2 class="card-title-zh">{story.zh_title}</h2>
+              <p class="card-title-jp">{story.title}</p>
+              <p class="card-desc">{story.desc}</p>
             </div>
-          </div>
-
-          <div class="lang-panel" data-lang="ja">
-            <div class="text-body ja-text">
-              {lv.ja.split('\n').map(line => <p>{line}</p>)}
-            </div>
-          </div>
-
-          <div class="lang-panel" data-lang="vocab">
-            <div class="vocab-grid">
-              {lv.vocab.map(v => (
-                <div class="vocab-item">
-                  <span class="vocab-zh">{v.zh}</span>
-                  <span class="vocab-p">{v.p}</span>
-                  <span class="vocab-j">{v.j}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
+            <span class="card-arrow">→</span>
+          </a>
+        </li>
       ))}
-
-    </div>
-
-    <!-- 黎蓮の手記 link -->
-    <div class="memoir-link-wrap">
-      <div class="memoir-deco">
-        <div class="ml-line"></div>
-        <div class="ml-diamond"></div>
-        <div class="ml-line"></div>
-      </div>
-      <div class="memoir-label">特集：黎蓮の手記</div>
-      <p class="memoir-desc">黎蓮が綴る、飄燈閣の記録と思索。</p>
-      <a href="/piaodeng/blog/" class="memoir-btn">天燈報で読む →</a>
-    </div>
+    </ul>
 
   </div>
 </BaseLayout>
 
-<script>
-  // Level tabs
-  document.querySelectorAll('.level-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const level = tab.dataset.level;
-      document.querySelectorAll('.level-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.level-panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelector(`.level-panel[data-level="${level}"]`)?.classList.add('active');
-    });
-  });
-
-  // Language tabs
-  document.querySelectorAll('.lang-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const lang = tab.dataset.lang;
-      document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.lang-panel').forEach(p => p.classList.remove('active'));
-      tab.classList.add('active');
-      document.querySelectorAll(`.lang-panel[data-lang="${lang}"]`).forEach(p => p.classList.add('active'));
-    });
-  });
-</script>
-
-<style is:global>
-  .story-page {
-    max-width: 780px;
+<style>
+  .story-index {
+    max-width: 720px;
     margin: 0 auto;
     padding: 0 1.5rem 5rem;
   }
 
-  /* Hero */
-  .story-hero {
+  .index-hero {
     text-align: center;
-    padding: 3.5rem 0 2.5rem;
+    padding: 3.5rem 0 3rem;
     border-bottom: 1px solid var(--border-dim);
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
   }
-  .story-eyebrow {
+  .index-eyebrow {
     font-family: var(--mono);
     font-size: 0.65rem;
     letter-spacing: 0.35em;
@@ -195,7 +57,7 @@ const SCENARIO = {
     text-transform: uppercase;
     margin-bottom: 0.75rem;
   }
-  .story-title-zh {
+  .index-title-zh {
     font-family: var(--serif-zh);
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 900;
@@ -204,199 +66,124 @@ const SCENARIO = {
     text-shadow: 0 0 30px var(--gold-glow);
     margin-bottom: 0.4rem;
   }
-  .story-title-jp {
+  .index-title-jp {
     font-family: var(--serif-jp);
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--text-dim);
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     letter-spacing: 0.08em;
   }
-  .story-desc {
-    font-family: var(--mono);
-    font-size: 0.7rem;
+  .index-desc {
+    font-family: var(--serif-jp);
+    font-size: 0.85rem;
     color: var(--text-faint);
-    letter-spacing: 0.08em;
+    line-height: 2;
+    letter-spacing: 0.05em;
   }
 
-  /* Reader */
-  .reader-wrap {
-    background: oklch(0.20 0.10 263 / 0.5);
+  .story-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .story-card {
     border: 1px solid var(--border-dim);
     border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 3rem;
+    margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
   }
-
-  /* Level tabs */
-  .level-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border-dim);
+  .story-card:hover {
+    border-color: var(--gold-dim);
   }
-  .level-tab {
-    flex: 1;
-    padding: 12px 8px;
-    background: none;
-    border: none;
-    border-right: 1px solid var(--border-dim);
-    color: var(--text-faint);
-    cursor: pointer;
+  .story-card-link {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 2px;
-    transition: all 0.2s;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: inherit;
   }
-  .level-tab:last-child { border-right: none; }
-  .level-tab:hover { background: var(--surface2); color: var(--text-dim); }
-  .level-tab.active {
-    background: var(--surface2);
-    color: var(--gold);
-    border-bottom: 2px solid var(--gold);
-  }
-  .lt-label {
-    font-family: var(--serif-jp);
-    font-size: 0.82rem;
-    letter-spacing: 0.05em;
-  }
-  .lt-zh {
+
+  .card-num {
     font-family: var(--mono);
-    font-size: 0.55rem;
-    opacity: 0.6;
+    font-size: 1.4rem;
+    color: var(--gold-dim);
     letter-spacing: 0.05em;
+    flex-shrink: 0;
+    width: 2.5rem;
+    text-align: center;
   }
 
-  /* Language tabs */
-  .lang-tabs {
+  .card-body {
+    flex: 1;
+  }
+
+  .card-chengyu {
     display: flex;
-    gap: 0;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border-dim);
-    background: var(--surface);
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+    flex-wrap: wrap;
   }
-  .lang-tab {
-    padding: 5px 14px;
-    background: none;
-    border: 1px solid var(--border-dim);
-    color: var(--text-faint);
-    font-family: var(--serif-jp);
-    font-size: 0.75rem;
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: all 0.2s;
-  }
-  .lang-tab:first-child { border-radius: 3px 0 0 3px; }
-  .lang-tab:last-child { border-radius: 0 3px 3px 0; }
-  .lang-tab + .lang-tab { border-left: none; }
-  .lang-tab:hover { color: var(--text-dim); }
-  .lang-tab.active { background: var(--surface2); border-color: var(--gold-dim); color: var(--gold); }
-
-  /* Panels */
-  .level-panel { display: none; }
-  .level-panel.active { display: block; }
-  .lang-panel { display: none; padding: 2rem 2rem; }
-  .lang-panel.active { display: block; }
-
-  /* Text */
-  .text-body { line-height: 2.2; }
-  .text-body p { margin-bottom: 0.75rem; }
-  .text-body p:last-child { margin-bottom: 0; }
-  .zh-text {
-    font-family: var(--serif-zh);
-    font-size: 1.1rem;
-    color: var(--text);
-    letter-spacing: 0.08em;
-  }
-  .ja-text {
-    font-family: var(--serif-jp);
-    font-size: 0.95rem;
-    color: var(--text-dim);
-    letter-spacing: 0.04em;
-  }
-
-  /* Vocab */
-  .vocab-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 10px;
-  }
-  .vocab-item {
-    background: var(--surface2);
-    border: 1px solid var(--border-dim);
-    border-radius: 3px;
-    padding: 10px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-  }
-  .vocab-zh {
+  .card-chengyu-zh {
     font-family: var(--serif-zh);
     font-size: 1rem;
     color: var(--gold);
     letter-spacing: 0.05em;
   }
-  .vocab-p {
+  .card-chengyu-reading {
     font-family: var(--mono);
     font-size: 0.65rem;
     color: var(--jade-dim);
     letter-spacing: 0.08em;
   }
-  .vocab-j {
+  .card-chengyu-meaning {
     font-family: var(--serif-jp);
-    font-size: 0.8rem;
-    color: var(--text-dim);
+    font-size: 0.7rem;
+    color: var(--text-faint);
     letter-spacing: 0.03em;
   }
 
-  /* Memoir link */
-  .memoir-link-wrap {
-    text-align: center;
-    padding: 2rem 1rem;
+  .card-title-zh {
+    font-family: var(--serif-zh);
+    font-size: 1.25rem;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.15rem;
   }
-  .memoir-deco {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 0 auto 1.5rem;
-    max-width: 200px;
-  }
-  .ml-line { flex: 1; height: 1px; background: var(--border-dim); }
-  .ml-diamond {
-    width: 6px; height: 6px;
-    background: var(--gold-dim);
-    transform: rotate(45deg);
-    flex-shrink: 0;
-  }
-  .memoir-label {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.25em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-  .memoir-desc {
+  .card-title-jp {
     font-family: var(--serif-jp);
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-dim);
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 0.05em;
   }
-  .memoir-btn {
-    display: inline-block;
-    padding: 10px 28px;
-    border: 1px solid var(--gold-dim);
-    color: var(--gold);
+  .card-desc {
     font-family: var(--serif-jp);
-    font-size: 0.85rem;
-    border-radius: 3px;
-    letter-spacing: 0.08em;
-    transition: all 0.2s;
-    text-decoration: none;
+    font-size: 0.75rem;
+    color: var(--text-faint);
+    line-height: 1.8;
+    letter-spacing: 0.03em;
   }
-  .memoir-btn:hover { background: var(--gold-glow); color: var(--text); }
+
+  .card-arrow {
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--gold-dim);
+    flex-shrink: 0;
+    transition: transform 0.2s, color 0.2s;
+  }
+  .story-card:hover .card-arrow {
+    transform: translateX(4px);
+    color: var(--gold);
+  }
 
   @media (max-width: 600px) {
-    .lt-zh { display: none; }
-    .lang-panel { padding: 1.5rem 1rem; }
+    .story-card-link { padding: 1.2rem 1rem; gap: 1rem; }
+    .card-num { font-size: 1.1rem; width: 2rem; }
   }
 </style>
