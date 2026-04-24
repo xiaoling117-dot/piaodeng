@@ -1,12 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="旧暦・四柱検索">
+<BaseLayout title="旧暦・命式検索">
 <style>
   .cal-page {
-    max-width: 580px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 3rem 2rem;
+    padding: 3rem 2rem 4rem;
   }
   .cal-heading {
     font-family: var(--serif-zh);
@@ -18,258 +18,153 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
   .cal-sub {
     font-family: var(--mono);
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     color: var(--text-faint);
     letter-spacing: 0.15em;
     text-align: center;
     margin-bottom: 2.5rem;
   }
-  .cal-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    align-items: center;
-    margin-bottom: 2rem;
-  }
-  .form-row {
-    display: flex;
-    gap: 0.4rem;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  .form-label {
-    font-family: var(--mono);
-    font-size: 0.6rem;
-    color: var(--text-faint);
-    letter-spacing: 0.05em;
-    min-width: 80px;
-    text-align: right;
-  }
+
+  /* ── Form ── */
+  .cal-form { display: flex; flex-direction: column; gap: 0.6rem; align-items: center; margin-bottom: 2rem; }
+  .form-row { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .form-label { font-family: var(--mono); font-size: 0.58rem; color: var(--text-faint); min-width: 84px; text-align: right; }
   .cal-input {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text);
-    font-family: var(--mono);
-    font-size: 0.82rem;
-    padding: 6px 10px;
-    width: 76px;
-    text-align: center;
-    outline: none;
-    transition: border-color 0.2s;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 3px;
+    color: var(--text); font-family: var(--mono); font-size: 0.82rem;
+    padding: 6px 10px; width: 76px; text-align: center; outline: none; transition: border-color 0.2s;
   }
   .cal-input:focus { border-color: var(--gold-dim); }
   .cal-input.narrow { width: 58px; }
   .cal-sep { color: var(--text-faint); font-family: var(--mono); }
-  .form-hint {
-    font-family: var(--mono);
-    font-size: 0.55rem;
-    color: var(--text-faint);
-    letter-spacing: 0.05em;
-  }
+  .form-hint { font-family: var(--mono); font-size: 0.53rem; color: var(--text-faint); }
   .cal-btn {
-    background: var(--surface2);
-    border: 1px solid var(--gold-dim);
-    border-radius: 3px;
-    color: var(--gold);
-    font-family: var(--serif-zh);
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    padding: 6px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-    margin-top: 0.3rem;
+    background: var(--surface2); border: 1px solid var(--gold-dim); border-radius: 3px;
+    color: var(--gold); font-family: var(--serif-zh); font-size: 0.85rem;
+    letter-spacing: 0.1em; padding: 6px 20px; cursor: pointer; transition: all 0.2s; margin-top: 0.3rem;
   }
   .cal-btn:hover { background: var(--surface3); }
 
-  .cal-error {
-    font-family: var(--mono);
-    font-size: 0.7rem;
-    color: var(--crimson);
-    text-align: center;
-    padding: 1rem;
-    display: none;
-  }
+  .cal-error { font-family: var(--mono); font-size: 0.7rem; color: var(--crimson); text-align: center; padding: 1rem; display: none; }
   .cal-error.visible { display: block; }
 
-  /* ── Result card ── */
-  .cal-result {
+  /* ── 結果エリア全体 ── */
+  .cal-result { display: none; }
+  .cal-result.visible { display: flex; flex-direction: column; gap: 1.2rem; animation: fadeup 0.3s ease; }
+  @keyframes fadeup { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+  /* 共通カード */
+  .result-card {
     border: 1px solid var(--border);
     border-radius: 4px;
     background: oklch(0.20 0.10 263 / 0.5);
-    padding: 1.5rem 1.5rem;
-    display: none;
+    padding: 1.4rem 1.6rem;
   }
-  .cal-result.visible { display: block; animation: fadeup 0.3s ease; }
-  @keyframes fadeup { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
 
-  /* 旧暦サマリー */
-  .lunar-summary {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.2rem;
+  /* セクション見出し */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
     border-bottom: 1px solid var(--border-dim);
   }
-  .res-date-gr {
-    font-family: var(--mono);
-    font-size: 0.62rem;
-    color: var(--text-faint);
-    letter-spacing: 0.1em;
-    margin-bottom: 0.7rem;
-  }
-  .res-moon    { font-size: 2.2rem; line-height: 1; margin-bottom: 0.5rem; }
-  .res-year    { font-family: var(--serif-zh); font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; }
-  .res-zodiac  { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); margin: 0.2rem 0 0.6rem; }
-  .res-day     { font-family: var(--serif-zh); font-size: 1.4rem; color: var(--text); letter-spacing: 0.08em; }
-  .res-solar   { font-family: var(--serif-zh); font-size: 0.72rem; color: var(--jade); margin-top: 0.4rem; }
-  .res-moon-name { font-family: var(--mono); font-size: 0.58rem; color: var(--text-faint); margin-top: 0.3rem; }
+  .section-zh { font-family: var(--serif-zh); font-size: 0.95rem; color: var(--gold-dim); letter-spacing: 0.1em; }
+  .section-note { font-family: var(--mono); font-size: 0.55rem; color: var(--text-faint); letter-spacing: 0.03em; }
 
-  /* ── 四柱 ── */
+  /* ── 旧暦 ── */
+  .lunar-body { text-align: center; }
+  .res-date-gr { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); letter-spacing: 0.1em; margin-bottom: 0.7rem; }
+  .res-moon    { font-size: 2rem; line-height: 1; margin-bottom: 0.4rem; }
+  .res-year    { font-family: var(--serif-zh); font-size: 1rem; color: var(--gold); letter-spacing: 0.1em; }
+  .res-zodiac  { font-family: var(--mono); font-size: 0.58rem; color: var(--text-faint); margin: 0.2rem 0 0.5rem; }
+  .res-day     { font-family: var(--serif-zh); font-size: 1.4rem; color: var(--text); letter-spacing: 0.08em; }
+  .res-solar   { font-family: var(--serif-zh); font-size: 0.7rem; color: var(--jade); margin-top: 0.4rem; }
+  .res-moon-name { font-family: var(--mono); font-size: 0.56rem; color: var(--text-faint); margin-top: 0.3rem; }
+  .lunar-gloss {
+    margin-top: 0.8rem;
+    font-family: var(--mono); font-size: 0.56rem; color: var(--text-faint);
+    line-height: 1.9; text-align: left;
+    border-top: 1px solid var(--border-dim); padding-top: 0.7rem;
+  }
+
+  /* ── 九星気学 ── */
+  .kyusei-body { display: flex; gap: 1rem; align-items: flex-start; }
+  .kyusei-star {
+    font-family: var(--serif-zh); font-size: 2.2rem; color: var(--gold);
+    letter-spacing: 0.05em; line-height: 1; flex-shrink: 0;
+    text-shadow: 0 0 16px var(--gold-glow);
+  }
+  .kyusei-info { flex: 1; }
+  .kyusei-name { font-family: var(--serif-zh); font-size: 1rem; color: var(--gold); letter-spacing: 0.08em; margin-bottom: 0.4rem; }
+  .kyusei-desc { font-family: var(--serif-jp); font-size: 0.72rem; color: var(--text-dim); line-height: 1.8; font-style: italic; }
+  .kyusei-caution {
+    margin-top: 0.6rem; font-family: var(--mono); font-size: 0.52rem;
+    color: var(--text-faint); border-top: 1px solid var(--border-dim); padding-top: 0.5rem;
+  }
+
+  /* ── 四柱八字 ── */
   .bazi-section { display: none; }
-  .bazi-section.visible { display: block; animation: fadeup 0.3s ease; }
-  .bazi-title {
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    letter-spacing: 0.25em;
-    color: var(--gold-dim);
-    text-align: center;
-    margin-bottom: 1rem;
+  .bazi-section.visible { display: block; }
+
+  .pillar-roles {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 6px; margin-bottom: 4px;
   }
-  .bazi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 6px;
-    margin-bottom: 1rem;
+  .pillar-role {
+    font-family: var(--mono); font-size: 0.46rem; color: var(--text-faint);
+    letter-spacing: 0.04em; text-align: center; line-height: 1.5;
   }
+  .bazi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 1rem; }
   .pillar {
-    border: 1px solid var(--border-dim);
-    border-radius: 4px;
-    padding: 10px 4px 8px;
-    text-align: center;
+    border: 1px solid var(--border-dim); border-radius: 4px;
+    padding: 10px 4px 8px; text-align: center;
     background: oklch(0.18 0.09 263 / 0.6);
-    position: relative;
   }
-  .pillar.is-day {
-    border-color: var(--gold-dim);
-    box-shadow: 0 0 10px var(--gold-glow);
-  }
+  .pillar.is-day { border-color: var(--gold-dim); box-shadow: 0 0 10px var(--gold-glow); }
   .pillar.no-hour { opacity: 0.3; }
-  .pillar-label {
-    font-family: var(--mono);
-    font-size: 0.48rem;
-    color: var(--text-faint);
-    letter-spacing: 0.15em;
-    margin-bottom: 6px;
-  }
-  .pillar-stem {
-    font-family: var(--serif-zh);
-    font-size: 1.7rem;
-    font-weight: 600;
-    line-height: 1;
-    margin-bottom: 3px;
-  }
-  .pillar-branch {
-    font-family: var(--serif-zh);
-    font-size: 1.7rem;
-    line-height: 1;
-    margin-bottom: 6px;
-    color: var(--text-dim);
-  }
-  .pillar-wx {
-    font-family: var(--mono);
-    font-size: 0.45rem;
-    color: var(--text-faint);
-    letter-spacing: 0.05em;
-  }
-  .pillar-shichen {
-    font-family: var(--mono);
-    font-size: 0.45rem;
-    color: var(--text-faint);
-    margin-top: 3px;
-  }
+  .pillar-label { font-family: var(--mono); font-size: 0.46rem; color: var(--text-faint); letter-spacing: 0.12em; margin-bottom: 6px; }
+  .pillar-stem   { font-family: var(--serif-zh); font-size: 1.65rem; font-weight: 600; line-height: 1; margin-bottom: 2px; }
+  .pillar-branch { font-family: var(--serif-zh); font-size: 1.65rem; line-height: 1; margin-bottom: 6px; color: var(--text-dim); }
+  .pillar-wx     { font-family: var(--mono); font-size: 0.43rem; color: var(--text-faint); letter-spacing: 0.04em; }
+  .pillar-shichen { font-family: var(--mono); font-size: 0.43rem; color: var(--text-faint); margin-top: 2px; }
 
   /* 五行カラー */
-  .wx-0 { color: #6aaa56; }
-  .wx-1 { color: #e06c6c; }
-  .wx-2 { color: #d4a017; }
-  .wx-3 { color: #9aa0a6; }
-  .wx-4 { color: #5b9bd5; }
+  .wx-0 { color: #6aaa56; } .wx-1 { color: #e06c6c; } .wx-2 { color: #d4a017; }
+  .wx-3 { color: #9aa0a6; } .wx-4 { color: #5b9bd5; }
 
-  /* 日主説明 */
+  /* 日主 */
   .daymaster-box {
-    background: oklch(0.24 0.10 263 / 0.5);
-    border-left: 2px solid var(--gold-dim);
-    padding: 0.6rem 0.9rem;
-    margin-bottom: 1rem;
+    background: oklch(0.24 0.10 263 / 0.5); border-left: 2px solid var(--gold-dim);
+    padding: 0.6rem 0.9rem; margin-bottom: 1rem;
   }
-  .daymaster-title {
-    font-family: var(--mono);
-    font-size: 0.52rem;
-    color: var(--gold-dim);
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
-  }
-  .daymaster-stem {
-    font-family: var(--serif-zh);
-    font-size: 1.1rem;
-    margin-right: 0.4rem;
-  }
-  .daymaster-desc {
-    font-family: var(--serif-jp);
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    line-height: 1.7;
-    font-style: italic;
-  }
+  .daymaster-label { font-family: var(--mono); font-size: 0.5rem; color: var(--gold-dim); letter-spacing: 0.1em; margin-bottom: 4px; }
+  .daymaster-sub   { font-family: var(--mono); font-size: 0.5rem; color: var(--text-faint); letter-spacing: 0.04em; margin-bottom: 6px; }
+  .daymaster-stem  { font-family: var(--serif-zh); font-size: 1.05rem; margin-right: 0.4rem; }
+  .daymaster-desc  { font-family: var(--serif-jp); font-size: 0.72rem; color: var(--text-dim); line-height: 1.7; font-style: italic; }
 
-  /* 五行カウント */
-  .wuxing-row {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    margin-top: 0.6rem;
-  }
-  .wx-cell {
-    text-align: center;
-    border: 1px solid var(--border-dim);
-    border-radius: 3px;
-    padding: 6px 2px;
-    background: oklch(0.18 0.09 263 / 0.4);
-  }
-  .wx-cell-name {
-    font-family: var(--serif-zh);
-    font-size: 0.95rem;
-    margin-bottom: 3px;
-  }
-  .wx-cell-count {
-    font-family: var(--mono);
-    font-size: 0.55rem;
-    color: var(--text-faint);
-  }
-  .wx-cell-bar {
-    height: 3px;
-    border-radius: 2px;
-    margin: 4px 4px 0;
-    background: currentColor;
-    opacity: 0.5;
-    transition: width 0.4s ease;
-  }
+  /* 五行 */
+  .wuxing-label { font-family: var(--mono); font-size: 0.5rem; color: var(--text-faint); margin-bottom: 0.4rem; letter-spacing: 0.05em; }
+  .wuxing-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .wx-cell { text-align: center; border: 1px solid var(--border-dim); border-radius: 3px; padding: 6px 2px; background: oklch(0.18 0.09 263 / 0.4); }
+  .wx-cell-name  { font-family: var(--serif-zh); font-size: 0.95rem; margin-bottom: 3px; }
+  .wx-cell-count { font-family: var(--mono); font-size: 0.55rem; color: var(--text-faint); }
+  .wx-cell-bar   { height: 3px; border-radius: 2px; margin: 4px 4px 0; background: currentColor; opacity: 0.5; }
 
-  .cal-note {
-    font-family: var(--mono);
-    font-size: 0.58rem;
-    color: var(--text-faint);
-    text-align: center;
-    margin-top: 2rem;
-    line-height: 1.9;
-    letter-spacing: 0.05em;
-  }
+  /* 体系比較 */
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 0.62rem; font-family: var(--mono); }
+  .compare-table th { color: var(--gold-dim); font-weight: normal; letter-spacing: 0.08em; text-align: left; padding: 4px 8px; border-bottom: 1px solid var(--border-dim); }
+  .compare-table td { color: var(--text-dim); padding: 5px 8px; border-bottom: 1px solid var(--border-dim); vertical-align: top; line-height: 1.6; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table .col-head { color: var(--text-faint); font-size: 0.55rem; }
+
+  .cal-note { font-family: var(--mono); font-size: 0.56rem; color: var(--text-faint); text-align: center; margin-top: 1.5rem; line-height: 1.9; }
 </style>
 
 <div class="cal-page">
-  <h1 class="cal-heading">旧暦・四柱検索</h1>
-  <p class="cal-sub">GREGORIAN → LUNAR · FOUR PILLARS</p>
+  <h1 class="cal-heading">旧暦・命式検索</h1>
+  <p class="cal-sub">GREGORIAN DATE → LUNAR · NINE STARS · FOUR PILLARS</p>
 
   <form class="cal-form" id="cal-form">
     <div class="form-row">
@@ -285,7 +180,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <input class="cal-input narrow" id="inp-hour"   type="number" placeholder="時" min="0" max="23" />
       <span class="cal-sep">:</span>
       <input class="cal-input narrow" id="inp-minute" type="number" placeholder="分" min="0" max="59" />
-      <span class="form-hint">（任意・四柱の時柱に使用）</span>
+      <span class="form-hint">（任意・入力すると時柱が加わります）</span>
     </div>
     <button class="cal-btn" type="submit">調べる</button>
   </form>
@@ -293,128 +188,204 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   <div class="cal-error" id="cal-error">その日付は対応範囲外です（1930〜2035年）</div>
 
   <div class="cal-result" id="cal-result">
-    <!-- 旧暦サマリー -->
-    <div class="lunar-summary">
-      <div class="res-date-gr"    id="res-date-gr"></div>
-      <div class="res-moon"       id="res-moon"></div>
-      <div class="res-year"       id="res-year"></div>
-      <div class="res-zodiac"     id="res-zodiac"></div>
-      <div class="res-day"        id="res-day"></div>
-      <div class="res-solar"      id="res-solar"></div>
-      <div class="res-moon-name"  id="res-moon-name"></div>
+
+    <!-- ① 旧暦 -->
+    <div class="result-card">
+      <div class="section-head">
+        <span class="section-zh">旧暦</span>
+        <span class="section-note">太陰太陽暦による日付と月の満ち欠け</span>
+      </div>
+      <div class="lunar-body">
+        <div class="res-date-gr"    id="res-date-gr"></div>
+        <div class="res-moon"       id="res-moon"></div>
+        <div class="res-year"       id="res-year"></div>
+        <div class="res-zodiac"     id="res-zodiac"></div>
+        <div class="res-day"        id="res-day"></div>
+        <div class="res-solar"      id="res-solar"></div>
+        <div class="res-moon-name"  id="res-moon-name"></div>
+      </div>
+      <div class="lunar-gloss">
+        干支（かんし）— 十干（甲〜癸）と十二支（子〜亥）を組み合わせた60年周期の暦。<br>
+        月相 — 新月（🌑）から満月（🌕）を経て有明月（🌘）まで約29.5日で一周する。
+      </div>
     </div>
 
-    <!-- 四柱八字 -->
-    <div class="bazi-section" id="bazi-section">
-      <div class="bazi-title">四 柱 八 字</div>
+    <!-- ② 九星気学 -->
+    <div class="result-card">
+      <div class="section-head">
+        <span class="section-zh">九星気学</span>
+        <span class="section-note">生まれた年から決まる、9種類の「本命星」</span>
+      </div>
+      <div class="kyusei-body" id="kyusei-body"></div>
+      <div class="kyusei-caution">
+        ※ 九星気学では立春（2月4日頃）が年の区切り。2月4日より前に生まれた場合は前年の星になります。<br>
+        ※ 生まれた年だけで決まるため、同じ年生まれはみな同じ星です。
+      </div>
+    </div>
+
+    <!-- ③ 四柱八字 -->
+    <div class="result-card bazi-section" id="bazi-section">
+      <div class="section-head">
+        <span class="section-zh">四柱八字</span>
+        <span class="section-note">年・月・日・時の四柱から成る八文字で命式を読む</span>
+      </div>
+
+      <div class="pillar-roles">
+        <div class="pillar-role">年柱<br>家系・社会</div>
+        <div class="pillar-role">月柱<br>仕事・親</div>
+        <div class="pillar-role">日柱 ★<br>自己の本質</div>
+        <div class="pillar-role">時柱<br>晩年・子孫</div>
+      </div>
       <div class="bazi-grid" id="bazi-grid"></div>
+
       <div class="daymaster-box" id="daymaster-box">
-        <div class="daymaster-title">日主（あなたの核）</div>
+        <div class="daymaster-label">日主（にちしゅ）</div>
+        <div class="daymaster-sub">日柱の天干 ＝ あなたという存在の核。命式全体を読む出発点</div>
         <div class="daymaster-desc" id="daymaster-desc"></div>
       </div>
-      <div class="bazi-title" style="margin-top:0.4rem">五 行</div>
+
+      <div class="wuxing-label">五行バランス — 八字に現れる木・火・土・金・水の気の配分</div>
       <div class="wuxing-row" id="wuxing-row"></div>
     </div>
-  </div>
+
+    <!-- ④ 体系の違い -->
+    <div class="result-card">
+      <div class="section-head">
+        <span class="section-zh">二つの体系について</span>
+        <span class="section-note">九星気学と四柱八字はどう違うか</span>
+      </div>
+      <table class="compare-table">
+        <tr>
+          <th></th>
+          <th>九星気学</th>
+          <th>四柱八字（命理学）</th>
+        </tr>
+        <tr>
+          <td class="col-head">使う情報</td>
+          <td>生まれた年のみ</td>
+          <td>生まれた年・月・日・時</td>
+        </tr>
+        <tr>
+          <td class="col-head">種類</td>
+          <td>9種類（同年生まれは同じ星）</td>
+          <td>干支の組み合わせで無数に異なる</td>
+        </tr>
+        <tr>
+          <td class="col-head">何を読む</td>
+          <td>基本性質と運気の流れ・年運</td>
+          <td>自己の本質（日主）・人生の構造・五行のバランス</td>
+        </tr>
+        <tr>
+          <td class="col-head">起源</td>
+          <td>中国発祥・日本で独自発展</td>
+          <td>中国の命理学（四柱推命）</td>
+        </tr>
+        <tr>
+          <td class="col-head">精度</td>
+          <td>年だけなので大まかな傾向</td>
+          <td>時刻まで入れると個人差が大きく出る</td>
+        </tr>
+      </table>
+    </div>
+
+  </div><!-- /.cal-result -->
 
   <p class="cal-note">
-    対応範囲: 1930年〜2035年（現在から約96年前まで）<br>
-    旧暦・四柱はいずれも概算です。節気の前後1〜2日ずれる場合があります
+    対応範囲: 1930年〜2035年 ／ 旧暦・四柱はいずれも概算（節気前後1〜2日の誤差あり）
   </p>
 </div>
 
 <script>
   import {
     getLunarInfo, getMoonPhase, getMoonEmoji, getMoonName, getSolarTerm,
-    getBazi, countWuXing,
-    WU_XING, RIZU_DESC, SHICHEN,
+    getBazi, countWuXing, getKyusei,
+    WU_XING, RIZU_DESC, SHICHEN, KYUSEI_NAMES,
   } from '../scripts/lunar.js';
 
   const WX_CLASS = ['wx-0','wx-1','wx-2','wx-3','wx-4'];
+  const STEM_EL  = [0,0,1,1,2,2,3,3,4,4];
+  const BRANCH_EL = [4,2,0,0,2,1,1,2,3,3,2,4];
 
-  const form     = document.getElementById('cal-form');
-  const errorEl  = document.getElementById('cal-error');
-  const resultEl = document.getElementById('cal-result');
-
-  form?.addEventListener('submit', (e) => {
+  document.getElementById('cal-form')?.addEventListener('submit', (e) => {
     e.preventDefault();
-    errorEl?.classList.remove('visible');
-    resultEl?.classList.remove('visible');
+    const errEl = document.getElementById('cal-error')!;
+    const resEl = document.getElementById('cal-result')!;
+    errEl.classList.remove('visible');
+    resEl.classList.remove('visible');
 
     const y = parseInt((document.getElementById('inp-year')   as HTMLInputElement).value);
     const m = parseInt((document.getElementById('inp-month')  as HTMLInputElement).value);
     const d = parseInt((document.getElementById('inp-day')    as HTMLInputElement).value);
-    const hRaw = (document.getElementById('inp-hour')   as HTMLInputElement).value;
-    const minRaw = (document.getElementById('inp-minute') as HTMLInputElement).value;
+    const hStr  = (document.getElementById('inp-hour')   as HTMLInputElement).value;
+    const minStr = (document.getElementById('inp-minute') as HTMLInputElement).value;
 
-    if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) return;
-
+    if (!y || !m || !d) return;
     const date = new Date(y, m - 1, d);
     const info = getLunarInfo(date);
-    if (!info) { errorEl?.classList.add('visible'); return; }
+    if (!info) { errEl.classList.add('visible'); return; }
 
+    const pad = (n: number) => String(n).padStart(2, '0');
     const phase = getMoonPhase(date);
     const solar = getSolarTerm(date);
-    const pad   = (n: number) => String(n).padStart(2,'0');
 
-    // 旧暦サマリー
-    (document.getElementById('res-date-gr')  as HTMLElement).textContent = `${y}.${pad(m)}.${pad(d)}`;
-    (document.getElementById('res-moon')     as HTMLElement).textContent = getMoonEmoji(phase);
-    (document.getElementById('res-year')     as HTMLElement).textContent = `${info.stemBranch}年`;
-    (document.getElementById('res-zodiac')   as HTMLElement).textContent = `${info.zodiac}年 / ${info.lunarYear}年`;
-    (document.getElementById('res-day')      as HTMLElement).textContent = `${info.monthName}${info.dayName}`;
-    (document.getElementById('res-solar')    as HTMLElement).textContent = solar ?? '';
-    (document.getElementById('res-moon-name')as HTMLElement).textContent = getMoonName(phase);
+    // ① 旧暦
+    (document.getElementById('res-date-gr')!  ).textContent = `${y}.${pad(m)}.${pad(d)}`;
+    (document.getElementById('res-moon')!      ).textContent = getMoonEmoji(phase);
+    (document.getElementById('res-year')!      ).textContent = `${info.stemBranch}年`;
+    (document.getElementById('res-zodiac')!    ).textContent = `${info.zodiac}年 / ${info.lunarYear}年`;
+    (document.getElementById('res-day')!       ).textContent = `${info.monthName}${info.dayName}`;
+    (document.getElementById('res-solar')!     ).textContent = solar ?? '';
+    (document.getElementById('res-moon-name')! ).textContent = getMoonName(phase);
 
-    // 四柱
-    const hasTime = hRaw !== '' && minRaw !== '';
-    const hour    = hasTime ? (parseInt(hRaw) + Math.round(parseInt(minRaw || '0') / 60 * 10) / 10) : null;
-    // hourは0-23の整数（分は四捨五入して繰り上げ考慮不要。時辰は2時間枠）
-    const hourInt = hasTime ? parseInt(hRaw) : null;
+    // ② 九星気学
+    const kyusei = getKyusei(y);
+    const kyuseiBody = document.getElementById('kyusei-body')!;
+    kyuseiBody.innerHTML = `
+      <div class="kyusei-star">${kyusei.number}</div>
+      <div class="kyusei-info">
+        <div class="kyusei-name">${kyusei.name}</div>
+        <div class="kyusei-desc">${kyusei.desc}</div>
+      </div>`;
+
+    // ③ 四柱八字
+    const hasTime = hStr !== '' && minStr !== '';
+    const hourInt = hasTime ? parseInt(hStr) : null;
     const bazi    = getBazi(date, hourInt);
+    const baziSec = document.getElementById('bazi-section')!;
 
-    const baziSection = document.getElementById('bazi-section');
-    if (bazi && baziSection) {
-      baziSection.classList.add('visible');
+    if (bazi) {
+      baziSec.classList.add('visible');
 
       const pillars = [
-        { key: 'year',  label: '年柱', p: bazi.year,  isDay: false },
-        { key: 'month', label: '月柱', p: bazi.month, isDay: false },
-        { key: 'day',   label: '日柱', p: bazi.day,   isDay: true  },
-        { key: 'hour',  label: '時柱', p: bazi.hour,  isDay: false },
+        { label: '年柱', p: bazi.year,  isDay: false },
+        { label: '月柱', p: bazi.month, isDay: false },
+        { label: '日柱', p: bazi.day,   isDay: true  },
+        { label: '時柱', p: bazi.hour,  isDay: false },
       ];
 
-      const grid = document.getElementById('bazi-grid') as HTMLElement;
-      grid.innerHTML = pillars.map(({ label, p, isDay }) => {
-        if (!p) {
-          return `<div class="pillar no-hour">
-            <div class="pillar-label">${label}</div>
-            <div style="padding:1.5rem 0;font-family:var(--mono);font-size:0.55rem;color:var(--text-faint)">未入力</div>
-          </div>`;
-        }
-        const stemWx  = [0,0,1,1,2,2,3,3,4,4][p.si];
-        const branchWx = [4,2,0,0,2,1,1,2,3,3,2,4][p.bi];
-        const shichen  = label === '時柱' ? SHICHEN[p.bi] + '時' : '';
+      document.getElementById('bazi-grid')!.innerHTML = pillars.map(({ label, p, isDay }) => {
+        if (!p) return `<div class="pillar no-hour">
+          <div class="pillar-label">${label}</div>
+          <div style="padding:1.5rem 0;font-family:var(--mono);font-size:0.52rem;color:var(--text-faint)">未入力</div>
+        </div>`;
+        const sWx = STEM_EL[p.si], bWx = BRANCH_EL[p.bi];
+        const shichen = label === '時柱' ? SHICHEN[p.bi] + '時' : '';
         return `<div class="pillar${isDay ? ' is-day' : ''}">
           <div class="pillar-label">${label}</div>
-          <div class="pillar-stem ${WX_CLASS[stemWx]}">${p.stem}</div>
-          <div class="pillar-branch ${WX_CLASS[branchWx]}">${p.branch}</div>
-          <div class="pillar-wx">${WU_XING[stemWx]}・${WU_XING[branchWx]}</div>
+          <div class="pillar-stem ${WX_CLASS[sWx]}">${p.stem}</div>
+          <div class="pillar-branch ${WX_CLASS[bWx]}">${p.branch}</div>
+          <div class="pillar-wx">${WU_XING[sWx]}・${WU_XING[bWx]}</div>
           ${shichen ? `<div class="pillar-shichen">${shichen}</div>` : ''}
         </div>`;
       }).join('');
 
-      // 日主
-      const dayMasterEl = document.getElementById('daymaster-desc') as HTMLElement;
-      dayMasterEl.innerHTML =
-        `<span class="daymaster-stem ${WX_CLASS[[0,0,1,1,2,2,3,3,4,4][bazi.day.si]]}">${bazi.day.stem}</span>` +
-        RIZU_DESC[bazi.day.si];
+      const dayWxCls = WX_CLASS[STEM_EL[bazi.day.si]];
+      document.getElementById('daymaster-desc')!.innerHTML =
+        `<span class="daymaster-stem ${dayWxCls}">${bazi.day.stem}</span>${RIZU_DESC[bazi.day.si]}`;
 
-      // 五行
       const counts = countWuXing(bazi);
-      const total  = counts.reduce((a,b) => a+b, 0);
-      const wxRow  = document.getElementById('wuxing-row') as HTMLElement;
-      wxRow.innerHTML = WU_XING.map((name, i) => {
+      const total  = counts.reduce((a, b) => a + b, 0);
+      document.getElementById('wuxing-row')!.innerHTML = WU_XING.map((name, i) => {
         const pct = total > 0 ? Math.round(counts[i] / total * 100) : 0;
         return `<div class="wx-cell ${WX_CLASS[i]}">
           <div class="wx-cell-name">${name}</div>
@@ -424,7 +395,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       }).join('');
     }
 
-    resultEl?.classList.add('visible');
+    resEl.classList.add('visible');
   });
 </script>
 </BaseLayout>

@@ -235,6 +235,31 @@ export function countWuXing(bazi) {
   return counts;
 }
 
+// ── 九星気学 ─────────────────────────────────────────────────
+export const KYUSEI_NAMES = [
+  '一白水星','二黒土星','三碧木星','四緑木星','五黄土星',
+  '六白金星','七赤金星','八白土星','九紫火星',
+];
+export const KYUSEI_DESC = [
+  '柔軟で浸透する水の気。縁と流れを大切に、人の心に静かに働きかける',
+  '誠実で粘り強い大地の気。コツコツ積み上げ、包容力で人を支える',
+  '行動力と好奇心旺盛な木の気。新しいものへの感性が鋭く、発信力が強い',
+  '情報を集めつなぐ風の気。信用と人間関係を育て、縁を広げる',
+  '変動が大きく中心に立つ土の王の気。影響力が強い分、波乱も多い',
+  '高潔で威厳ある天の気。リーダーシップと正義感が強く、完璧主義の面も',
+  '喜びと言葉の気。社交的で弁が立ち、直感と金運と結びつく',
+  '堅実で蓄積を司る山の気。晩成型の才能を持ち、変化の節目に強い',
+  '直観力と情熱の火の気。美意識と華やかさを持ち、礼と品格を大切にする',
+];
+
+// 生まれた年（立春以降）で本命星を計算
+export function getKyusei(year) {
+  let s = String(year).split('').reduce((a, d) => a + parseInt(d), 0);
+  if (s >= 10) s = Math.floor(s / 10) + (s % 10);
+  const star = ((11 - s - 1) % 9) + 1; // 1-9
+  return { number: star, name: KYUSEI_NAMES[star - 1], desc: KYUSEI_DESC[star - 1] };
+}
+
 // ── Current lunar month's day list ────────────────────────────
 export function getLunarMonthDays(today) {
   const info = getLunarInfo(today);
