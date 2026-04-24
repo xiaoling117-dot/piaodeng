@@ -180,7 +180,12 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
         <div class="orn-line"></div>
       </div>
 
-      <div class="sidebar-date" id="sidebar-date"></div>
+      <div class="lunar-box">
+        <div class="lunar-compact" id="lunar-compact"><span class="lunar-loading">…</span></div>
+        <button class="lunar-toggle-btn" id="lunar-toggle-btn">暦 ▾</button>
+        <div class="lunar-grid" id="lunar-grid" style="display:none"></div>
+        <a href="/piaodeng/calendar/" class="lunar-bday-link">誕生日を旧暦で調べる →</a>
+      </div>
     </aside>
 
   </div>
@@ -368,15 +373,56 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
       flex-shrink: 0;
     }
 
-    /* Date */
-    .sidebar-date {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      color: var(--text-faint);
+    /* Lunar calendar */
+    .lunar-box { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+    .lunar-compact {
+      font-family: var(--serif-zh);
+      font-size: 0.68rem;
+      color: var(--text-dim);
       text-align: center;
-      letter-spacing: 0.1em;
-      line-height: 1.8;
+      line-height: 1.9;
     }
+    .lunar-loading { color: var(--text-faint); font-family: var(--mono); }
+    .lunar-toggle-btn {
+      background: none;
+      border: 1px solid var(--border-dim);
+      border-radius: 3px;
+      color: var(--text-faint);
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      letter-spacing: 0.1em;
+      padding: 2px 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lunar-toggle-btn:hover { border-color: var(--gold-dim); color: var(--gold-dim); }
+    .lunar-grid {
+      width: 100%;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+    .lunar-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3px 1px;
+      border-radius: 3px;
+    }
+    .lunar-day.today {
+      background: var(--surface2);
+      outline: 1px solid var(--gold-dim);
+    }
+    .day-emoji { font-size: 0.85rem; line-height: 1; }
+    .day-num { font-family: var(--mono); font-size: 0.44rem; color: var(--text-faint); margin-top: 1px; }
+    .lunar-day.today .day-num { color: var(--gold); }
+    .lunar-bday-link {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      color: var(--text-faint);
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+    .lunar-bday-link:hover { color: var(--gold-dim); }
 
     /* ── Footer ── */
     .site-footer {
@@ -408,11 +454,50 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
   </style>
 
   <script>
-    const el = document.getElementById('sidebar-date');
-    if (el) {
-      const now = new Date();
-      const jp = now.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' });
-      el.innerHTML = `甲辰年<br>${jp}`;
+    import { getLunarInfo, getMoonPhase, getMoonEmoji, getSolarTerm, getLunarMonthDays } from '../scripts/lunar.js';
+
+    const today = new Date();
+    const lunarInfo = getLunarInfo(today);
+    const phase     = getMoonPhase(today);
+    const solarTerm = getSolarTerm(today);
+
+    const compactEl = document.getElementById('lunar-compact');
+    if (compactEl && lunarInfo) {
+      const emoji = getMoonEmoji(phase);
+      const lines  = [`${emoji} ${lunarInfo.stemBranch}年`, `${lunarInfo.monthName}${lunarInfo.dayName}`];
+      if (solarTerm) lines.push(solarTerm);
+      compactEl.innerHTML = lines.join('<br>');
+    }
+
+    const toggleBtn = document.getElementById('lunar-toggle-btn');
+    const gridEl    = document.getElementById('lunar-grid');
+    let built = false;
+
+    function buildGrid() {
+      if (!gridEl) return;
+      const days = getLunarMonthDays(today);
+      gridEl.innerHTML = days.map(d => {
+        const cls = d.isToday ? 'lunar-day today' : 'lunar-day';
+        const st  = getSolarTerm(d.date);
+        return `<div class="${cls}" title="${d.dayName}${st ? ' · ' + st : ''}">
+          <span class="day-emoji">${d.emoji}</span>
+          <span class="day-num">${d.dayIdx + 1}</span>
+        </div>`;
+      }).join('');
+    }
+
+    if (toggleBtn && gridEl) {
+      toggleBtn.addEventListener('click', () => {
+        const open = gridEl.style.display === 'grid';
+        if (open) {
+          gridEl.style.display = 'none';
+          toggleBtn.textContent = '暦 ▾';
+        } else {
+          if (!built) { buildGrid(); built = true; }
+          gridEl.style.display = 'grid';
+          toggleBtn.textContent = '暦 ▴';
+        }
+      });
     }
   </script>
 

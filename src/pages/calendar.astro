@@ -1,0 +1,219 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="旧暦検索">
+<style>
+  .cal-page {
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+  }
+  .cal-heading {
+    font-family: var(--serif-zh);
+    font-size: 1.5rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-align: center;
+    margin-bottom: 0.4rem;
+  }
+  .cal-sub {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-faint);
+    letter-spacing: 0.15em;
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+  .cal-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+  .cal-form label {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-faint);
+  }
+  .cal-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    padding: 6px 10px;
+    width: 80px;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .cal-input:focus { border-color: var(--gold-dim); }
+  .cal-sep {
+    color: var(--text-faint);
+    font-family: var(--mono);
+    font-size: 0.9rem;
+  }
+  .cal-btn {
+    background: var(--surface2);
+    border: 1px solid var(--gold-dim);
+    border-radius: 3px;
+    color: var(--gold);
+    font-family: var(--serif-zh);
+    font-size: 0.85rem;
+    letter-spacing: 0.1em;
+    padding: 6px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .cal-btn:hover { background: var(--surface3); }
+  .cal-result {
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: oklch(0.20 0.10 263 / 0.5);
+    padding: 1.5rem 2rem;
+    text-align: center;
+    display: none;
+  }
+  .cal-result.visible { display: block; animation: fadeup 0.3s ease; }
+  @keyframes fadeup { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+  .res-date-gr {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.8rem;
+  }
+  .res-moon {
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+  .res-year {
+    font-family: var(--serif-zh);
+    font-size: 1.05rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+  }
+  .res-zodiac {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text-faint);
+    margin-bottom: 0.8rem;
+  }
+  .res-day {
+    font-family: var(--serif-zh);
+    font-size: 1.5rem;
+    color: var(--text);
+    letter-spacing: 0.08em;
+  }
+  .res-solar {
+    font-family: var(--serif-zh);
+    font-size: 0.75rem;
+    color: var(--jade);
+    margin-top: 0.5rem;
+    letter-spacing: 0.1em;
+  }
+  .res-moon-name {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    margin-top: 0.4rem;
+    letter-spacing: 0.1em;
+  }
+  .cal-error {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--crimson);
+    text-align: center;
+    padding: 1rem;
+    display: none;
+  }
+  .cal-error.visible { display: block; }
+  .cal-note {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text-faint);
+    text-align: center;
+    margin-top: 2rem;
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+  }
+</style>
+
+<div class="cal-page">
+  <h1 class="cal-heading">旧暦検索</h1>
+  <p class="cal-sub">GREGORIAN → LUNAR CALENDAR</p>
+
+  <form class="cal-form" id="cal-form">
+    <input class="cal-input" id="inp-year"  type="number" placeholder="年" min="2019" max="2035" />
+    <span class="cal-sep">/</span>
+    <input class="cal-input" id="inp-month" type="number" placeholder="月" min="1"    max="12"   style="width:64px" />
+    <span class="cal-sep">/</span>
+    <input class="cal-input" id="inp-day"   type="number" placeholder="日" min="1"    max="31"   style="width:64px" />
+    <button class="cal-btn" type="submit">調べる</button>
+  </form>
+
+  <div class="cal-error" id="cal-error">その日付は対応範囲外です（2019〜2035年）</div>
+
+  <div class="cal-result" id="cal-result">
+    <div class="res-date-gr" id="res-date-gr"></div>
+    <div class="res-moon"    id="res-moon"></div>
+    <div class="res-year"    id="res-year"></div>
+    <div class="res-zodiac"  id="res-zodiac"></div>
+    <div class="res-day"     id="res-day"></div>
+    <div class="res-solar"   id="res-solar"></div>
+    <div class="res-moon-name" id="res-moon-name"></div>
+  </div>
+
+  <p class="cal-note">
+    対応範囲: 2019年〜2035年<br>
+    旧暦は概算です。実際の暦と1〜2日ずれる場合があります
+  </p>
+</div>
+
+<script>
+  import { getLunarInfo, getMoonPhase, getMoonEmoji, getMoonName, getSolarTerm } from '../scripts/lunar.js';
+
+  const form     = document.getElementById('cal-form');
+  const errorEl  = document.getElementById('cal-error');
+  const resultEl = document.getElementById('cal-result');
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    errorEl?.classList.remove('visible');
+    resultEl?.classList.remove('visible');
+
+    const y = parseInt((document.getElementById('inp-year')  as HTMLInputElement).value);
+    const m = parseInt((document.getElementById('inp-month') as HTMLInputElement).value);
+    const d = parseInt((document.getElementById('inp-day')   as HTMLInputElement).value);
+
+    if (!y || !m || !d || isNaN(y) || isNaN(m) || isNaN(d)) return;
+
+    const date = new Date(y, m - 1, d);
+    const info = getLunarInfo(date);
+
+    if (!info) {
+      errorEl?.classList.add('visible');
+      return;
+    }
+
+    const phase = getMoonPhase(date);
+    const solar = getSolarTerm(date);
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+    (document.getElementById('res-date-gr')   as HTMLElement).textContent = `${y}.${pad(m)}.${pad(d)}`;
+    (document.getElementById('res-moon')      as HTMLElement).textContent = getMoonEmoji(phase);
+    (document.getElementById('res-year')      as HTMLElement).textContent = `${info.stemBranch}年`;
+    (document.getElementById('res-zodiac')    as HTMLElement).textContent = `${info.zodiac}年 / ${info.lunarYear}年`;
+    (document.getElementById('res-day')       as HTMLElement).textContent = `${info.monthName}${info.dayName}`;
+    (document.getElementById('res-solar')     as HTMLElement).textContent = solar ?? '';
+    (document.getElementById('res-moon-name') as HTMLElement).textContent = getMoonName(phase);
+
+    resultEl?.classList.add('visible');
+  });
+</script>
+</BaseLayout>
