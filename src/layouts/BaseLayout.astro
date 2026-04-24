@@ -127,8 +127,13 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
         <span class="nav-zh">物語</span>
         <span class="nav-label">story</span>
       </a>
+      <button class="sidebar-toggle-btn" id="sidebar-toggle" aria-label="従者の間を開く">
+        <span class="sidebar-toggle-zh">従</span>
+      </button>
     </nav>
   </header>
+
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
 
   <!-- ── Body ── -->
   <div class="body-wrap">
@@ -442,9 +447,63 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
     .footer-pinyin { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); font-style: italic; }
     .footer-motto { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.15em; }
 
+    /* ── Sidebar toggle button（モバイルのみ表示） ── */
+    .sidebar-toggle-btn {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: none;
+      border: 1px solid var(--border-dim);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: 0.25rem;
+      flex-shrink: 0;
+    }
+    .sidebar-toggle-btn:hover { border-color: var(--gold-dim); }
+    .sidebar-toggle-btn.open { border-color: var(--gold-dim); background: var(--surface2); }
+    .sidebar-toggle-zh {
+      font-family: var(--serif-zh);
+      font-size: 0.85rem;
+      color: var(--gold-dim);
+      line-height: 1;
+    }
+    .sidebar-toggle-btn.open .sidebar-toggle-zh { color: var(--gold); }
+
+    /* ── Backdrop ── */
+    .sidebar-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: oklch(0.10 0.10 263 / 0.7);
+      z-index: 199;
+      backdrop-filter: blur(2px);
+    }
+    .sidebar-backdrop.visible { display: block; }
+
     /* ── Responsive ── */
     @media (max-width: 960px) {
-      .sidebar { display: none; }
+      .sidebar-toggle-btn { display: flex; }
+
+      .sidebar {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100dvh;
+        width: min(var(--sidebar-w), 85vw);
+        border-left: 1px solid var(--border);
+        background: oklch(0.20 0.13 263 / 0.98);
+        z-index: 200;
+        transform: translateX(100%);
+        transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        padding-top: 72px;
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
     }
     @media (max-width: 600px) {
       .site-header { padding: 0 1rem; }
@@ -452,6 +511,29 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
       .nav-item { padding: 0.4rem 0.6rem; }
     }
   </style>
+
+  <script>
+    // サイドバー開閉
+    const toggleBtn  = document.getElementById('sidebar-toggle');
+    const sidebar    = document.querySelector('.sidebar') as HTMLElement;
+    const backdrop   = document.getElementById('sidebar-backdrop');
+
+    function openSidebar() {
+      sidebar?.classList.add('open');
+      backdrop?.classList.add('visible');
+      toggleBtn?.classList.add('open');
+    }
+    function closeSidebar() {
+      sidebar?.classList.remove('open');
+      backdrop?.classList.remove('visible');
+      toggleBtn?.classList.remove('open');
+    }
+
+    toggleBtn?.addEventListener('click', () => {
+      sidebar?.classList.contains('open') ? closeSidebar() : openSidebar();
+    });
+    backdrop?.addEventListener('click', closeSidebar);
+  </script>
 
   <script>
     import { getLunarInfo, getMoonPhase, getMoonEmoji, getSolarTerm, getLunarMonthDays } from '../scripts/lunar.js';
