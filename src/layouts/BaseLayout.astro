@@ -8,6 +8,8 @@ const { title, description = '飄燈閣 — 中国語の世界へ、ようこそ
 const path = Astro.url.pathname;
 const section =
   path.includes('/chengyu') ? 'chengyu' :
+  path.includes('/quiz')    ? 'quiz'    :
+  path.includes('/story')   ? 'story'   :
   path.includes('/blog')    ? 'blog'    :
   path.includes('/about')   ? 'about'   :
   'home';
@@ -21,9 +23,17 @@ const LINES = {
     lilian: "成語とは、漢民族の智慧が結晶した宝玉。一字一字、丁寧にご覧くださいませ",
     lilan:  "灯籠をめくると意味が飛び出すよ！全100語、制覇できるかな？",
   },
+  quiz: {
+    lilian: "試練とは、己を知るための鏡にございます。焦らず、心静かに臨まれよ",
+    lilan:  "全問正解できたら私がほめてあげる！ちなみに私は全部知ってるよ〜笑",
+  },
+  story: {
+    lilian: "言葉は、ただ意味を運ぶのではない。読む者の心を、時代を超えて揺さぶるものです",
+    lilan:  "同じシーンでも難易度が変わると、こんなに違うんだって分かるよ。面白いから試してみて！",
+  },
   blog: {
-    lilian: "この物語は、虚と実の境を歩むもの。どうか、心して読まれよ",
-    lilan:  "この作者、天才だと思う。世界観がすごすぎ。読んで読んで！",
+    lilian: "知識とは光なり。どうぞゆっくりと、一頁ずつお読みくださいませ",
+    lilan:  "天燈報、最新号出てるよ！読んで読んで！",
   },
   about: {
     lilian: "飄燈閣についてお読みいただき、ありがとうございます。誤りを見つけられた際には、どうかお知らせくださいませ",
@@ -96,22 +106,26 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
 
   <!-- ── Header ── -->
   <header class="site-header">
-    <a href="/piaodeng/" class="header-brand">
+    <a href="/piaodeng/about/" class="header-brand">
       <span class="brand-zh">飄燈閣</span>
       <span class="brand-pinyin">piāodēng gé</span>
     </a>
     <nav class="header-nav">
       <a href="/piaodeng/blog/" class="nav-item">
-        <span class="nav-zh">読物</span>
-        <span class="nav-label">blog</span>
+        <span class="nav-zh">天燈報</span>
+        <span class="nav-label">magazine</span>
       </a>
       <a href="/piaodeng/chengyu/" class="nav-item">
         <span class="nav-zh">成語</span>
         <span class="nav-label">chengyu</span>
       </a>
-      <a href="/piaodeng/about/" class="nav-item">
-        <span class="nav-zh">閣について</span>
-        <span class="nav-label">about</span>
+      <a href="/piaodeng/quiz/" class="nav-item">
+        <span class="nav-zh">試練</span>
+        <span class="nav-label">quiz</span>
+      </a>
+      <a href="/piaodeng/story/" class="nav-item">
+        <span class="nav-zh">物語</span>
+        <span class="nav-label">story</span>
       </a>
     </nav>
   </header>

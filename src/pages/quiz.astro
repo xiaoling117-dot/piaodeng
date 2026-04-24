@@ -1,0 +1,597 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { CHENGYU_DATA } from '../data/chengyu.js';
+
+const chengyuList = CHENGYU_DATA.flatMap(cat =>
+  cat.words.map(w => ({ w: w.w, p: w.p, m: w.m.split('。')[0] }))
+);
+---
+
+<BaseLayout title="試練の間" description="成語クイズ。意味・成語・ピンインの3モードで腕試しを。">
+  <div class="quiz-page">
+
+    <section class="quiz-hero">
+      <p class="quiz-eyebrow">試練の間</p>
+      <h1 class="quiz-title-zh">成語試煉</h1>
+      <p class="quiz-desc">三つの試練から選び、成語の知識を問え</p>
+    </section>
+
+    <div class="quiz-wrap" id="quiz-wrap">
+
+      <!-- Mode tabs -->
+      <div class="mode-row">
+        <button class="mode-btn active" data-mode="meaning">意味を当てる</button>
+        <button class="mode-btn" data-mode="word">成語を当てる</button>
+        <button class="mode-btn" data-mode="pinyin">ピンインを入力</button>
+      </div>
+
+      <!-- Progress + score -->
+      <div class="progress-bar-wrap" id="progress-wrap">
+        <div class="progress-score">
+          スコア <span id="score-num">0</span> / <span id="score-total">0</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-label"><span id="q-num">1</span> / <span id="q-total">20</span></div>
+      </div>
+
+      <!-- Question card -->
+      <div class="q-card" id="q-card">
+        <div class="q-prompt-label" id="q-label">成語</div>
+        <div class="q-main" id="q-main">—</div>
+        <div class="q-sub" id="q-sub"></div>
+      </div>
+
+      <!-- Options (multiple choice) -->
+      <div class="options-grid" id="options-grid"></div>
+
+      <!-- Pinyin input -->
+      <div class="pinyin-wrap" id="pinyin-wrap" style="display:none">
+        <input id="pinyin-input" class="pinyin-input" type="text" placeholder="ピンインを入力（例: xīn bù zài yān）" autocomplete="off" />
+        <button class="pinyin-submit" id="pinyin-submit">答える</button>
+      </div>
+
+      <!-- Feedback -->
+      <div class="feedback" id="feedback"></div>
+
+      <!-- Next button -->
+      <button class="next-btn" id="next-btn" style="display:none">次の問題 →</button>
+
+    </div>
+
+    <!-- Result screen -->
+    <div class="result-screen" id="result-screen" style="display:none">
+      <div class="result-circle">
+        <div class="result-num" id="result-num">0</div>
+        <div class="result-denom" id="result-denom">/ 20</div>
+      </div>
+      <div class="result-msg" id="result-msg"></div>
+      <div class="result-review" id="result-review"></div>
+      <button class="retry-btn" id="retry-btn">もう一度挑む</button>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<script define:vars={{ chengyuList }}>
+  const QUIZ_SIZE = 20;
+  let mode = 'meaning';
+  let questions = [];
+  let current = 0;
+  let score = 0;
+  let log = []; // {word, correct: bool}
+  let answered = false;
+
+  // ── DOM refs ──────────────────────────────────────────────
+  const qLabel   = document.getElementById('q-label');
+  const qMain    = document.getElementById('q-main');
+  const qSub     = document.getElementById('q-sub');
+  const optGrid  = document.getElementById('options-grid');
+  const pinWrap  = document.getElementById('pinyin-wrap');
+  const pinInput = document.getElementById('pinyin-input');
+  const pinSub   = document.getElementById('pinyin-submit');
+  const feedback = document.getElementById('feedback');
+  const nextBtn  = document.getElementById('next-btn');
+  const scoreNum = document.getElementById('score-num');
+  const scoreTot = document.getElementById('score-total');
+  const qNum     = document.getElementById('q-num');
+  const qTotal   = document.getElementById('q-total');
+  const progFill = document.getElementById('progress-fill');
+  const qCard    = document.getElementById('q-card');
+  const resultScreen = document.getElementById('result-screen');
+  const quizWrap = document.getElementById('quiz-wrap');
+
+  // ── Shuffle ───────────────────────────────────────────────
+  function shuffle(arr) {
+    return [...arr].sort(() => Math.random() - 0.5);
+  }
+
+  // ── Start ─────────────────────────────────────────────────
+  function startQuiz() {
+    questions = shuffle(chengyuList).slice(0, QUIZ_SIZE);
+    current = 0; score = 0; log = [];
+    resultScreen.style.display = 'none';
+    quizWrap.style.display = 'block';
+    qTotal.textContent = QUIZ_SIZE;
+    showQuestion();
+  }
+
+  // ── Show question ─────────────────────────────────────────
+  function showQuestion() {
+    answered = false;
+    feedback.textContent = '';
+    feedback.className = 'feedback';
+    nextBtn.style.display = 'none';
+    qCard.className = 'q-card';
+
+    const q = questions[current];
+    qNum.textContent = current + 1;
+    progFill.style.width = `${(current / QUIZ_SIZE) * 100}%`;
+
+    if (mode === 'meaning') {
+      qLabel.textContent = '成語';
+      qMain.textContent  = q.w;
+      qSub.textContent   = q.p;
+      showOptions(q, 'm');
+      pinWrap.style.display = 'none';
+      optGrid.style.display = 'grid';
+    } else if (mode === 'word') {
+      qLabel.textContent = '意味';
+      qMain.textContent  = q.m;
+      qSub.textContent   = '';
+      showOptions(q, 'w');
+      pinWrap.style.display = 'none';
+      optGrid.style.display = 'grid';
+    } else {
+      qLabel.textContent = '成語';
+      qMain.textContent  = q.w;
+      qSub.textContent   = '';
+      optGrid.style.display = 'none';
+      pinWrap.style.display = 'flex';
+      pinInput.value = '';
+      pinInput.focus();
+    }
+  }
+
+  // ── Options ───────────────────────────────────────────────
+  function showOptions(q, field) {
+    const correctVal = q[field];
+    const wrong = shuffle(chengyuList.filter(c => c[field] !== correctVal)).slice(0, 3).map(c => c[field]);
+    const opts = shuffle([correctVal, ...wrong]);
+
+    optGrid.innerHTML = '';
+    opts.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.textContent = opt;
+      btn.addEventListener('click', () => handleChoice(btn, opt, correctVal, field));
+      optGrid.appendChild(btn);
+    });
+  }
+
+  function handleChoice(btn, chosen, correct, field) {
+    if (answered) return;
+    answered = true;
+
+    const isCorrect = chosen === correct;
+    if (isCorrect) {
+      score++;
+      btn.classList.add('correct');
+      feedback.textContent = '正解！';
+      feedback.className = 'feedback correct-fb';
+    } else {
+      btn.classList.add('wrong');
+      feedback.className = 'feedback wrong-fb';
+      const q = questions[current];
+      const correctText = field === 'm' ? q.m : q.w;
+      feedback.textContent = `不正解。正解：${correctText}`;
+      // highlight correct
+      optGrid.querySelectorAll('.option-btn').forEach(b => {
+        if (b.textContent === correct) b.classList.add('correct');
+      });
+    }
+
+    log.push({ word: questions[current].w, correct: isCorrect });
+    updateScore();
+    nextBtn.style.display = 'block';
+  }
+
+  // ── Pinyin check ──────────────────────────────────────────
+  function checkPinyin() {
+    if (answered) return;
+    const q = questions[current];
+    const input = pinInput.value.trim().toLowerCase().replace(/\s+/g, ' ');
+    // Normalize: remove tones for lenient check
+    const normalize = s => s.toLowerCase()
+      .replace(/[āáǎà]/g, 'a').replace(/[ēéěè]/g, 'e')
+      .replace(/[īíǐì]/g, 'i').replace(/[ōóǒò]/g, 'o')
+      .replace(/[ūúǔù]/g, 'u').replace(/[ǖǘǚǜü]/g, 'u')
+      .replace(/\s+/g, ' ').trim();
+
+    const isCorrect = normalize(input) === normalize(q.p);
+    answered = true;
+
+    if (isCorrect) {
+      score++;
+      pinInput.classList.add('correct');
+      feedback.textContent = `正解！　${q.p}`;
+      feedback.className = 'feedback correct-fb';
+    } else {
+      pinInput.classList.add('wrong');
+      feedback.className = 'feedback wrong-fb';
+      feedback.textContent = `不正解。正解：${q.p}`;
+    }
+
+    log.push({ word: q.w, correct: isCorrect });
+    updateScore();
+    nextBtn.style.display = 'block';
+  }
+
+  pinSub.addEventListener('click', checkPinyin);
+  pinInput.addEventListener('keydown', e => { if (e.key === 'Enter') checkPinyin(); });
+
+  // ── Next ─────────────────────────────────────────────────
+  nextBtn.addEventListener('click', () => {
+    pinInput.classList.remove('correct', 'wrong');
+    current++;
+    if (current >= QUIZ_SIZE) {
+      showResult();
+    } else {
+      showQuestion();
+    }
+  });
+
+  function updateScore() {
+    scoreNum.textContent = score;
+    scoreTot.textContent = log.length;
+  }
+
+  // ── Result ───────────────────────────────────────────────
+  function showResult() {
+    quizWrap.style.display = 'none';
+    resultScreen.style.display = 'block';
+    progFill.style.width = '100%';
+
+    const pct = Math.round(score / QUIZ_SIZE * 100);
+    document.getElementById('result-num').textContent = score;
+    document.getElementById('result-denom').textContent = `/ ${QUIZ_SIZE}`;
+
+    const msg = document.getElementById('result-msg');
+    if (pct === 100)      msg.textContent = '完璧です。主上の知識は、まさに畫龍點睛の境地——黎蓮';
+    else if (pct >= 80)   msg.textContent = '見事な成績。次は満点を目指されよ——黎蓮';
+    else if (pct >= 60)   msg.textContent = 'よく励まれました。一歩一歩が、いつか大樹となります——黎蓮';
+    else                  msg.textContent = '亡羊補牢、まだ間に合います。もう一度試みられよ——黎蓮';
+
+    const rev = document.getElementById('result-review');
+    rev.innerHTML = log.map(l =>
+      `<span class="rev-item ${l.correct ? 'rev-ok' : 'rev-ng'}">${l.word}</span>`
+    ).join('');
+  }
+
+  document.getElementById('retry-btn').addEventListener('click', startQuiz);
+
+  // ── Mode tabs ────────────────────────────────────────────
+  document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      mode = btn.dataset.mode;
+      startQuiz();
+    });
+  });
+
+  // Start
+  startQuiz();
+</script>
+
+<style is:global>
+  .quiz-page {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  /* Hero */
+  .quiz-hero {
+    text-align: center;
+    padding: 3.5rem 0 2.5rem;
+    border-bottom: 1px solid var(--border-dim);
+    margin-bottom: 2rem;
+  }
+  .quiz-eyebrow {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .quiz-title-zh {
+    font-family: var(--serif-zh);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 900;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 30px var(--gold-glow);
+    margin-bottom: 0.75rem;
+  }
+  .quiz-desc {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  /* Mode tabs */
+  .mode-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .mode-btn {
+    padding: 6px 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    font-family: var(--serif-jp);
+    font-size: 0.8rem;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .mode-btn:hover { border-color: var(--gold-dim); color: var(--text); }
+  .mode-btn.active { background: var(--surface2); border-color: var(--gold); color: var(--gold); }
+
+  /* Progress */
+  .progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+  .progress-score {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--jade);
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 3px;
+    background: var(--border-dim);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--jade), var(--gold));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0;
+  }
+  .progress-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    white-space: nowrap;
+  }
+
+  /* Question card */
+  .q-card {
+    background: oklch(0.20 0.10 263 / 0.6);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .q-prompt-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .q-main {
+    font-family: var(--serif-zh);
+    font-size: clamp(2rem, 8vw, 3.5rem);
+    font-weight: 900;
+    color: var(--text);
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .q-sub {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.15em;
+  }
+
+  /* Mode: meaning/word — meaning text in q-main needs smaller font */
+  .q-card[data-mode="word"] .q-main,
+  .q-card.text-mode .q-main {
+    font-size: 0.95rem;
+    font-family: var(--serif-jp);
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  /* Options */
+  .options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .option-btn {
+    background: var(--surface);
+    border: 1px solid var(--border-dim);
+    color: var(--text-dim);
+    font-family: var(--serif-jp);
+    font-size: 0.82rem;
+    line-height: 1.65;
+    padding: 14px 16px;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--gold-dim); color: var(--text); }
+  .option-btn.correct { background: oklch(0.22 0.09 175 / 0.4); border-color: var(--jade); color: var(--jade); }
+  .option-btn.wrong   { background: oklch(0.22 0.09 18 / 0.3); border-color: var(--crimson); color: var(--crimson); }
+
+  /* Pinyin input */
+  .pinyin-wrap {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .pinyin-input {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    padding: 10px 14px;
+    letter-spacing: 0.08em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .pinyin-input:focus { border-color: var(--gold-dim); }
+  .pinyin-input.correct { border-color: var(--jade); }
+  .pinyin-input.wrong   { border-color: var(--crimson); }
+  .pinyin-submit {
+    padding: 10px 20px;
+    background: var(--surface2);
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: var(--serif-jp);
+    font-size: 0.82rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .pinyin-submit:hover { background: var(--gold-glow); }
+
+  /* Feedback */
+  .feedback {
+    min-height: 24px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    text-align: center;
+  }
+  .correct-fb { color: var(--jade); }
+  .wrong-fb   { color: var(--crimson); }
+
+  /* Next button */
+  .next-btn {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: var(--surface2);
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    font-family: var(--serif-jp);
+    font-size: 0.9rem;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+  .next-btn:hover { background: oklch(0.35 0.09 80 / 0.3); }
+
+  /* Result */
+  .result-screen {
+    text-align: center;
+    padding: 3rem 1rem 5rem;
+  }
+  .result-circle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: oklch(0.20 0.10 263 / 0.5);
+    margin-bottom: 2rem;
+    box-shadow: 0 0 40px var(--gold-glow);
+  }
+  .result-num {
+    font-family: var(--serif-zh);
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .result-denom {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+  .result-msg {
+    font-family: var(--serif-jp);
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.9;
+    font-style: italic;
+    margin-bottom: 2rem;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .result-review {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+  .rev-item {
+    font-family: var(--serif-zh);
+    font-size: 0.9rem;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+  }
+  .rev-ok { background: oklch(0.22 0.09 175 / 0.25); color: var(--jade); border: 1px solid oklch(0.52 0.06 175 / 0.4); }
+  .rev-ng { background: oklch(0.22 0.09 18 / 0.2); color: var(--crimson); border: 1px solid oklch(0.45 0.08 18 / 0.4); }
+
+  .retry-btn {
+    padding: 12px 32px;
+    background: var(--surface2);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-family: var(--serif-jp);
+    font-size: 0.9rem;
+    border-radius: 3px;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: all 0.2s;
+  }
+  .retry-btn:hover { box-shadow: 0 0 20px var(--gold-glow); }
+
+  @media (max-width: 600px) {
+    .options-grid { grid-template-columns: 1fr; }
+    .pinyin-wrap { flex-direction: column; }
+  }
+</style>
