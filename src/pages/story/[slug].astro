@@ -45,11 +45,21 @@ const { story } = Astro.props;
         ))}
       </div>
 
-      <!-- Language tabs -->
-      <div class="lang-tabs">
-        <button class="lang-tab active" data-lang="zh">中国語</button>
-        <button class="lang-tab" data-lang="ja">日本語訳</button>
-        <button class="lang-tab" data-lang="vocab">単語</button>
+      <!-- Language tabs + ピンイン・音声ボタン -->
+      <div class="lang-tabs-row">
+        <div class="lang-tabs">
+          <button class="lang-tab active" data-lang="zh">中国語</button>
+          <button class="lang-tab" data-lang="ja">日本語訳</button>
+          <button class="lang-tab" data-lang="vocab">単語</button>
+        </div>
+        <div class="reader-tools">
+          <button class="tool-btn" id="pinyin-toggle" title="ピンイン表示">
+            拼音
+          </button>
+          <button class="tool-btn" id="audio-play" title="音声再生">
+            ▶
+          </button>
+        </div>
       </div>
 
       <!-- Content panels -->
@@ -57,7 +67,7 @@ const { story } = Astro.props;
         <div class={`level-panel ${i === 0 ? 'active' : ''}`} data-level={lv.id}>
 
           <div class="lang-panel active" data-lang="zh">
-            <div class="text-body zh-text">
+            <div class="text-body zh-text" data-zh={lv.zh}>
               {lv.zh.split('\n').map(line => <p>{line}</p>)}
             </div>
           </div>
@@ -101,6 +111,9 @@ const { story } = Astro.props;
 </BaseLayout>
 
 <script>
+  import { pinyin } from 'pinyin-pro';
+
+  // Level tabs
   document.querySelectorAll('.level-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const level = (tab as HTMLElement).dataset.level;
@@ -111,6 +124,7 @@ const { story } = Astro.props;
     });
   });
 
+  // Language tabs
   document.querySelectorAll('.lang-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const lang = (tab as HTMLElement).dataset.lang;
@@ -119,6 +133,82 @@ const { story } = Astro.props;
       tab.classList.add('active');
       document.querySelectorAll(`.lang-panel[data-lang="${lang}"]`).forEach(p => p.classList.add('active'));
     });
+  });
+
+  // ---- ピンイン切り替え ----
+  let pinyinOn = false;
+
+  function getActiveZhBody(): HTMLElement | null {
+    const activePanel = document.querySelector('.level-panel.active');
+    return activePanel?.querySelector('.zh-text') as HTMLElement ?? null;
+  }
+
+  function renderWithPinyin(body: HTMLElement) {
+    const raw = body.dataset.zh ?? '';
+    const lines = raw.split('\n');
+    body.innerHTML = lines.map(line => {
+      if (!line.trim()) return '<p></p>';
+      // pinyin-pro: HTML ruby 出力
+      const html = pinyin(line, { type: 'html' });
+      return `<p>${html}</p>`;
+    }).join('');
+  }
+
+  function renderPlain(body: HTMLElement) {
+    const raw = body.dataset.zh ?? '';
+    body.innerHTML = raw.split('\n').map(line => `<p>${line}</p>`).join('');
+  }
+
+  document.getElementById('pinyin-toggle')?.addEventListener('click', () => {
+    pinyinOn = !pinyinOn;
+    const btn = document.getElementById('pinyin-toggle')!;
+    btn.classList.toggle('active', pinyinOn);
+
+    document.querySelectorAll('.zh-text').forEach(el => {
+      const body = el as HTMLElement;
+      pinyinOn ? renderWithPinyin(body) : renderPlain(body);
+    });
+  });
+
+  // レベル切り替え時もピンイン状態を引き継ぐ
+  document.querySelectorAll('.level-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (!pinyinOn) return;
+      setTimeout(() => {
+        const body = getActiveZhBody();
+        if (body) renderWithPinyin(body);
+      }, 0);
+    });
+  });
+
+  // ---- 音声再生 ----
+  let speaking = false;
+
+  document.getElementById('audio-play')?.addEventListener('click', () => {
+    if (!('speechSynthesis' in window)) return;
+
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      speaking = false;
+      document.getElementById('audio-play')!.classList.remove('active');
+      return;
+    }
+
+    const body = getActiveZhBody();
+    if (!body) return;
+    const text = body.dataset.zh?.replace(/\n/g, '，') ?? '';
+
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'zh-CN';
+    utter.rate = 0.85;
+    utter.onend = () => {
+      speaking = false;
+      document.getElementById('audio-play')!.classList.remove('active');
+    };
+
+    speaking = true;
+    document.getElementById('audio-play')!.classList.add('active');
+    window.speechSynthesis.speak(utter);
   });
 </script>
 
@@ -244,13 +334,55 @@ const { story } = Astro.props;
     letter-spacing: 0.05em;
   }
 
+  /* Language tabs row */
+  .lang-tabs-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-dim);
+    background: var(--surface);
+    gap: 0.75rem;
+  }
+
+  .reader-tools {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .tool-btn {
+    padding: 4px 10px;
+    background: none;
+    border: 1px solid var(--border-dim);
+    border-radius: 3px;
+    color: var(--text-faint);
+    font-family: var(--serif-zh);
+    font-size: 0.72rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .tool-btn:hover { color: var(--text-dim); border-color: var(--gold-dim); }
+  .tool-btn.active {
+    background: var(--surface2);
+    border-color: var(--gold-dim);
+    color: var(--gold);
+  }
+
+  /* pinyin-pro が出力する ruby */
+  ruby { ruby-align: center; }
+  rt {
+    font-family: var(--mono);
+    font-size: 0.55em;
+    color: var(--jade-dim);
+    letter-spacing: 0.05em;
+  }
+
   /* Language tabs */
   .lang-tabs {
     display: flex;
     gap: 0;
-    padding: 10px 14px;
-    border-bottom: 1px solid var(--border-dim);
-    background: var(--surface);
   }
   .lang-tab {
     padding: 5px 14px;
