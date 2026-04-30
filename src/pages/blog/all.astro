@@ -10,8 +10,12 @@ const jigokuSeries = allPosts
   .filter(p => p.data.tags?.includes('地獄シリーズ'))
   .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
 
+const chochoSeries = allPosts
+  .filter(p => p.data.tags?.includes('朝貢シリーズ'))
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
 const standalone = allPosts
-  .filter(p => !p.data.tags?.includes('地獄シリーズ'))
+  .filter(p => !p.data.tags?.includes('地獄シリーズ') && !p.data.tags?.includes('朝貢シリーズ'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 <BaseLayout title="特集一覧">
@@ -38,6 +42,37 @@ const standalone = allPosts
 
       <div class="series-list">
         {jigokuSeries.map((post, i) => (
+          <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
+            <span class="episode-label">{seriesLabels[i]}</span>
+            <div class="item-body">
+              <h3 class="item-title">{post.data.title}</h3>
+              {post.data.description && (
+                <p class="item-desc">{post.data.description}</p>
+              )}
+              <span class="item-meta">{post.data.date}</span>
+            </div>
+            <span class="item-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <!-- 朝貢シリーズ -->
+    <section class="series-section">
+      <div class="series-header">
+        <div class="series-title-row">
+          <h2 class="series-name">朝貢シリーズ</h2>
+          <div class="series-badges">
+            <span class="badge badge-count">全{chochoSeries.length}回</span>
+          </div>
+        </div>
+        <p class="series-desc">「唐の度量に甘えて学ばせてもらった」——そのやさしい記憶のどこが正確で、どこが抜け落ちているのか。朝貢という装置を、三つの層からほどいていく。</p>
+      </div>
+
+      <div class="series-list">
+        {chochoSeries.map((post, i) => (
           <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
             <span class="episode-label">{seriesLabels[i]}</span>
             <div class="item-body">
