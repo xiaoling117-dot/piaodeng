@@ -2,120 +2,152 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
----
-<BaseLayout title="読み物">
-  <section class="blog-page">
-    <header class="blog-hero">
-      <p class="hero-sub">読み物</p>
-      <h1>黎蓮と麗蘭の<br /><span class="cn">物語記録</span></h1>
-      <p class="hero-desc">二人の対話、中国語の世界、耽美の断片。</p>
-    </header>
+const allPosts = await getCollection('blog');
 
-    <div class="post-list">
-      {posts.map(post => (
-        <a class="post-card" href={`/piaodeng/blog/${post.slug}/`}>
-          <div class="post-meta">
-            <span class="post-date">{post.data.date}</span>
-            <span class="post-authors">{post.data.authors.join(' & ')}</span>
+const jigokuSeries = allPosts
+  .filter(p => p.data.tags?.includes('地獄シリーズ'))
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+const featured = jigokuSeries[0]; // 序章：シリーズの入口
+
+const recent = allPosts
+  .filter(p => p.slug !== featured.slug)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 4);
+---
+<BaseLayout title="天燈報">
+  <article class="home">
+
+    <!-- 特集：大型アイキャッチ -->
+    <section class="featured-section">
+      <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-img-link">
+        <div class="featured-img-wrap">
+          <img
+            src="/piaodeng/images/hero-featured.jpg"
+            alt={featured.data.title}
+            class="featured-img"
+          />
+          <div class="featured-img-overlay">
+            <span class="featured-eyebrow">特集</span>
+            <h2 class="featured-img-title">{featured.data.title}</h2>
           </div>
-          <h2 class="post-title">{post.data.title}</h2>
-          {post.data.description && (
-            <p class="post-desc">{post.data.description}</p>
-          )}
-          {post.data.tags && (
-            <div class="post-tags">
-              {post.data.tags.map(tag => (
-                <span class="tag">{tag}</span>
-              ))}
-            </div>
-          )}
-        </a>
-      ))}
-    </div>
-  </section>
+        </div>
+      </a>
+      <div class="featured-body">
+        <p class="featured-desc">{featured.data.description}</p>
+        <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-cta">読む →</a>
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <!-- 最新記事リスト -->
+    <section class="recent-section">
+      <h2 class="section-title">最新記事</h2>
+      <nav class="article-list">
+        {recent.map(post => (
+          <a href={`/piaodeng/blog/${post.slug}/`} class="article-row">
+            <span class="row-date">{post.data.date}</span>
+            <span class="row-title">{post.data.title}</span>
+            <span class="row-arrow">→</span>
+          </a>
+        ))}
+      </nav>
+      <a href="/piaodeng/blog/all/" class="more-link">特集一覧へ →</a>
+    </section>
+
+  </article>
 
   <style>
-    .blog-page { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+    .home { max-width: 800px; margin: 0 auto; padding: 0 1.5rem 5rem; }
 
-    .blog-hero {
-      text-align: center;
-      padding: 4rem 0 3rem;
-      border-bottom: 1px solid var(--color-navy);
-      margin-bottom: 3rem;
-    }
-    .hero-sub {
-      font-size: 0.75rem;
-      letter-spacing: 0.4em;
-      color: var(--color-gold);
-      margin-bottom: 1rem;
-    }
-    .blog-hero h1 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      letter-spacing: 0.15em;
-      color: var(--color-moon);
-      line-height: 1.5;
-      margin-bottom: 1rem;
-    }
-    .cn { font-size: 0.75em; color: var(--color-gold); }
-    .hero-desc { color: var(--color-muted); font-size: 0.9rem; }
-
-    .post-list { display: flex; flex-direction: column; gap: 1.5rem; }
-
-    .post-card {
-      display: block;
-      border: 1px solid var(--color-navy);
-      padding: 2rem;
-      text-decoration: none;
-      transition: all 0.2s;
+    .featured-section { padding-top: 2.5rem; }
+    .featured-img-link { display: block; text-decoration: none; }
+    .featured-img-wrap {
       position: relative;
       overflow: hidden;
+      border: 1px solid var(--border-dim);
     }
-    .post-card::before {
-      content: '';
+    .featured-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .featured-img-link:hover .featured-img { transform: scale(1.02); }
+    .featured-img-overlay {
       position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--color-gold);
-      transform: scaleY(0);
-      transition: transform 0.2s;
-    }
-    .post-card:hover { border-color: rgba(212,168,67,0.4); }
-    .post-card:hover::before { transform: scaleY(1); }
-
-    .post-meta {
+      bottom: 0; left: 0; right: 0;
+      top: 35%;
+      padding: 1.5rem 2rem;
       display: flex;
-      gap: 1rem;
-      margin-bottom: 0.75rem;
-      font-size: 0.75rem;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, oklch(0.15 0.12 263 / 0.95) 0%, oklch(0.15 0.12 263 / 0.65) 40%, transparent 100%);
     }
-    .post-date { color: var(--color-muted); }
-    .post-authors { color: var(--color-gold); }
-
-    .post-title {
-      font-size: 1.3rem;
+    .featured-eyebrow {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .featured-img-title {
+      font-family: var(--serif-jp);
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--text);
       letter-spacing: 0.05em;
-      color: var(--color-moon);
-      margin-bottom: 0.75rem;
       line-height: 1.5;
     }
-    .post-card:hover .post-title { color: var(--color-gold); }
-
-    .post-desc {
-      font-size: 0.85rem;
-      color: var(--color-muted);
-      line-height: 1.8;
-      margin-bottom: 1rem;
+    .featured-body { padding: 1.5rem 0 0; }
+    .featured-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 2; margin-bottom: 1rem; }
+    .featured-cta {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 2px;
     }
+    .featured-cta:hover { color: var(--text); border-color: var(--text); }
 
-    .post-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .tag {
-      font-size: 0.7rem;
-      padding: 0.2rem 0.6rem;
-      border: 1px solid var(--color-navy);
-      color: var(--color-muted);
+    .section-rule { border: none; border-top: 1px solid var(--border-dim); margin: 2.5rem 0; }
+
+    .section-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
     }
+    .article-list { display: flex; flex-direction: column; }
+    .article-row {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr auto;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.9rem 0.5rem;
+      border-bottom: 1px solid var(--border-dim);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .article-row:first-child { border-top: 1px solid var(--border-dim); }
+    .article-row:hover { background: var(--surface); }
+    .row-date { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.04em; }
+    .row-title { font-size: 0.93rem; color: var(--text); letter-spacing: 0.03em; line-height: 1.5; }
+    .article-row:hover .row-title { color: var(--gold); }
+    .row-arrow { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); }
+    .article-row:hover .row-arrow { color: var(--gold); }
+    .more-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+    .more-link:hover { color: var(--gold-dim); }
   </style>
 </BaseLayout>

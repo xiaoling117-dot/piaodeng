@@ -1,18 +1,182 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+const jigokuSeries = allPosts
+  .filter(p => p.data.tags?.includes('地獄シリーズ'))
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+const featured = jigokuSeries[0]; // 序章：シリーズの入口
+
+const recent = allPosts
+  .filter(p => p.slug !== featured.slug)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 4);
 ---
 <BaseLayout title="飄燈閣">
-  <section style="min-height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4rem 2rem;">
-    <p style="color: var(--color-muted); font-size: 0.85rem; letter-spacing: 0.3em; margin-bottom: 1.5rem;">piāodēng gé</p>
-    <h1 style="font-size: clamp(3rem, 8vw, 6rem); letter-spacing: 0.3em; color: var(--color-moon); margin-bottom: 1rem;">飄燈閣</h1>
-    <p style="color: var(--color-gold); font-size: 1rem; letter-spacing: 0.2em; margin-bottom: 3rem;">月と灯り、中国語の世界へ</p>
-    <p style="color: var(--color-muted); max-width: 480px; line-height: 2; font-size: 0.95rem;">
-      耽美と漢詩を入り口に、<br />
-      中国語の美しさをあなたに届けます。
-    </p>
-    <div style="margin-top: 3rem; display: flex; gap: 1.5rem;">
-      <a href="/piaodeng/blog/" style="border: 1px solid var(--color-gold); padding: 0.75rem 2rem; color: var(--color-gold); letter-spacing: 0.1em; font-size: 0.9rem;">読み物へ</a>
-      <a href="/piaodeng/chengyu/" style="border: 1px solid var(--color-navy); padding: 0.75rem 2rem; color: var(--color-muted); letter-spacing: 0.1em; font-size: 0.9rem;">成語辞書</a>
-    </div>
-  </section>
+  <article class="home">
+
+    <!-- 特集：大型アイキャッチ -->
+    <section class="featured-section">
+      <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-img-link">
+        <div class="featured-img-wrap">
+          <img
+            src="/piaodeng/images/hero-featured.jpg"
+            alt={featured.data.title}
+            class="featured-img"
+          />
+          <div class="featured-img-overlay">
+            <span class="featured-eyebrow">特集</span>
+            <h2 class="featured-img-title">{featured.data.title}</h2>
+          </div>
+        </div>
+      </a>
+      <div class="featured-body">
+        <p class="featured-desc">{featured.data.description}</p>
+        <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-cta">読む →</a>
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <!-- 最新記事リスト -->
+    <section class="recent-section">
+      <h2 class="section-title">最新記事</h2>
+      <nav class="article-list">
+        {recent.map(post => (
+          <a href={`/piaodeng/blog/${post.slug}/`} class="article-row">
+            <span class="row-date">{post.data.date}</span>
+            <span class="row-title">{post.data.title}</span>
+            <span class="row-arrow">→</span>
+          </a>
+        ))}
+      </nav>
+      <a href="/piaodeng/blog/all/" class="more-link">特集一覧へ →</a>
+    </section>
+
+    <hr class="section-rule" />
+
+    <!-- 成語辞書への導線 -->
+    <section>
+      <a href="/piaodeng/chengyu/" class="chengyu-card">
+        <span class="cat-zh">成語</span>
+        <span class="cat-desc">四字熟語の辞書 — 全100語収録</span>
+        <span class="cat-en">chengyu →</span>
+      </a>
+    </section>
+
+  </article>
+
+  <style>
+    .home { max-width: 800px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+    /* ── 特集 ── */
+    .featured-section { padding-top: 2.5rem; }
+    .featured-img-link { display: block; text-decoration: none; }
+    .featured-img-wrap {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-dim);
+    }
+    .featured-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .featured-img-link:hover .featured-img { transform: scale(1.02); }
+    .featured-img-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      top: 35%;
+      padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, oklch(0.15 0.12 263 / 0.95) 0%, oklch(0.15 0.12 263 / 0.65) 40%, transparent 100%);
+    }
+    .featured-eyebrow {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+    .featured-img-title {
+      font-family: var(--serif-jp);
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      color: var(--text);
+      letter-spacing: 0.05em;
+      line-height: 1.5;
+    }
+    .featured-body { padding: 1.5rem 0 0; }
+    .featured-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 2; margin-bottom: 1rem; }
+    .featured-cta {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--gold-dim);
+      padding-bottom: 2px;
+    }
+    .featured-cta:hover { color: var(--text); border-color: var(--text); }
+
+    /* ── 区切り線 ── */
+    .section-rule { border: none; border-top: 1px solid var(--border-dim); margin: 2.5rem 0; }
+
+    /* ── 最新記事 ── */
+    .section-title {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.35em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+    }
+    .article-list { display: flex; flex-direction: column; }
+    .article-row {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr auto;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.9rem 0.5rem;
+      border-bottom: 1px solid var(--border-dim);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .article-row:first-child { border-top: 1px solid var(--border-dim); }
+    .article-row:hover { background: var(--surface); }
+    .row-date { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.04em; }
+    .row-title { font-size: 0.93rem; color: var(--text); letter-spacing: 0.03em; line-height: 1.5; }
+    .article-row:hover .row-title { color: var(--gold); }
+    .row-arrow { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); }
+    .article-row:hover .row-arrow { color: var(--gold); }
+    .more-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-faint);
+      letter-spacing: 0.1em;
+    }
+    .more-link:hover { color: var(--gold-dim); }
+
+    /* ── 成語導線 ── */
+    .chengyu-card {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 1.2rem 1rem;
+      border: 1px solid var(--border-dim);
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .chengyu-card:hover { border-color: var(--gold-dim); background: var(--surface); }
+    .cat-zh { font-family: var(--serif-zh); font-size: 1.2rem; color: var(--gold); letter-spacing: 0.05em; flex-shrink: 0; }
+    .cat-desc { font-size: 0.82rem; color: var(--text-dim); flex: 1; }
+    .cat-en { font-family: var(--mono); font-size: 0.62rem; color: var(--gold-dim); letter-spacing: 0.1em; flex-shrink: 0; }
+  </style>
 </BaseLayout>

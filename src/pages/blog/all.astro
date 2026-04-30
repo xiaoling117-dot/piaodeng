@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+const seriesLabels = ['序', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+
+const jigokuSeries = allPosts
+  .filter(p => p.data.tags?.includes('地獄シリーズ'))
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+const standalone = allPosts
+  .filter(p => !p.data.tags?.includes('地獄シリーズ'))
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+---
+<BaseLayout title="特集一覧">
+  <section class="blog-page">
+
+    <header class="blog-hero">
+      <p class="hero-sub">特集一覧</p>
+      <h1>天燈報<br /><span class="cn">すべての記事</span></h1>
+      <p class="hero-desc">シリーズと単発、すべての読み物。</p>
+    </header>
+
+    <!-- 地獄シリーズ -->
+    <section class="series-section">
+      <div class="series-header">
+        <div class="series-title-row">
+          <h2 class="series-name">地獄シリーズ</h2>
+          <div class="series-badges">
+            <span class="badge badge-done">完結</span>
+            <span class="badge badge-count">全{jigokuSeries.length}回</span>
+          </div>
+        </div>
+        <p class="series-desc">「地獄」という言葉がどこから来て、どうやって日本人の心に降りたか。インド神話から律令の時代、そして閻魔の旅へ。</p>
+      </div>
+
+      <div class="series-list">
+        {jigokuSeries.map((post, i) => (
+          <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
+            <span class="episode-label">{seriesLabels[i]}</span>
+            <div class="item-body">
+              <h3 class="item-title">{post.data.title}</h3>
+              {post.data.description && (
+                <p class="item-desc">{post.data.description}</p>
+              )}
+              <span class="item-meta">{post.data.date}</span>
+            </div>
+            <span class="item-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <!-- 単発記事 -->
+    <section class="series-section">
+      <div class="series-header">
+        <div class="series-title-row">
+          <h2 class="series-name">単発記事</h2>
+        </div>
+      </div>
+
+      <div class="series-list">
+        {standalone.map(post => (
+          <a href={`/piaodeng/blog/${post.slug}/`} class="series-item standalone-item">
+            <span class="standalone-date">{post.data.date}</span>
+            <div class="item-body">
+              <h3 class="item-title">{post.data.title}</h3>
+              {post.data.description && (
+                <p class="item-desc">{post.data.description}</p>
+              )}
+            </div>
+            <span class="item-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+  </section>
+
+  <style>
+    .blog-page { max-width: 760px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+
+    .blog-hero {
+      text-align: center;
+      padding: 4rem 0 3rem;
+      border-bottom: 1px solid var(--border-dim);
+      margin-bottom: 3rem;
+    }
+    .hero-sub {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.4em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .blog-hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      letter-spacing: 0.15em;
+      color: var(--text);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .cn { font-size: 0.8em; color: var(--gold); }
+    .hero-desc { color: var(--text-dim); font-size: 0.88rem; }
+
+    .series-section { margin-bottom: 0; }
+    .series-header { margin-bottom: 1.5rem; }
+    .series-title-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.6rem; }
+    .series-name { font-family: var(--serif-zh); font-size: 1.1rem; color: var(--text); letter-spacing: 0.08em; }
+    .series-badges { display: flex; gap: 0.4rem; }
+    .badge { font-family: var(--mono); font-size: 0.58rem; letter-spacing: 0.06em; padding: 0.15rem 0.5rem; border-radius: 2px; }
+    .badge-done { background: var(--jade-dim); color: oklch(0.88 0.05 175); }
+    .badge-count { border: 1px solid var(--border-dim); color: var(--text-faint); }
+    .series-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.9; }
+
+    .series-list { display: flex; flex-direction: column; }
+    .series-item {
+      display: grid;
+      grid-template-columns: 2.4rem 1fr auto;
+      gap: 1rem;
+      align-items: start;
+      padding: 1.2rem 0.5rem;
+      border-bottom: 1px solid var(--border-dim);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .series-item:first-child { border-top: 1px solid var(--border-dim); }
+    .series-item:hover { background: var(--surface); }
+
+    .episode-label {
+      font-family: var(--serif-zh);
+      font-size: 1.4rem;
+      color: var(--gold-dim);
+      text-align: center;
+      line-height: 1.2;
+      padding-top: 0.1rem;
+    }
+
+    .item-body { display: flex; flex-direction: column; gap: 0.4rem; }
+    .item-title { font-size: 1rem; color: var(--text); letter-spacing: 0.03em; line-height: 1.6; }
+    .series-item:hover .item-title { color: var(--gold); }
+    .item-desc { font-size: 0.8rem; color: var(--text-dim); line-height: 1.85; }
+    .item-meta { font-family: var(--mono); font-size: 0.6rem; color: var(--text-faint); letter-spacing: 0.04em; }
+
+    .item-arrow { font-family: var(--mono); font-size: 0.75rem; color: var(--text-faint); padding-top: 0.2rem; }
+    .series-item:hover .item-arrow { color: var(--gold); }
+
+    .standalone-item { grid-template-columns: 6.5rem 1fr auto; }
+    .standalone-date { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.04em; padding-top: 0.15rem; }
+
+    .section-rule { border: none; border-top: 1px solid var(--border-dim); margin: 2.5rem 0; }
+  </style>
+</BaseLayout>
