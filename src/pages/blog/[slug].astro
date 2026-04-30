@@ -3,14 +3,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
-  return posts.map(post => ({
+  const allPosts = await getCollection('blog');
+  const sorted = allPosts.sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+  return sorted.map((post, i) => ({
     params: { slug: post.slug },
-    props: { post },
+    props: { post, nextPost: sorted[i + 1] ?? null },
   }));
 }
 
-const { post } = Astro.props;
+const { post, nextPost } = Astro.props;
 const { Content } = await post.render();
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
@@ -34,6 +35,11 @@ const { Content } = await post.render();
 
     <footer class="post-footer">
       <a href="/piaodeng/blog/" class="back-link">← 読み物一覧へ</a>
+      {nextPost && (
+        <a href={`/piaodeng/blog/${nextPost.slug}/`} class="next-link">
+          次の記事へ：{nextPost.data.title} →
+        </a>
+      )}
     </footer>
   </article>
 
@@ -135,8 +141,22 @@ const { Content } = await post.render();
       font-style: italic;
     }
 
-    .post-footer { padding-top: 2rem; border-top: 1px solid var(--color-navy); }
-    .back-link { font-size: 0.85rem; color: var(--color-muted); }
+    .post-footer {
+      padding-top: 2rem;
+      border-top: 1px solid var(--color-navy);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+    .back-link { font-size: 0.85rem; color: var(--color-muted); white-space: nowrap; }
     .back-link:hover { color: var(--color-gold); }
+    .next-link {
+      font-size: 0.85rem;
+      color: var(--color-muted);
+      text-align: right;
+      line-height: 1.6;
+    }
+    .next-link:hover { color: var(--color-gold); }
   </style>
 </BaseLayout>
