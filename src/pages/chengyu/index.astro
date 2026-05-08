@@ -114,15 +114,16 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
     .theme-tile::after {
       content: '';
       position: absolute;
-      top: 5px; left: 5px;
-      width: 10px; height: 10px;
-      border-top: 1px solid var(--color-gold);
-      border-left: 1px solid var(--color-gold);
+      top: 4px; left: 4px;
+      width: 14px; height: 14px;
+      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><circle cx='4' cy='4' r='2.5' fill='%23D4A843'/><circle cx='9' cy='4' r='1.8' fill='%23D4A843' fill-opacity='0.7'/><circle cx='4' cy='9' r='1.8' fill='%23D4A843' fill-opacity='0.7'/></svg>");
+      background-size: contain;
+      background-repeat: no-repeat;
       opacity: 0;
       transition: opacity 0.25s;
       pointer-events: none;
     }
-    .theme-tile:hover::after { opacity: 0.8; }
+    .theme-tile:hover::after { opacity: 1; }
     .tt-icon { font-size: 1.4rem; display: block; margin-bottom: 0.5rem; position: relative; }
     .tt-label {
       font-family: 'Noto Serif JP', serif;
@@ -195,26 +196,26 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       -webkit-backface-visibility: hidden;
       border: 1px solid var(--color-navy);
     }
-    /* 角飾り（回字框スタイル） */
+    /* 角飾り（祥雲形） */
     .fc-face::before {
       content: '';
       position: absolute;
-      top: 7px; left: 7px;
-      width: 18px; height: 18px;
-      border-top: 1.5px solid var(--color-gold);
-      border-left: 1.5px solid var(--color-gold);
+      top: 6px; left: 6px;
+      width: 20px; height: 20px;
+      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><circle cx='5' cy='5' r='3.5' fill='%23D4A843' fill-opacity='0.65'/><circle cx='12' cy='5' r='2.5' fill='%23D4A843' fill-opacity='0.42'/><circle cx='5' cy='12' r='2.5' fill='%23D4A843' fill-opacity='0.42'/></svg>");
+      background-size: contain;
+      background-repeat: no-repeat;
       pointer-events: none;
-      opacity: 0.5;
     }
     .fc-face::after {
       content: '';
       position: absolute;
-      bottom: 7px; right: 7px;
-      width: 18px; height: 18px;
-      border-bottom: 1.5px solid var(--color-gold);
-      border-right: 1.5px solid var(--color-gold);
+      bottom: 6px; right: 6px;
+      width: 20px; height: 20px;
+      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><circle cx='15' cy='15' r='3.5' fill='%23D4A843' fill-opacity='0.38'/><circle cx='8' cy='15' r='2.5' fill='%23D4A843' fill-opacity='0.25'/><circle cx='15' cy='8' r='2.5' fill='%23D4A843' fill-opacity='0.25'/></svg>");
+      background-size: contain;
+      background-repeat: no-repeat;
       pointer-events: none;
-      opacity: 0.35;
     }
     .fc-front {
       background: rgba(14, 12, 34, 0.97);
