@@ -166,8 +166,28 @@ const { Content } = await post.render();
       letter-spacing: 0.1em;
       color: var(--color-moon);
       margin: 2.5rem 0 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid rgba(212,168,67,0.2);
+      padding: 0.25rem 0 0.25rem 1rem;
+      border-left: 2px solid var(--gold-dim);
+      position: relative;
+    }
+    /* 左上コーナー角 */
+    .post-body :global(h2)::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -2px;
+      width: 10px;
+      height: 2px;
+      background: var(--gold-dim);
+    }
+    /* 左下コーナー角（控えめ） */
+    .post-body :global(h2)::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: -2px;
+      width: 6px;
+      height: 2px;
+      background: var(--gold-dim);
+      opacity: 0.5;
     }
 
     .post-body :global(blockquote) {
