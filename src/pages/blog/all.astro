@@ -14,8 +14,16 @@ const chochoSeries = allPosts
   .filter(p => p.data.tags?.includes('朝貢シリーズ'))
   .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
 
+const enkonshiSeries = allPosts
+  .filter(p => p.data.tags?.includes('冤魂志より'))
+  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
 const standalone = allPosts
-  .filter(p => !p.data.tags?.includes('地獄シリーズ') && !p.data.tags?.includes('朝貢シリーズ'))
+  .filter(p =>
+    !p.data.tags?.includes('地獄シリーズ') &&
+    !p.data.tags?.includes('朝貢シリーズ') &&
+    !p.data.tags?.includes('冤魂志より')
+  )
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 <BaseLayout title="特集一覧">
@@ -73,6 +81,37 @@ const standalone = allPosts
 
       <div class="series-list">
         {chochoSeries.map((post, i) => (
+          <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
+            <span class="episode-label">{seriesLabels[i]}</span>
+            <div class="item-body">
+              <h3 class="item-title">{post.data.title}</h3>
+              {post.data.description && (
+                <p class="item-desc">{post.data.description}</p>
+              )}
+              <span class="item-meta">{post.data.date}</span>
+            </div>
+            <span class="item-arrow">→</span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <hr class="section-rule" />
+
+    <!-- 冤魂志シリーズ -->
+    <section class="series-section">
+      <div class="series-header">
+        <div class="series-title-row">
+          <h2 class="series-name">冤魂志より</h2>
+          <div class="series-badges">
+            <span class="badge badge-count">全{enkonshiSeries.length}回</span>
+          </div>
+        </div>
+        <p class="series-desc">5〜6世紀の中国に記録された、冤罪と亡霊の物語。顔之推『冤魂志（還冤記）』を原文から掘る。読み物と原文四層解説の二本一セット。</p>
+      </div>
+
+      <div class="series-list">
+        {enkonshiSeries.map((post, i) => (
           <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
             <span class="episode-label">{seriesLabels[i]}</span>
             <div class="item-body">
