@@ -402,6 +402,20 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       border-top: 1px solid rgba(26, 47, 90, 0.5);
     }
 
+    .fc-detail-link {
+      text-align: right;
+      padding-top: 0.6rem;
+    }
+    .fc-detail-link a {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.78rem;
+      color: var(--color-accent, #8B6C42);
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+    .fc-detail-link a:hover { opacity: 1; text-decoration: underline; }
+
     /* Audio button */
     .audio-btn {
       background: none;
@@ -586,6 +600,8 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       }
 
       if (word.ori) h += `<div class="fc-origin">${word.ori}</div>`;
+
+      h += `<div class="fc-detail-link"><a href="/piaodeng/chengyu/${encodeURIComponent(word.w)}/">詳細を見る →</a></div>`;
 
       fcBack.innerHTML = h;
     }
