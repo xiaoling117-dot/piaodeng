@@ -148,6 +148,104 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"002-jigoku-tabi-no-josho.md": {
+	id: "002-jigoku-tabi-no-josho.md";
+  slug: "002-jigoku-tabi-no-josho";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"003-piaodengkaku-to-nazoru.md": {
+	id: "003-piaodengkaku-to-nazoru.md";
+  slug: "003-piaodengkaku-to-nazoru";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"004-jigoku-1-yomotsukuni.md": {
+	id: "004-jigoku-1-yomotsukuni.md";
+  slug: "004-jigoku-1-yomotsukuni";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"005-jigoku-2-ritsuryo.md": {
+	id: "005-jigoku-2-ritsuryo.md";
+  slug: "005-jigoku-2-ritsuryo";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"006-jigoku-3-300nen.md": {
+	id: "006-jigoku-3-300nen.md";
+  slug: "006-jigoku-3-300nen";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"007-jigoku-4-enno-tabi.md": {
+	id: "007-jigoku-4-enno-tabi.md";
+  slug: "007-jigoku-4-enno-tabi";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"007b-chocho-pre-intro.md": {
+	id: "007b-chocho-pre-intro.md";
+  slug: "007b-chocho-pre-intro";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"008-chocho-0-intro.md": {
+	id: "008-chocho-0-intro.md";
+  slug: "008-chocho-0-intro";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"009-chocho-1-sansou.md": {
+	id: "009-chocho-1-sansou.md";
+  slug: "009-chocho-1-sansou";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"010-chocho-2-gakuhi.md": {
+	id: "010-chocho-2-gakuhi.md";
+  slug: "010-chocho-2-gakuhi";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"011-chocho-3-kioku.md": {
+	id: "011-chocho-3-kioku.md";
+  slug: "011-chocho-3-kioku";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"012-chocho-4-nukitori.md": {
+	id: "012-chocho-4-nukitori.md";
+  slug: "012-chocho-4-nukitori";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"013-enkonshi-1-gakuji.md": {
+	id: "013-enkonshi-1-gakuji.md";
+  slug: "013-enkonshi-1-gakuji";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"014-enkonshi-2-genbun.md": {
+	id: "014-enkonshi-2-genbun.md";
+  slug: "014-enkonshi-2-genbun";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 };
 
 	};

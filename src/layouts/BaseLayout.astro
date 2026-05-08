@@ -197,6 +197,15 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
 
   <!-- ── Footer ── -->
   <footer class="site-footer">
+    <div class="footer-ornament" aria-hidden="true">
+      <div class="fo-line"></div>
+      <div class="fo-center">
+        <span class="fo-diamond"></span>
+        <span class="fo-diamond fo-diamond--sm"></span>
+        <span class="fo-diamond"></span>
+      </div>
+      <div class="fo-line"></div>
+    </div>
     <div class="footer-brand">
       <span class="footer-zh">飄燈閣</span>
       <span class="footer-pinyin">piāodēng gé</span>
@@ -431,10 +440,40 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
 
     /* ── Footer ── */
     .site-footer {
-      border-top: 1px solid var(--border-dim);
       padding: 2rem;
       text-align: center;
       margin-top: 0;
+    }
+
+    /* footer 上部装飾 */
+    .footer-ornament {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+      padding: 0 2rem;
+    }
+    .fo-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    }
+    .fo-center {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .fo-diamond {
+      width: 6px;
+      height: 6px;
+      background: var(--gold-dim);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+    .fo-diamond--sm {
+      width: 3px;
+      height: 3px;
+      background: var(--border);
     }
     .footer-brand {
       display: flex;

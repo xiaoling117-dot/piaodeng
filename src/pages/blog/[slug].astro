@@ -52,8 +52,20 @@ const { Content } = await post.render();
 
     .post-header {
       padding-bottom: 2.5rem;
-      border-bottom: 1px solid var(--color-navy);
       margin-bottom: 3rem;
+      position: relative;
+    }
+    .post-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg,
+        var(--border-dim) 0%,
+        var(--gold-dim) 40%,
+        var(--gold-dim) 60%,
+        var(--border-dim) 100%
+      );
     }
     .post-meta {
       display: flex;
@@ -82,8 +94,34 @@ const { Content } = await post.render();
     .post-body :global(p) { margin-bottom: 1.5rem; opacity: 0.9; }
     .post-body :global(hr) {
       border: none;
-      border-top: 1px solid var(--color-navy);
-      margin: 2.5rem 0;
+      position: relative;
+      height: 16px;
+      margin: 2.8rem 0;
+      overflow: visible;
+    }
+    .post-body :global(hr)::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        var(--border-dim) 15%,
+        var(--gold-dim) 50%,
+        var(--border-dim) 85%,
+        transparent 100%
+      );
+    }
+    .post-body :global(hr)::after {
+      content: '◆';
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg);
+      color: var(--gold-dim);
+      font-size: 0.45rem;
+      padding: 0 1rem;
+      line-height: 1;
     }
     .post-body :global(strong) { color: var(--color-gold); font-weight: 600; }
     .post-body :global(em) { color: var(--color-muted); font-style: normal; }
