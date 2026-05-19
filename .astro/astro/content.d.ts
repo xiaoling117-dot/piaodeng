@@ -239,6 +239,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"013b-enkonshi-3-gakujin.md": {
+	id: "013b-enkonshi-3-gakujin.md";
+  slug: "013b-enkonshi-3-gakujin";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "014-enkonshi-2-genbun.md": {
 	id: "014-enkonshi-2-genbun.md";
   slug: "014-enkonshi-2-genbun";
