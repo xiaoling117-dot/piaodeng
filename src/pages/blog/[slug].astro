@@ -33,6 +33,10 @@ const { Content } = await post.render();
       <Content />
     </div>
 
+    <div class="post-colophon" aria-hidden="true">
+      <div class="colophon-seal">飄燈閣</div>
+    </div>
+
     <footer class="post-footer">
       <a href="/piaodeng/blog/" class="back-link">← 読み物一覧へ</a>
       {nextPost && (
@@ -216,5 +220,22 @@ const { Content } = await post.render();
       line-height: 1.6;
     }
     .next-link:hover { color: var(--color-gold); }
+
+    .post-colophon {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0.5rem 0 1.5rem;
+      margin-top: 3rem;
+    }
+    .colophon-seal {
+      font-family: var(--serif-zh);
+      font-size: 0.82rem;
+      color: var(--crimson);
+      border: 1.5px solid var(--crimson);
+      padding: 0.3rem 0.65rem;
+      letter-spacing: 0.2em;
+      opacity: 0.7;
+      line-height: 1.5;
+    }
   </style>
 </BaseLayout>
