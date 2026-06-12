@@ -28,26 +28,25 @@ const recent = allPosts
             class="featured-img"
           />
           <div class="featured-img-overlay">
-            <div class="featured-eyebrow">
-              <svg class="eyebrow-lantern" viewBox="0 0 32 32" aria-hidden="true">
-                <rect x="14.5" y="2" width="3" height="3.5" rx="1" fill="currentColor"/>
-                <path d="M9.5 7h13l-2.5 4h-8Z" fill="currentColor"/>
-                <rect x="11" y="11" width="10" height="10" rx="2" fill="currentColor" opacity="0.9"/>
-                <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor" opacity="0.6"/>
-                <path d="M11 21h10l2.5 3.5H8.5Z" fill="currentColor"/>
-                <line x1="14" y1="24.5" x2="13" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="16" y1="24.5" x2="16" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                <line x1="18" y1="24.5" x2="19" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              </svg>
-              特集
-            </div>
             <h2 class="featured-img-title">{featured.data.title}</h2>
           </div>
         </div>
       </a>
       <div class="featured-body">
         <div class="featured-body-inner">
-          <div class="featured-vertical-label" aria-hidden="true">特　集</div>
+          <div class="featured-vertical-label" aria-hidden="true">
+            <svg class="vertical-lantern" viewBox="0 0 32 32" aria-hidden="true">
+              <rect x="14.5" y="2" width="3" height="3.5" rx="1" fill="currentColor"/>
+              <path d="M9.5 7h13l-2.5 4h-8Z" fill="currentColor"/>
+              <rect x="11" y="11" width="10" height="10" rx="2" fill="currentColor" opacity="0.9"/>
+              <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor" opacity="0.6"/>
+              <path d="M11 21h10l2.5 3.5H8.5Z" fill="currentColor"/>
+              <line x1="14" y1="24.5" x2="13" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16" y1="24.5" x2="16" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="18" y1="24.5" x2="19" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            特　集
+          </div>
           <div class="featured-body-text">
             <p class="featured-desc">{featured.data.description}</p>
             <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-cta">読む →</a>
@@ -114,22 +113,6 @@ const recent = allPosts
       justify-content: flex-end;
       background: linear-gradient(to top, oklch(0.15 0.12 263 / 0.95) 0%, oklch(0.15 0.12 263 / 0.65) 40%, transparent 100%);
     }
-    .featured-eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.35em;
-      color: var(--gold);
-      margin-bottom: 0.4rem;
-    }
-    .eyebrow-lantern {
-      width: 13px;
-      height: 13px;
-      flex-shrink: 0;
-      opacity: 0.9;
-    }
     .featured-img-title {
       font-family: var(--serif-jp);
       font-size: clamp(1rem, 2.5vw, 1.5rem);
@@ -147,14 +130,23 @@ const recent = allPosts
       writing-mode: vertical-rl;
       text-orientation: mixed;
       font-family: var(--serif-zh);
-      font-size: 0.72rem;
-      color: var(--gold-dim);
-      letter-spacing: 0.6em;
+      font-size: 0.78rem;
+      color: var(--gold);
+      letter-spacing: 0.55em;
       border-right: 1px solid var(--gold-dim);
-      padding: 0.2rem 0.6rem 0.2rem 0;
+      padding: 0.2rem 0.7rem 0.2rem 0;
       flex-shrink: 0;
-      opacity: 0.7;
+      opacity: 0.85;
       align-self: stretch;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .vertical-lantern {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
     }
     .featured-body-text { flex: 1; }
     .featured-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 2; margin-bottom: 1rem; }
