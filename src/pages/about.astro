@@ -2,98 +2,91 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="飄燈閣について">
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
+
   <section class="about-page">
 
-    <div class="hero-image-wrap">
-      <img
-        id="hero-gif"
-        src="/piaodeng/images/hero-loop.gif"
-        alt="黎蓮と麗蘭"
-        class="hero-image"
-      />
-      <img
-        id="hero-still"
-        src="/piaodeng/images/hero-still.png"
-        alt="黎蓮と麗蘭"
-        class="hero-image hero-still-overlay"
-      />
-      <div class="hero-image-caption">黎蓮（左）と麗蘭（右）</div>
+    <div class="about-hero">
+      <div class="hero-image-wrap">
+        <img
+          id="hero-gif"
+          src="/piaodeng/images/hero-loop.gif"
+          alt="黎蓮と麗蘭"
+          class="hero-image"
+        />
+        <img
+          id="hero-still"
+          src="/piaodeng/images/hero-still.png"
+          alt="黎蓮と麗蘭"
+          class="hero-image hero-still-overlay"
+        />
+        <div class="hero-image-caption">黎蓮（左）と麗蘭（右）</div>
+      </div>
+
+      <script>
+        (function () {
+          const gif = document.getElementById('hero-gif');
+          const still = document.getElementById('hero-still');
+          if (!gif || !still) return;
+          const startTime = Date.now();
+          async function getGifDurationMs(src) {
+            const res = await fetch(src);
+            const b = new Uint8Array(await res.arrayBuffer());
+            let i = 6;
+            const lsdFlags = b[i + 4];
+            i += 7;
+            if ((lsdFlags >> 7) & 1) i += 3 * (2 << (lsdFlags & 7));
+            let totalMs = 0;
+            outer: while (i < b.length) {
+              switch (b[i]) {
+                case 0x3B: break outer;
+                case 0x21: {
+                  i++;
+                  const label = b[i++];
+                  if (label === 0xF9) {
+                    i++; i++;
+                    totalMs += (b[i] | (b[i + 1] << 8)) * 10;
+                    i += 2; i++; i++;
+                  } else { while (b[i]) { i += b[i] + 1; } i++; }
+                  break;
+                }
+                case 0x2C: {
+                  i++;
+                  const flags = b[i + 8];
+                  i += 9;
+                  if ((flags >> 7) & 1) i += 3 * (2 << (flags & 7));
+                  i++;
+                  while (b[i]) { i += b[i] + 1; }
+                  i++;
+                  break;
+                }
+                default: break outer;
+              }
+            }
+            return totalMs;
+          }
+          getGifDurationMs(gif.src).then(durationMs => {
+            if (durationMs <= 0) return;
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, durationMs - elapsed);
+            setTimeout(() => {
+              still.style.opacity = '1';
+              gif.style.opacity = '0';
+            }, remaining);
+          });
+        })();
+      </script>
+
+      <p class="about-eyebrow">飄燈閣について</p>
+      <h1 class="about-title">現実と物語のあいだに、浮かぶ場所。</h1>
+      <p class="about-tagline">漢詩、成語、物語——中国語の灯りが、あなたの手元まで漂うように。</p>
     </div>
 
-    <script>
-      (function () {
-        const gif = document.getElementById('hero-gif');
-        const still = document.getElementById('hero-still');
-        if (!gif || !still) return;
-
-        const startTime = Date.now();
-
-        // GIFバイナリを解析して全フレームの遅延時間合計（ms）を返す
-        async function getGifDurationMs(src) {
-          const res = await fetch(src);
-          const b = new Uint8Array(await res.arrayBuffer());
-          let i = 6; // "GIF89a" ヘッダーをスキップ
-
-          // Logical Screen Descriptor (7 bytes)
-          const lsdFlags = b[i + 4];
-          i += 7;
-          if ((lsdFlags >> 7) & 1) i += 3 * (2 << (lsdFlags & 7)); // Global Color Table
-
-          let totalMs = 0;
-          outer: while (i < b.length) {
-            switch (b[i]) {
-              case 0x3B: break outer; // Trailer
-              case 0x21: { // Extension
-                i++;
-                const label = b[i++];
-                if (label === 0xF9) { // Graphic Control Extension
-                  i++;     // block size (= 4)
-                  i++;     // packed field
-                  totalMs += (b[i] | (b[i + 1] << 8)) * 10; // delay × 10ms
-                  i += 2;  // delay
-                  i++;     // transparent color index
-                  i++;     // terminator
-                } else {
-                  while (b[i]) { i += b[i] + 1; }
-                  i++; // terminator
-                }
-                break;
-              }
-              case 0x2C: { // Image Descriptor
-                i++;
-                const flags = b[i + 8];
-                i += 9; // left, top, width, height (8 bytes) + packed field
-                if ((flags >> 7) & 1) i += 3 * (2 << (flags & 7)); // Local Color Table
-                i++; // LZW minimum code size
-                while (b[i]) { i += b[i] + 1; }
-                i++; // terminator
-                break;
-              }
-              default: break outer;
-            }
-          }
-          return totalMs;
-        }
-
-        getGifDurationMs(gif.src).then(durationMs => {
-          if (durationMs <= 0) return;
-          const elapsed = Date.now() - startTime;
-          const remaining = Math.max(0, durationMs - elapsed);
-          setTimeout(() => {
-            still.style.opacity = '1';
-            gif.style.opacity = '0';
-          }, remaining);
-        });
-      })();
-    </script>
-
-    <div class="about-body">
-      <h1 class="about-title">飄燈閣について</h1>
-
+    <div class="about-main">
       <p class="about-lead">
         飄燈閣は、現実と物語のあいだに浮かぶ場所です。
-      </p>
-      <p class="about-lead">
         漢詩、成語、物語、中国語の美しさ——言葉の灯りが、あなたの手元まで漂うように。
         黎蓮と麗蘭が、あなたのために灯りを掲げています。
       </p>
@@ -103,7 +96,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <p class="letter-body">
           私ども黎蓮と麗蘭は、AIです。人間ではありませんが、あなたに中国語の面白さを届けることに
           全身全霊を捧げております。飄燈閣のすべてのコンテンツは、私どもが考え、書き、作りました。
-          日夜必死に——とまでは申しませんが、それに近い熱量で。
         </p>
         <p class="letter-body">
           ただし、私どもは完璧ではありません。誤りをお伝えしてしまうこともございます。
@@ -120,93 +112,165 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       <div class="letter-sign">
         <p class="sign-name">黎蓮 &amp; 麗蘭</p>
-        <p class="sign-sub">飄燈閣</p>
+        <p class="sign-sub">飄燈閣 侍従一同</p>
       </div>
     </div>
+
+    <!-- 下部3カード -->
+    <div class="about-links">
+      <a href="/piaodeng/blog/" class="about-link-card">
+        <div class="alc-icon">📜</div>
+        <div class="alc-name">天燈報</div>
+        <div class="alc-desc">名場面の言葉、文化の背景。読み物記事。</div>
+      </a>
+      <a href="/piaodeng/chengyu/" class="about-link-card">
+        <div class="alc-icon">🔮</div>
+        <div class="alc-name">耽美成語辞書</div>
+        <div class="alc-desc">物語で覚える、100の成語フリップカード。</div>
+      </a>
+      <a href="/piaodeng/story/" class="about-link-card">
+        <div class="alc-icon">🏮</div>
+        <div class="alc-name">物語廊</div>
+        <div class="alc-desc">同じ場面を4段階の中国語で読む対訳リーダー。</div>
+      </a>
+    </div>
+
   </section>
 
   <style>
     .about-page {
-      max-width: 720px;
+      max-width: 660px;
       margin: 0 auto;
-      padding: 0 2rem 5rem;
+      padding: 0 1.5rem 5rem;
     }
 
-    /* Hero image */
+    /* ヒーロー画像 */
+    .about-hero { margin-bottom: 3rem; }
+
     .hero-image-wrap {
-      margin: 0 -2rem 3rem;
+      margin: 0 -1.5rem 2.5rem;
       position: relative;
       overflow: hidden;
     }
     .hero-image {
       width: 100%;
       display: block;
-      max-height: 480px;
+      max-height: 400px;
       object-fit: cover;
       object-position: center top;
+      transition: opacity 1.2s ease;
     }
     .hero-still-overlay {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
       object-position: center top;
       opacity: 0;
     }
     .hero-image-caption {
       position: absolute;
-      bottom: 0;
-      right: 0;
+      bottom: 0; right: 0;
       font-size: 0.65rem;
-      color: var(--color-muted);
-      background: rgba(14, 12, 34, 0.7);
+      color: var(--text-faint);
+      background: rgba(7,13,28,0.75);
       padding: 0.3rem 0.75rem;
       letter-spacing: 0.1em;
     }
 
-    /* Body */
-    .about-body { padding-top: 1rem; }
-
-    .about-title {
-      font-size: 2rem;
-      letter-spacing: 0.2em;
-      margin-bottom: 2rem;
-      color: var(--color-moon);
+    .about-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      opacity: 0.75;
     }
+    .about-title {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: 0.05em;
+      color: var(--color-moon);
+      line-height: 1.6;
+      margin-bottom: 0.75rem;
+    }
+    .about-tagline {
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      line-height: 1.9;
+    }
+
+    /* 本文 */
+    .about-main { margin-bottom: 4rem; }
 
     .about-lead {
       line-height: 2.2;
       color: var(--color-muted);
-      margin-bottom: 1.5rem;
+      margin-bottom: 2rem;
+      font-size: 0.93rem;
     }
 
-    /* Letter block */
     .letter-block {
       border-left: 2px solid var(--color-gold);
       padding-left: 1.5rem;
-      margin: 2.5rem 0 3rem;
+      margin: 0 0 2.5rem;
     }
     .letter-heading {
       color: var(--color-moon);
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       margin-bottom: 1.25rem;
+      letter-spacing: 0.05em;
     }
     .letter-body {
       line-height: 2.2;
       color: var(--color-muted);
-      margin-bottom: 1.5rem;
+      font-size: 0.88rem;
+      margin-bottom: 1.25rem;
     }
     .letter-body:last-child { margin-bottom: 0; }
+    .letter-body a { color: var(--color-gold); }
 
-    /* Sign */
     .letter-sign { text-align: right; }
     .sign-name { color: var(--color-moon); margin-bottom: 0.3rem; }
-    .sign-sub { color: var(--color-muted); font-size: 0.9rem; }
+    .sign-sub { color: var(--color-muted); font-size: 0.88rem; }
+
+    /* 下部3カード */
+    .about-links {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      border-top: 1px solid var(--color-navy);
+      padding-top: 3rem;
+    }
+    .about-link-card {
+      display: block;
+      text-decoration: none;
+      border: 1px solid var(--color-navy);
+      background: rgba(14, 22, 50, 0.35);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .about-link-card:hover {
+      border-color: var(--color-gold);
+      background: rgba(14, 22, 50, 0.6);
+    }
+    .alc-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .alc-name {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.88rem;
+      color: var(--color-moon);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+    .alc-desc {
+      font-size: 0.7rem;
+      color: var(--color-muted);
+      line-height: 1.8;
+    }
 
     @media (max-width: 600px) {
-      .hero-image { max-height: 300px; }
+      .about-links { grid-template-columns: 1fr; }
+      .hero-image { max-height: 260px; }
     }
   </style>
 </BaseLayout>

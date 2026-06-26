@@ -1,0 +1,318 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const SERIES_DEFS = [
+    {
+      slug: 'jigoku',
+      tag: '地獄シリーズ',
+      title: '地獄シリーズ',
+      pinyin: 'dì yù xì liè',
+      desc: '地獄という二文字を起点に、古典から現代までの「地獄」観の変遷をたどる。',
+      img: '/piaodeng/images/header-jigoku.png',
+    },
+    {
+      slug: 'enkonshi',
+      tag: '冤魂志より',
+      title: '冤　魂　志',
+      pinyin: 'yuān hún zhì',
+      desc: '冤罪と亡霊の記録。5〜6世紀の中国から届く、忘れられた声を聴く。',
+      img: '/piaodeng/images/header-enkonshi.png',
+    },
+    {
+      slug: 'joshi',
+      tag: '助詞が感情を作る',
+      title: '助詞が感情を作る',
+      pinyin: 'zhù cí yǔ gǎn qíng',
+      desc: '了・吧・啊・嘛……助詞一字が、心の動きをどこまで変えるか。',
+      img: '/piaodeng/images/header-joshi.png',
+    },
+    {
+      slug: 'chocho',
+      tag: '朝貢シリーズ',
+      title: '朝　貢',
+      pinyin: 'cháo gòng',
+      desc: '絹と香料、そして物語の記録。日本人の見た唐を、やさしく問い直す。',
+      img: '/piaodeng/images/header-chocho.png',
+    },
+    {
+      slug: 'genbun',
+      tag: '原文を読む',
+      title: '原文を開く',
+      pinyin: 'yuán wén',
+      desc: '古典の生テキストと向き合う。繁体字・簡体字・ピンインで、言葉の重さを味わう。',
+      img: '/piaodeng/images/header-enkonshi.png',
+    },
+  ];
+
+  const allPosts = await getCollection('blog');
+
+  return SERIES_DEFS.map(series => ({
+    params: { tag: series.slug },
+    props: {
+      series,
+      posts: allPosts
+        .filter(p => p.data.tags?.includes(series.tag))
+        .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime()),
+    },
+  }));
+}
+
+const { series, posts } = Astro.props;
+---
+<BaseLayout title={`${series.title} — 飄燈閣`}>
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
+
+  <div class="tag-index">
+
+    <div class="hero">
+      <img src={series.img} alt="" class="hero-bg" />
+      <div class="hero-overlay"></div>
+      <div class="hero-body">
+        <p class="hero-pinyin">{series.pinyin}</p>
+        <h1 class="hero-title">{series.title}</h1>
+        <div class="hero-rule-wrap">
+          <div class="hero-rule"></div>
+          <span class="hero-rule-star">✦</span>
+          <div class="hero-rule"></div>
+        </div>
+        <p class="hero-sub">{series.desc}</p>
+      </div>
+    </div>
+
+    <div class="toc-header">
+      <span class="toc-count">全{posts.length}本</span>
+    </div>
+
+    <ol class="toc-list">
+      {posts.map((post, i) => (
+        <li class="toc-item">
+          <a href={`/piaodeng/blog/${post.slug}/`} class="toc-link">
+            <span class="toc-num">{String(i + 1).padStart(2, '0')}</span>
+            <div class="toc-body">
+              <h2 class="toc-title">{post.data.title}</h2>
+              <div class="toc-meta">
+                <span class="toc-date">{post.data.date}</span>
+                {post.data.authors && (
+                  <span class="toc-author">{post.data.authors.join(' · ')}</span>
+                )}
+              </div>
+              {post.data.description && (
+                <p class="toc-desc">{post.data.description}</p>
+              )}
+            </div>
+            <span class="toc-arrow">⟶</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+
+    <div class="back-link-wrap">
+      <a href="/piaodeng/blog/" class="back-link">← 天燈報に戻る</a>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .tag-index {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .hero {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    border-radius: 4px;
+    margin: 1.5rem 0 2.2rem;
+    border: 1px solid rgba(200,155,83,.22);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(4,8,20,.88) 0%, rgba(4,8,20,.6) 60%, rgba(4,8,20,.78) 100%);
+  }
+  .hero-body {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .hero-pinyin {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: rgba(200,155,83,.6);
+    letter-spacing: 0.25em;
+    margin-bottom: 0.35rem;
+  }
+  .hero-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.35em;
+    text-shadow: 0 0 40px var(--gold-glow);
+    margin-bottom: 0.7rem;
+    line-height: 1;
+  }
+  .hero-rule-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 160px;
+    margin: 0 auto 0.75rem;
+  }
+  .hero-rule { flex: 1; height: 1px; background: rgba(200,155,83,.45); }
+  .hero-rule-star { color: #c89b53; font-size: 9px; flex-shrink: 0; }
+  .hero-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+    line-height: 1.9;
+  }
+
+  /* ── 目次ヘッダー ── */
+  .toc-header {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(200,155,83,.15);
+  }
+  .toc-count {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.2em;
+  }
+
+  /* ── 記事リスト ── */
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .toc-item {
+    border: 1px solid rgba(200,155,83,.1);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .toc-item:hover {
+    border-color: rgba(200,155,83,.3);
+    background: rgba(8, 14, 32, 0.6);
+  }
+
+  .toc-link {
+    display: grid;
+    grid-template-columns: 2.8rem 1fr auto;
+    align-items: start;
+    gap: 1.25rem;
+    padding: 1.4rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .toc-num {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: rgba(200,155,83,.3);
+    letter-spacing: 0.05em;
+    padding-top: 0.15rem;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .toc-body { flex: 1; }
+
+  .toc-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.04em;
+    line-height: 1.65;
+    margin-bottom: 0.35rem;
+    transition: color 0.2s;
+  }
+  .toc-item:hover .toc-title { color: var(--gold); }
+
+  .toc-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+  .toc-date {
+    font-family: var(--mono);
+    font-size: 0.63rem;
+    color: var(--text-faint);
+    letter-spacing: 0.08em;
+  }
+  .toc-author {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.63rem;
+    color: var(--jade-dim);
+    letter-spacing: 0.05em;
+  }
+
+  .toc-desc {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    line-height: 1.85;
+    letter-spacing: 0.03em;
+  }
+
+  .toc-arrow {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--gold-dim);
+    padding-top: 0.2rem;
+    flex-shrink: 0;
+    transition: transform 0.2s, color 0.2s;
+  }
+  .toc-item:hover .toc-arrow {
+    transform: translateX(4px);
+    color: var(--gold);
+  }
+
+  .back-link-wrap {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(200,155,83,.1);
+  }
+  .back-link {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.8rem;
+    color: var(--gold-dim);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: var(--gold); }
+
+  @media (max-width: 600px) {
+    .toc-link { grid-template-columns: 2.2rem 1fr; padding: 1.1rem 1rem; }
+    .toc-arrow { display: none; }
+  }
+</style>

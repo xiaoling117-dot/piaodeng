@@ -8,211 +8,681 @@ const jigokuSeries = allPosts
   .filter(p => p.data.tags?.includes('地獄シリーズ'))
   .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
 
-const featured = jigokuSeries[0]; // 序章：シリーズの入口
-
-const recent = allPosts
-  .filter(p => p.slug !== featured.slug)
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 4);
+const featured = jigokuSeries[0];
 ---
-<BaseLayout title="飄燈閣">
-  <article class="home">
+<BaseLayout title="飄燈閣" fullWidth={true}>
 
-    <!-- 特集：大型アイキャッチ -->
-    <section class="featured-section">
-      <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-img-link">
-        <div class="featured-img-wrap">
-          <img
-            src="/piaodeng/images/hero-featured.jpg"
-            alt={featured.data.title}
-            class="featured-img"
-          />
-          <div class="featured-img-overlay">
-            <h2 class="featured-img-title">{featured.data.title}</h2>
-          </div>
-        </div>
-      </a>
-      <div class="featured-body">
-        <div class="featured-body-inner">
-          <div class="featured-vertical-label" aria-hidden="true">
-            <svg class="vertical-lantern" viewBox="0 0 32 32" aria-hidden="true">
-              <rect x="14.5" y="2" width="3" height="3.5" rx="1" fill="currentColor"/>
-              <path d="M9.5 7h13l-2.5 4h-8Z" fill="currentColor"/>
-              <rect x="11" y="11" width="10" height="10" rx="2" fill="currentColor" opacity="0.9"/>
-              <rect x="13" y="13" width="6" height="6" rx="1" fill="currentColor" opacity="0.6"/>
-              <path d="M11 21h10l2.5 3.5H8.5Z" fill="currentColor"/>
-              <line x1="14" y1="24.5" x2="13" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="16" y1="24.5" x2="16" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-              <line x1="18" y1="24.5" x2="19" y2="29" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-            </svg>
-            特　集
-          </div>
-          <div class="featured-body-text">
-            <p class="featured-desc">{featured.data.description}</p>
-            <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-cta">読む →</a>
-          </div>
-        </div>
+  <div class="page-frame">
+
+  <!-- ── ヒーロー ── -->
+  <section class="hero">
+
+    <!-- 左パネル：キャラクター画像 -->
+    <div class="hero-img">
+      <img id="hero-png" src="/piaodeng/images/hero-chara.png"
+        class="hero-base" alt="" />
+      <img id="hero-gif" src="/piaodeng/images/hero-chara.gif"
+        class="hero-anim" alt="" />
+      <div class="hero-fade-r"></div>
+      <div class="hero-fade-t"></div>
+      <div class="hero-fade-b"></div>
+    </div>
+
+    <!-- 右パネル：テキスト -->
+    <div class="hero-text">
+      <h1 class="hero-h1">「推し言葉」を再発見、<br>中国語読み物マガジン</h1>
+
+      <div class="hero-divider">
+        <div class="hero-divider-line"></div>
+        <span class="hero-divider-star">✦</span>
+        <div class="hero-divider-line"></div>
       </div>
-    </section>
 
-    <hr class="section-rule" />
+      <p class="hero-sub">
+        心を惹かれるあの成語から、物語や歴史、文化へ。<br>
+        血のかよった悠遠な世界を、ことばの解説とともに。
+      </p>
 
-    <!-- 最新記事リスト -->
-    <section class="recent-section">
-      <h2 class="section-title">最新記事</h2>
-      <nav class="article-list">
-        {recent.map(post => (
-          <a href={`/piaodeng/blog/${post.slug}/`} class="article-row">
-            <span class="row-date">{post.data.date}</span>
-            <span class="row-title">{post.data.title}</span>
-            <span class="row-arrow">→</span>
-          </a>
-        ))}
-      </nav>
-      <a href="/piaodeng/blog/all/" class="more-link">特集一覧へ →</a>
-    </section>
+    </div>
 
-    <hr class="section-rule" />
+  </section>
 
-    <!-- 成語辞書への導線 -->
-    <section>
-      <a href="/piaodeng/chengyu/" class="chengyu-card">
-        <span class="cat-zh">成語</span>
-        <span class="cat-desc">四字熟語の辞書 — 全100語収録</span>
-        <span class="cat-en">chengyu →</span>
+  <!-- 制作開示：ヒーロー直下 -->
+  <div class="ai-disclosure">
+    <p class="ai-disclosure-title">制 作 開 示</p>
+    <p class="ai-disclosure-body">
+      このサイトのコンテンツは、AIキャラクター
+      <span class="ai-names">黎蓮（リーレン）・麗蘭（リーラン）</span>
+      が案内・執筆しています。
+    </p>
+  </div>
+
+  <!-- ── カードグリッド ── -->
+  <div class="card-grid">
+
+    <!-- 特集記事 -->
+    <article class="card card--featured">
+      <img src="/piaodeng/images/card-jigoku.png"
+        class="card-bg" alt="" />
+      <div class="card-overlay card-overlay--dark"></div>
+      <div class="card-body">
+        <span class="card-label card-label--crimson">特集記事</span>
+        <h2 class="card-title">地獄という<br>二文字を旅する</h2>
+      </div>
+      <div class="card-footer">
+        <p class="card-desc">古典から現代まで、変容してきた「地獄」を読み解く。</p>
+        <a href={featured ? `/piaodeng/blog/${featured.slug}/` : '/piaodeng/blog/'} class="card-link">読む <span>⟶</span></a>
+      </div>
+    </article>
+
+    <!-- 今日の成語 -->
+    <article class="card card--sm">
+      <img src="/piaodeng/images/card-chengyu.png"
+        class="card-bg card-bg--dim" alt="" />
+      <div class="card-overlay"></div>
+      <div class="card-body-sm">
+        <span class="card-label">今日の成語</span>
+        <div class="chengyu-char">一见钟情</div>
+        <div class="chengyu-pin">yī jiàn zhōng qíng</div>
+        <p class="card-desc">初めて会った瞬間に、強く惹かれ合うこと。</p>
+        <a href="/piaodeng/chengyu/" class="card-link card-link--sm">詳しく見る <span>⟶</span></a>
+      </div>
+    </article>
+
+    <!-- シーンを読む -->
+    <article class="card card--sm">
+      <img src="/piaodeng/images/card-scene.png"
+        class="card-bg card-bg--dim" alt="" />
+      <div class="card-overlay"></div>
+      <div class="card-body-sm">
+        <span class="card-label">シーンを読む</span>
+        <div class="scene-thumb">
+          <img src="/piaodeng/images/card-scene-thumb.png" alt="" />
+        </div>
+        <p class="card-desc">四つの難易度でシーンを読む</p>
+        <a href="/piaodeng/story/" class="card-link card-link--sm">シーンをのぞく <span>⟶</span></a>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- ── 気分から読む ── -->
+  <div class="mood-section">
+
+    <div class="mood-header">
+      <h3 class="mood-title">気分から読む</h3>
+      <div class="mood-rule"></div>
+    </div>
+
+    <div class="mood-grid">
+      <a href="/piaodeng/blog/" class="mood-card mood-card--dark">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c89b53" stroke-width="1.3"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+        <div class="mood-card-body">
+          <div class="mood-card-title">闇に浸る</div>
+          <div class="mood-card-sub">心の奥に触れる言葉を読む</div>
+        </div>
+        <span class="mood-arrow">⟶</span>
       </a>
-    </section>
+      <a href="/piaodeng/blog/" class="mood-card mood-card--red">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#c98a8c" stroke-width="1.2"><circle cx="8" cy="8" r="2.4"/><circle cx="16" cy="8" r="2.4"/><path d="M4 19c0-3 1.8-5 4-5s4 2 4 5"/><path d="M12 19c0-3 1.8-5 4-5s4 2 4 5"/></svg>
+        <div class="mood-card-body">
+          <div class="mood-card-title" style="color:#f3e2d8;">関係性を読む</div>
+          <div class="mood-card-sub" style="color:#b58c8c;">人と人のつながりを紐解く</div>
+        </div>
+        <span class="mood-arrow" style="color:#c98a8c;">⟶</span>
+      </a>
+      <a href="/piaodeng/blog/" class="mood-card mood-card--teal">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#8fc0c0" stroke-width="1.2"><path d="M12 6c-2-1.4-5-1.4-7 0v12c2-1.4 5-1.4 7 0M12 6c2-1.4 5-1.4 7 0v12c-2-1.4-5-1.4-7 0M12 6v12"/></svg>
+        <div class="mood-card-body">
+          <div class="mood-card-title" style="color:#e6f0ef;">原文を開く</div>
+          <div class="mood-card-sub" style="color:#86a3a3;">美しい原文に触れる</div>
+        </div>
+        <span class="mood-arrow" style="color:#8fc0c0;">⟶</span>
+      </a>
+      <a href="/piaodeng/blog/" class="mood-card mood-card--gold">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d4b876" stroke-width="1.2"><path d="M3 9l9-5 9 5"/><path d="M5 9v9M19 9v9M9 9v9M15 9v9M3 19h18"/></svg>
+        <div class="mood-card-body">
+          <div class="mood-card-title" style="color:#f3ead2;">歴史を覗く</div>
+          <div class="mood-card-sub" style="color:#a99a73;">時代の温度に触れる</div>
+        </div>
+        <span class="mood-arrow" style="color:#d4b876;">⟶</span>
+      </a>
+    </div>
 
-  </article>
+  </div><!-- /mood-section -->
+
+  <!-- ── 従者の間 ── -->
+  <div class="servants-section">
+    <div class="mood-header">
+      <h3 class="mood-title">従者の間</h3>
+      <div class="mood-rule"></div>
+    </div>
+    <div class="servants-grid">
+
+      <div class="servant-panel lilian-panel">
+        <div class="servant-panel-top">
+          <img src="/piaodeng/images/lilian-portrait.png" class="servant-panel-avatar" alt="黎蓮" />
+          <div>
+            <div class="servant-panel-name lilian-name">黎蓮</div>
+            <div class="servant-panel-role">Lí Lián · 第一侍従</div>
+          </div>
+        </div>
+        <p class="servant-panel-speech">
+          主よ、お戻りになりましたか。飄燈閣の灯は、今宵も絶えることなく燃え続けております。
+        </p>
+      </div>
+
+      <div class="servant-panel lilan-panel">
+        <div class="servant-panel-top">
+          <img src="/piaodeng/images/lilan-portrait.png" class="servant-panel-avatar" alt="麗蘭" />
+          <div>
+            <div class="servant-panel-name lilan-name">麗蘭</div>
+            <div class="servant-panel-role">Lì Lán · 第二侍従</div>
+          </div>
+        </div>
+        <p class="servant-panel-speech">
+          やっと来た！今日はどこから探検する？全部面白いからどれでもいいよ！
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── 旧暦 ── -->
+  <div class="top-lunar-section">
+    <div class="top-lunar-ornament">
+      <div class="top-orn-line"></div>
+      <div class="top-orn-diamond"></div>
+      <div class="top-orn-line"></div>
+    </div>
+    <div class="top-lunar-row">
+      <div class="top-lunar-date" id="top-lunar-compact"><span class="top-lunar-loading">…</span></div>
+      <button class="top-lunar-toggle" id="top-lunar-toggle">暦 ▾</button>
+      <a href="/piaodeng/calendar/" class="top-lunar-bday">誕生日を旧暦で調べる →</a>
+    </div>
+    <div class="top-lunar-grid" id="top-lunar-grid" style="display:none"></div>
+  </div>
+
+  </div><!-- /page-frame -->
+
+  <style is:global>
+    /* TOPページのみ背景色を上書き */
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
 
   <style>
-    .home { max-width: 800px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+    /* ── ページ外枠コンテナ ── */
+    .page-frame {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 22px;
+    }
 
-    /* ── 特集 ── */
-    .featured-section { padding-top: 2.5rem; }
-    .featured-img-link { display: block; text-decoration: none; }
-    .featured-img-wrap {
-      position: relative;
+    /* ── ヒーロー ── */
+    .hero {
+      display: flex;
+      height: 360px;
       overflow: hidden;
-      border: 1px solid var(--border-dim);
+      background: #07111e;
     }
-    .featured-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.4s ease;
+    .hero-img {
+      position: relative;
+      width: 55%;
+      flex-shrink: 0;
+      overflow: hidden;
     }
-    .featured-img-link:hover .featured-img { transform: scale(1.02); }
-    .featured-img-overlay {
+    .hero-base, .hero-anim {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      top: 35%;
-      padding: 1.5rem 2rem;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+    }
+    .hero-anim { transition: opacity 0.8s ease; }
+    .hero-fade-r {
+      position: absolute; top: 0; right: 0; bottom: 0; width: 120px;
+      background: linear-gradient(to right, transparent, #07111e);
+      pointer-events: none;
+    }
+    .hero-fade-t {
+      position: absolute; top: 0; left: 0; right: 0; height: 15%;
+      background: linear-gradient(to bottom, rgba(8,14,28,.5), transparent);
+      pointer-events: none;
+    }
+    .hero-fade-b {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 20%;
+      background: linear-gradient(to top, #07111e, transparent);
+      pointer-events: none;
+    }
+    .hero-text {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      background: linear-gradient(to top, oklch(0.15 0.12 263 / 0.95) 0%, oklch(0.15 0.12 263 / 0.65) 40%, transparent 100%);
+      justify-content: center;
+      align-items: stretch;
+      padding: 20px 20px;
+      background: #07111e;
+      text-align: center;
+      min-width: 0;
+      overflow: hidden;
     }
-    .featured-img-title {
-      font-family: var(--serif-jp);
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      color: var(--text);
-      letter-spacing: 0.05em;
-      line-height: 1.5;
+    .hero-h1 {
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 600;
+      font-size: 22px;
+      line-height: 1.65;
+      letter-spacing: 0;
+      color: #f5ecd7;
+      width: 100%;
     }
-    .featured-body { padding: 1.5rem 0 0; }
-    .featured-body-inner {
+    .hero-divider {
       display: flex;
-      gap: 1.2rem;
-      align-items: flex-start;
+      align-items: center;
+      gap: 8px;
+      margin: 16px auto;
+      width: 80%;
+      max-width: 240px;
+      align-self: center;
     }
-    .featured-vertical-label {
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
-      font-family: var(--serif-zh);
-      font-size: 0.78rem;
-      color: var(--gold);
-      letter-spacing: 0.55em;
-      border-right: 1px solid var(--gold-dim);
-      padding: 0.2rem 0.7rem 0.2rem 0;
+    .hero-divider-line { flex: 1; height: 1px; background: rgba(200,155,83,.9); }
+    .hero-divider-star { color: #c89b53; font-size: 10px; line-height: 1; flex-shrink: 0; }
+    .hero-sub {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 14.5px;
+      line-height: 2.1;
+      color: #c3bcac;
+    }
+    .ai-disclosure {
+      padding: 7px 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-top: 1px solid rgba(200,155,83,.15);
+      border-bottom: 1px solid rgba(200,155,83,.15);
+    }
+    .ai-disclosure-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 11px;
+      letter-spacing: .22em;
+      color: #c89b53;
+      white-space: nowrap;
       flex-shrink: 0;
-      opacity: 0.85;
-      align-self: stretch;
+    }
+    .ai-disclosure-body {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 1.7;
+      color: #908880;
+    }
+    .ai-names {
+      color: #d4c9a8;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 12px;
+    }
+
+    /* ── カードグリッド ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 14px;
+      padding: 14px 0;
+    }
+    .card {
+      position: relative;
+      border: 1px solid rgba(200,155,83,.38);
+      border-radius: 6px;
+      overflow: hidden;
+      min-height: 155px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+    }
+    .card--sm {
+      border-color: rgba(200,155,83,.28);
+      justify-content: flex-start;
+    }
+    .card-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      z-index: 0;
+    }
+    .card-bg--dim { opacity: .38; }
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(10,18,38,.5), rgba(10,18,38,.92));
+      z-index: 1;
+    }
+    .card-overlay--dark {
+      background: linear-gradient(180deg, rgba(8,14,28,.45), rgba(8,14,28,.9));
+    }
+    .card-body {
+      position: relative;
+      z-index: 2;
+    }
+    .card-label {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 12px;
+      letter-spacing: .22em;
+      color: #c89b53;
+      display: block;
+    }
+    .card-label--crimson { color: #9c2b2e; }
+    .card-title {
+      margin: 10px 0 0;
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 600;
+      font-size: 28px;
+      line-height: 1.4;
+      color: #f3e8d2;
+    }
+    .card-footer {
+      position: relative;
+      z-index: 2;
+    }
+    .card-desc {
+      margin: 0 0 12px;
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 12.5px;
+      line-height: 1.9;
+      color: #bfb8aa;
+    }
+    .card-link {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 14px;
+      letter-spacing: .1em;
+      color: #c89b53;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-body-sm {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .chengyu-char {
+      margin: 10px 0 2px;
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 700;
+      font-size: 33px;
+      letter-spacing: .14em;
+      color: #f3e8d2;
+    }
+    .chengyu-pin {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 15px;
+      color: #c89b53;
+      letter-spacing: .04em;
+    }
+    .scene-thumb {
+      margin: 12px 0 14px;
+      height: 70px;
+      border-radius: 3px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .scene-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    .card-link--sm {
+      font-size: 13px;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    /* ── 気分から読む ── */
+    .mood-section { padding: 4px 0 16px; }
+    .mood-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 0 0 10px;
+    }
+    .mood-title {
+      font-family: 'Shippori Mincho', serif;
+      font-weight: 500;
+      font-size: 17px;
+      letter-spacing: .18em;
+      color: #c89b53;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .mood-rule { flex: 1; height: 1px; background: rgba(200,155,83,.4); }
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+    }
+    .mood-card {
+      border: 1px solid rgba(200,155,83,.28);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #0d1730, #0a1224);
+      text-decoration: none;
+    }
+    .mood-card--red  { border-color: rgba(156,43,46,.4); background: linear-gradient(135deg,#2a0f17,#190a12); }
+    .mood-card--teal { border-color: rgba(120,170,170,.28); background: linear-gradient(135deg,#0c2228,#0a1a1e); }
+    .mood-card--gold { border-color: rgba(200,155,83,.35); background: linear-gradient(135deg,#24200f,#16130a); }
+    .mood-card-body { flex: 1; }
+    .mood-card-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 17px;
+      color: #f3e8d2;
+    }
+    .mood-card-sub {
+      font-family: 'Noto Serif JP', serif;
+      font-weight: 300;
+      font-size: 12px;
+      color: #9a9384;
+      margin-top: 3px;
+    }
+    .mood-arrow { color: #c89b53; font-size: 14px; }
+
+    /* ── 従者の間 ── */
+    .servants-section { padding: 4px 0 32px; }
+    .servants-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .servant-panel {
+      border: 1px solid rgba(200,155,83,.22);
+      border-radius: 6px;
+      padding: 18px 20px;
+      background: oklch(0.18 0.09 263 / 0.5);
+    }
+    .lilian-panel { border-top: 2px solid rgba(100,180,160,.5); }
+    .lilan-panel  { border-top: 2px solid rgba(200,155,83,.5); }
+    .servant-panel-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .servant-panel-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(200,155,83,.4);
+      flex-shrink: 0;
+    }
+    .servant-panel-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .lilian-name { color: oklch(0.65 0.08 175); }
+    .lilan-name  { color: #c89b53; }
+    .servant-panel-role {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.68rem;
+      color: rgba(200,190,170,.5);
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+    .servant-panel-speech {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.8rem;
+      line-height: 1.9;
+      color: rgba(200,190,170,.7);
+      font-style: italic;
+    }
+
+    /* ── 旧暦 ── */
+    .top-lunar-section { padding: 0 0 36px; }
+    .top-lunar-ornament {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .top-orn-line { flex: 1; height: 1px; background: rgba(200,155,83,.2); }
+    .top-orn-diamond {
+      width: 5px; height: 5px;
+      background: rgba(200,155,83,.4);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+    .top-lunar-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .top-lunar-date {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.82rem;
+      color: rgba(200,190,170,.6);
+      text-align: center;
+      line-height: 1.7;
+    }
+    .top-lunar-loading { color: rgba(200,190,170,.3); }
+    .top-lunar-toggle {
+      background: none;
+      border: 1px solid rgba(200,155,83,.25);
+      border-radius: 3px;
+      color: rgba(200,190,170,.5);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      padding: 3px 12px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .top-lunar-toggle:hover { border-color: rgba(200,155,83,.5); color: #c89b53; }
+    .top-lunar-bday {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: rgba(200,190,170,.4);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .top-lunar-bday:hover { color: #c89b53; }
+    .top-lunar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      margin-top: 12px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .top-lunar-day {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
+      padding: 4px 2px;
+      border-radius: 3px;
     }
-    .vertical-lantern {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
+    .top-lunar-day.today {
+      background: oklch(0.27 0.12 263);
+      outline: 1px solid rgba(200,155,83,.4);
     }
-    .featured-body-text { flex: 1; }
-    .featured-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 2; margin-bottom: 1rem; }
-    .featured-cta {
-      font-family: var(--mono);
-      font-size: 0.78rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      border-bottom: 1px solid var(--gold-dim);
-      padding-bottom: 2px;
-    }
-    .featured-cta:hover { color: var(--text); border-color: var(--text); }
-
-    /* ── 区切り線 ── */
-    .section-rule { border: none; border-top: 1px solid var(--border-dim); margin: 2.5rem 0; }
-
-    /* ── 最新記事 ── */
-    .section-title {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.35em;
-      color: var(--gold-dim);
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
-    }
-    .article-list { display: flex; flex-direction: column; }
-    .article-row {
-      display: grid;
-      grid-template-columns: 6.5rem 1fr auto;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 0.9rem 0.5rem;
-      border-bottom: 1px solid var(--border-dim);
-      text-decoration: none;
-      transition: background 0.15s;
-    }
-    .article-row:first-child { border-top: 1px solid var(--border-dim); }
-    .article-row:hover { background: var(--surface); }
-    .row-date { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.04em; }
-    .row-title { font-size: 0.93rem; color: var(--text); letter-spacing: 0.03em; line-height: 1.5; }
-    .article-row:hover .row-title { color: var(--gold); }
-    .row-arrow { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); }
-    .article-row:hover .row-arrow { color: var(--gold); }
-    .more-link {
-      display: inline-block;
-      margin-top: 1.2rem;
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--text-faint);
-      letter-spacing: 0.1em;
-    }
-    .more-link:hover { color: var(--gold-dim); }
-
-    /* ── 成語導線 ── */
-    .chengyu-card {
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 1.2rem 1rem;
-      border: 1px solid var(--border-dim);
-      text-decoration: none;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .chengyu-card:hover { border-color: var(--gold-dim); background: var(--surface); }
-    .cat-zh { font-family: var(--serif-zh); font-size: 1.2rem; color: var(--gold); letter-spacing: 0.05em; flex-shrink: 0; }
-    .cat-desc { font-size: 0.82rem; color: var(--text-dim); flex: 1; }
-    .cat-en { font-family: var(--mono); font-size: 0.62rem; color: var(--gold-dim); letter-spacing: 0.1em; flex-shrink: 0; }
+    .top-day-emoji { font-size: 0.9rem; line-height: 1; }
+    .top-day-num { font-family: 'Space Mono', monospace; font-size: 0.44rem; color: rgba(200,190,170,.4); margin-top: 1px; }
+    .top-lunar-day.today .top-day-num { color: #c89b53; }
   </style>
+
+  <script>
+    import { getLunarInfo, getMoonPhase, getMoonEmoji, getSolarTerm, getLunarMonthDays } from '../scripts/lunar.js';
+
+    const today = new Date();
+    const lunarInfo  = getLunarInfo(today);
+    const phase      = getMoonPhase(today);
+    const solarTerm  = getSolarTerm(today);
+    const compactEl  = document.getElementById('top-lunar-compact');
+    if (compactEl && lunarInfo) {
+      const emoji = getMoonEmoji(phase);
+      const parts = [`${emoji} ${lunarInfo.stemBranch}年`, `${lunarInfo.monthName}${lunarInfo.dayName}`];
+      if (solarTerm) parts.push(solarTerm);
+      compactEl.innerHTML = parts.join('　');
+    }
+
+    const toggleBtn = document.getElementById('top-lunar-toggle');
+    const gridEl    = document.getElementById('top-lunar-grid');
+    let built = false;
+    function buildGrid() {
+      if (!gridEl) return;
+      const days = getLunarMonthDays(today);
+      gridEl.innerHTML = days.map(d => {
+        const cls = d.isToday ? 'top-lunar-day today' : 'top-lunar-day';
+        const st  = getSolarTerm(d.date);
+        return `<div class="${cls}" title="${d.dayName}${st ? ' · ' + st : ''}">
+          <span class="top-day-emoji">${d.emoji}</span>
+          <span class="top-day-num">${d.dayIdx + 1}</span>
+        </div>`;
+      }).join('');
+    }
+    if (toggleBtn && gridEl) {
+      toggleBtn.addEventListener('click', () => {
+        const open = gridEl.style.display === 'grid';
+        if (open) {
+          gridEl.style.display = 'none';
+          toggleBtn.textContent = '暦 ▾';
+        } else {
+          if (!built) { buildGrid(); built = true; }
+          gridEl.style.display = 'grid';
+          toggleBtn.textContent = '暦 ▴';
+        }
+      });
+    }
+  </script>
+
+  <script>
+    const gif = document.getElementById('hero-gif') as HTMLImageElement | null;
+    if (gif) {
+      const gifDurationMs = 4000;
+      function startFade() {
+        setTimeout(() => {
+          gif.style.opacity = '0';
+          setTimeout(() => { gif.style.display = 'none'; }, 800);
+        }, gifDurationMs);
+      }
+      if (gif.complete) { startFade(); } else { gif.addEventListener('load', startFade); }
+    }
+  </script>
+
 </BaseLayout>

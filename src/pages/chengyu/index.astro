@@ -3,13 +3,25 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { CHENGYU_DATA } from '../../data/chengyu.js';
 ---
 <BaseLayout title="成語辞書" description="耽美小説で出会う100の成語。フリップカードで覚える中国語成語辞書。">
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
   <div class="chengyu-page">
 
-    <section class="hero">
-      <p class="hero-sub">耽美成語辞書</p>
-      <h1>物語で覚える<br /><span class="cn">一百個成語</span></h1>
-      <p class="hero-desc">テーマを選んで、カードをめくる。</p>
-    </section>
+    <div class="hero">
+      <img src="/piaodeng/images/header-chengyu.png" alt="" class="hero-bg" />
+      <div class="hero-overlay"></div>
+      <div class="hero-body">
+        <p class="hero-pinyin">tān měi chéng yǔ cí diǎn</p>
+        <h1 class="hero-title">耽美成語辞書</h1>
+        <div class="hero-rule-wrap">
+          <div class="hero-rule"></div>
+          <span class="hero-rule-star">✦</span>
+          <div class="hero-rule"></div>
+        </div>
+        <p class="hero-sub">物語で覚える一行解説成語。テーマを選んで、カードをめくる。</p>
+      </div>
+    </div>
 
     <!-- Theme grid -->
     <div id="theme-view">
@@ -27,6 +39,22 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
             </button>
           );
         })}
+      </div>
+    </div>
+
+    <!-- 今日の一語 (theme view only) -->
+    <div id="featured-word" class="featured-word-section">
+      <div class="fw-deco">
+        <div class="fw-line"></div>
+        <span class="fw-star">✦</span>
+        <div class="fw-line"></div>
+      </div>
+      <p class="fw-eyebrow">今日の一語</p>
+      <div class="fw-body">
+        <div class="fw-chars">心不在焉</div>
+        <div class="fw-pinyin">xīn bù zài yān</div>
+        <p class="fw-mean">心がここにない。上の空で、別のことを考えている状態。</p>
+        <p class="fw-story">彼は文机の前に端座し、筆も止まっていた——上の空。その視線がずっと、廊下の白衣の後ろ姿に注がれていることを、傍の者は誰も知らなかった。</p>
       </div>
     </div>
 
@@ -62,38 +90,82 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       padding: 0 1.5rem 5rem;
     }
 
-    /* Hero */
+    /* ── ヒーロー（天燈報共通スタイル） ── */
     .hero {
+      position: relative;
+      height: 240px;
+      overflow: hidden;
+      border-radius: 4px;
+      margin: 1.5rem 0 2.2rem;
+      border: 1px solid rgba(200,155,83,.22);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(4,8,20,.88) 0%, rgba(4,8,20,.6) 60%, rgba(4,8,20,.78) 100%);
+    }
+    .hero-body {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      padding: 4rem 0 3rem;
-      border-bottom: 1px solid var(--color-navy);
-      margin-bottom: 2.5rem;
+      padding: 1.5rem;
     }
+    .hero-pinyin {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: rgba(200,155,83,.6);
+      letter-spacing: 0.25em;
+      margin-bottom: 0.35rem;
+    }
+    .hero-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.35em;
+      text-shadow: 0 0 40px var(--gold-glow);
+      margin-bottom: 0.7rem;
+      line-height: 1;
+    }
+    .hero-rule-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 160px;
+      margin: 0 auto 0.75rem;
+    }
+    .hero-rule { flex: 1; height: 1px; background: rgba(200,155,83,.45); }
+    .hero-rule-star { color: #c89b53; font-size: 9px; flex-shrink: 0; }
     .hero-sub {
-      font-size: 0.75rem;
-      letter-spacing: 0.4em;
-      color: var(--color-gold);
-      margin-bottom: 1rem;
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      line-height: 1.9;
     }
-    .hero h1 {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      letter-spacing: 0.15em;
-      color: var(--color-moon);
-      line-height: 1.4;
-      margin-bottom: 1rem;
-    }
-    .hero h1 .cn { font-size: 0.75em; color: var(--color-gold); }
-    .hero-desc { color: var(--color-muted); font-size: 0.9rem; letter-spacing: 0.1em; }
 
     /* Theme grid */
     .theme-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 1rem;
     }
     .theme-tile {
-      background: rgba(26, 47, 90, 0.25);
-      border: 1px solid var(--color-navy);
+      background: rgba(8, 14, 32, 0.75);
+      border: 1px solid rgba(200,155,83,.18);
       padding: 1.5rem 1.25rem;
       cursor: pointer;
       text-align: left;
@@ -466,6 +538,63 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       letter-spacing: 0.1em;
     }
 
+    /* Featured word section */
+    .featured-word-section {
+      margin: 3rem 0 2rem;
+      text-align: center;
+    }
+    .fw-deco {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 auto 1.5rem;
+      max-width: 240px;
+    }
+    .fw-line { flex: 1; height: 1px; background: rgba(212,168,67,0.25); }
+    .fw-star { font-size: 0.6rem; color: rgba(212,168,67,0.55); }
+    .fw-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.35em;
+      color: var(--color-gold);
+      opacity: 0.7;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .fw-body {
+      background: rgba(14, 22, 50, 0.5);
+      border: 1px solid var(--color-navy);
+      padding: 2rem;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .fw-chars {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2rem;
+      color: var(--color-moon);
+      letter-spacing: 0.25em;
+      margin-bottom: 0.5rem;
+    }
+    .fw-pinyin {
+      font-size: 0.75rem;
+      color: var(--color-gold);
+      letter-spacing: 0.12em;
+      margin-bottom: 1.25rem;
+    }
+    .fw-mean {
+      font-size: 0.88rem;
+      color: var(--color-muted);
+      line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+    .fw-story {
+      font-size: 0.78rem;
+      color: rgba(232,238,244,0.45);
+      line-height: 2;
+      font-style: italic;
+      border-top: 1px solid rgba(26,47,90,0.6);
+      padding-top: 1rem;
+    }
+
     @media (max-width: 640px) {
       .theme-grid { grid-template-columns: 1fr 1fr; }
       .fc-scene { height: 500px; }
@@ -630,6 +759,8 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       fcCard.classList.toggle('flipped', isFlipped);
     }
 
+    const featuredWord = document.getElementById('featured-word');
+
     document.querySelectorAll('.theme-tile').forEach(tile => {
       tile.addEventListener('click', () => {
         currentTheme = CHENGYU_DATA.find(t => t.id === tile.dataset.themeId);
@@ -637,6 +768,7 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
         cardThemeLabel.textContent = currentTheme.name;
         themeView.hidden = true;
         cardView.hidden = false;
+        if (featuredWord) featuredWord.hidden = true;
         updateCounter();
         loadCard(currentTheme.words[0]);
       });
@@ -645,6 +777,7 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
     document.getElementById('back-btn').addEventListener('click', () => {
       themeView.hidden = false;
       cardView.hidden = true;
+      if (featuredWord) featuredWord.hidden = false;
       currentTheme = null;
     });
 

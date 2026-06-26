@@ -2,8 +2,9 @@
 interface Props {
   title: string;
   description?: string;
+  fullWidth?: boolean;
 }
-const { title, description = '飄燈閣 — 中国語の世界へ、ようこそ' } = Astro.props;
+const { title, description = '飄燈閣 — 中国語の世界へ、ようこそ', fullWidth = false } = Astro.props;
 
 const path = Astro.url.pathname;
 const section =
@@ -63,7 +64,7 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
   <meta name="twitter:image" content="https://xiaoling117-dot.github.io/piaodeng/images/hero-featured.jpg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Noto+Serif+SC:wght@300;400;600;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Shippori+Mincho:wght@400;500;600;700&family=EB+Garamond:ital,wght@1,400&display=swap" rel="stylesheet" />
   <style>
     :root {
       --bg:         oklch(0.22 0.13 263);
@@ -117,37 +118,41 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
 
   <!-- ── Header ── -->
   <header class="site-header">
-    <a href="/piaodeng/" class="header-brand">
-      <span class="brand-zh">飄燈閣</span>
-      <span class="brand-pinyin">piāodēng gé</span>
-    </a>
-    <nav class="header-nav">
-      <a href="/piaodeng/blog/" class="nav-item">
-        <span class="nav-zh">天燈報</span>
-        <span class="nav-label">magazine</span>
+    <div class="header-inner">
+      <a href="/piaodeng/" class="header-brand">
+        <span class="brand-zh">飄燈閣</span>
+        <span class="brand-pinyin">piāodēng gé</span>
       </a>
-      <a href="/piaodeng/chengyu/" class="nav-item">
-        <span class="nav-zh">成語</span>
-        <span class="nav-label">chengyu</span>
-      </a>
-      <a href="/piaodeng/quiz/" class="nav-item">
-        <span class="nav-zh">試練</span>
-        <span class="nav-label">quiz</span>
-      </a>
-      <a href="/piaodeng/story/" class="nav-item">
-        <span class="nav-zh">物語</span>
-        <span class="nav-label">story</span>
-      </a>
-      <button class="sidebar-toggle-btn" id="sidebar-toggle" aria-label="従者の間を開く">
-        <span class="sidebar-toggle-zh">従</span>
-      </button>
-    </nav>
+      <div class="header-divider" aria-hidden="true"></div>
+      <nav class="header-nav">
+        <a href="/piaodeng/blog/" class="nav-item">
+          <span class="nav-zh">天燈報</span>
+        </a>
+        <a href="/piaodeng/chengyu/" class="nav-item">
+          <span class="nav-zh">成語を探す</span>
+        </a>
+        <a href="/piaodeng/story/" class="nav-item">
+          <span class="nav-zh">シーンを読む</span>
+        </a>
+        <a href="/piaodeng/quiz/" class="nav-item">
+          <span class="nav-zh">成語試問</span>
+        </a>
+        <a href="/piaodeng/about/" class="nav-item nav-item--about">
+          <span class="nav-zh">About</span>
+        </a>
+        {!fullWidth && (
+          <button class="nav-servants-btn" id="sidebar-toggle" aria-label="従者の間を開く">
+            従者の間
+          </button>
+        )}
+      </nav>
+    </div>
   </header>
 
-  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+  {!fullWidth && <div class="sidebar-backdrop" id="sidebar-backdrop"></div>}
 
   <!-- ── Body ── -->
-  <div class="body-wrap">
+  <div class={fullWidth ? 'body-wrap body-wrap--full' : 'body-wrap'}>
 
     <main class="main-content">
       <slot />
@@ -205,6 +210,12 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
     </aside>
 
   </div>
+  {fullWidth && (
+    <style>
+      .body-wrap--full .sidebar { display: none; }
+      .body-wrap--full .main-content { width: 100%; }
+    </style>
+  )}
 
   <!-- ── Footer ── -->
   <footer class="site-footer">
@@ -227,17 +238,22 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
   <style>
     /* ── Header ── */
     .site-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
       height: 56px;
       border-bottom: 1px solid var(--border);
-      background: oklch(0.20 0.13 263 / 0.92);
+      background: oklch(0.13 0.07 263 / 0.97);
       backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
       z-index: 100;
+    }
+    .header-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      height: 100%;
+      padding: 0 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .site-header::after {
       content: '';
@@ -269,6 +285,13 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
       font-style: italic;
     }
     .header-brand:hover .brand-zh { color: var(--text); }
+    .header-divider {
+      width: 1px;
+      height: 22px;
+      background: rgba(200,155,83,.35);
+      margin: 0 28px;
+      flex-shrink: 0;
+    }
     .header-nav { display: flex; gap: 0.15rem; }
     .nav-item {
       display: flex;
@@ -283,12 +306,36 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
     .nav-item:hover { background: var(--surface2); color: var(--gold); }
     .nav-zh { font-family: var(--serif-jp); font-size: 0.82rem; letter-spacing: 0.05em; line-height: 1.2; }
     .nav-label { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.05em; opacity: 0.5; }
+    .nav-item--about .nav-zh { font-family: 'EB Garamond', serif; font-style: italic; font-size: 1rem; color: var(--gold); letter-spacing: 0.04em; }
+    .nav-item--about:hover .nav-zh { color: var(--text); }
+    .nav-servants-btn {
+      display: flex;
+      align-items: center;
+      padding: 0.3rem 0.9rem;
+      border: 1px solid rgba(200,155,83,.45);
+      border-radius: 3px;
+      background: none;
+      font-family: var(--serif-jp);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-left: 0.4rem;
+    }
+    .nav-servants-btn:hover { background: rgba(200,155,83,.12); color: var(--text); }
 
     /* ── Body layout ── */
     .body-wrap {
       display: flex;
       align-items: flex-start;
       min-height: calc(100vh - 56px);
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .body-wrap--full {
+      max-width: none;
     }
     .main-content {
       flex: 1;
@@ -497,30 +544,7 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
     .footer-pinyin { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); font-style: italic; }
     .footer-motto { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); letter-spacing: 0.15em; }
 
-    /* ── Sidebar toggle button（モバイルのみ表示） ── */
-    .sidebar-toggle-btn {
-      display: none;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      background: none;
-      border: 1px solid var(--border-dim);
-      border-radius: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-      margin-left: 0.25rem;
-      flex-shrink: 0;
-    }
-    .sidebar-toggle-btn:hover { border-color: var(--gold-dim); }
-    .sidebar-toggle-btn.open { border-color: var(--gold-dim); background: var(--surface2); }
-    .sidebar-toggle-zh {
-      font-family: var(--serif-zh);
-      font-size: 0.85rem;
-      color: var(--gold-dim);
-      line-height: 1;
-    }
-    .sidebar-toggle-btn.open .sidebar-toggle-zh { color: var(--gold); }
+    /* sidebar-toggle-btn は nav-servants-btn に統合済み */
 
     /* ── Backdrop ── */
     .sidebar-backdrop {
@@ -581,9 +605,11 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
       toggleBtn?.classList.remove('open');
     }
 
-    toggleBtn?.addEventListener('click', () => {
-      sidebar?.classList.contains('open') ? closeSidebar() : openSidebar();
-    });
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        sidebar?.classList.contains('open') ? closeSidebar() : openSidebar();
+      });
+    }
     backdrop?.addEventListener('click', closeSidebar);
   </script>
 

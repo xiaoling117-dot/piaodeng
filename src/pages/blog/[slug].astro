@@ -15,42 +15,78 @@ const { post, nextPost } = Astro.props;
 const { Content } = await post.render();
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
-  <article class="blog-post">
-    <nav class="breadcrumb">
-      <a href="/piaodeng/blog/">← 読み物へ戻る</a>
-    </nav>
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
 
-    <header class="post-header">
-      <div class="post-meta">
-        <span class="post-date">{post.data.date}</span>
-        <span class="post-authors">{post.data.authors.join(' & ')}</span>
+  <div class="post-layout">
+    <article class="blog-post">
+      <nav class="breadcrumb">
+        <a href="/piaodeng/blog/">← 天燈報</a>
+      </nav>
+
+      <header class="post-header">
+        <div class="post-meta">
+          <span class="post-date">{post.data.date}</span>
+          <span class="post-authors">{post.data.authors.join(' & ')}</span>
+        </div>
+        <h1>{post.data.title}</h1>
+        {post.data.description && <p class="post-desc">{post.data.description}</p>}
+      </header>
+
+      <div class="post-body">
+        <Content />
       </div>
-      <h1>{post.data.title}</h1>
-      {post.data.description && <p class="post-desc">{post.data.description}</p>}
-    </header>
 
-    <div class="post-body">
-      <Content />
-    </div>
+      <div class="post-colophon" aria-hidden="true">
+        <div class="colophon-seal">飄燈閣</div>
+      </div>
 
-    <div class="post-colophon" aria-hidden="true">
-      <div class="colophon-seal">飄燈閣</div>
-    </div>
+      <footer class="post-footer">
+        <a href="/piaodeng/blog/" class="back-link">← 天燈報へ</a>
+        {nextPost && (
+          <a href={`/piaodeng/blog/${nextPost.slug}/`} class="next-link">
+            {nextPost.data.title} →
+          </a>
+        )}
+      </footer>
+    </article>
 
-    <footer class="post-footer">
-      <a href="/piaodeng/blog/" class="back-link">← 読み物一覧へ</a>
+    <aside class="post-sidebar">
       {nextPost && (
-        <a href={`/piaodeng/blog/${nextPost.slug}/`} class="next-link">
-          次の記事へ：{nextPost.data.title} →
-        </a>
+        <div class="sidebar-widget">
+          <p class="sidebar-label">次の記事</p>
+          <a href={`/piaodeng/blog/${nextPost.slug}/`} class="sidebar-next-card">
+            <p class="snc-title">{nextPost.data.title}</p>
+            <p class="snc-date">{nextPost.data.date}</p>
+          </a>
+        </div>
       )}
-    </footer>
-  </article>
+      <div class="sidebar-widget sidebar-chengyu-widget">
+        <p class="sidebar-label">今日の一語</p>
+        <div class="scw-inner">
+          <div class="scw-chars">心不在焉</div>
+          <div class="scw-pinyin">xīn bù zài yān</div>
+          <div class="scw-rule"></div>
+          <div class="scw-mean">心がここにない。上の空で、別のことを考えている状態。</div>
+          <a href="/piaodeng/chengyu/" class="scw-link">成語辞書で探す →</a>
+        </div>
+      </div>
+    </aside>
+  </div>
 
   <style>
-    .blog-post { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 5rem; }
+    .post-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 210px;
+      gap: 2.5rem;
+      align-items: start;
+      padding-bottom: 4rem;
+    }
 
-    .breadcrumb { margin-bottom: 3rem; font-size: 0.8rem; }
+    .blog-post { padding: 2rem 0 2rem; }
+
+    .breadcrumb { margin-bottom: 2.5rem; font-size: 0.8rem; }
     .breadcrumb a { color: var(--color-muted); }
     .breadcrumb a:hover { color: var(--color-gold); }
 
@@ -89,7 +125,6 @@ const { Content } = await post.render();
     }
     .post-desc { color: var(--color-muted); font-size: 0.9rem; line-height: 1.8; }
 
-    /* 本文スタイル */
     .post-body {
       font-size: 0.95rem;
       line-height: 2.2;
@@ -129,16 +164,12 @@ const { Content } = await post.render();
     }
     .post-body :global(strong) { color: var(--color-gold); font-weight: 600; }
     .post-body :global(em) { color: var(--color-muted); font-style: normal; }
-
-    /* 対話スタイル */
     .post-body :global(p:has(strong:first-child)) {
       padding: 1rem 1.2rem;
       border-left: 2px solid var(--color-navy);
       margin-bottom: 0.5rem;
       opacity: 1;
     }
-
-    /* テーブル */
     .post-body :global(table) {
       width: 100%;
       border-collapse: collapse;
@@ -164,7 +195,6 @@ const { Content } = await post.render();
       background: rgba(212,168,67,0.1);
       padding: 0.1em 0.4em;
     }
-
     .post-body :global(h2) {
       font-size: 1.1rem;
       letter-spacing: 0.1em;
@@ -174,26 +204,21 @@ const { Content } = await post.render();
       border-left: 2px solid var(--gold-dim);
       position: relative;
     }
-    /* 左上コーナー角 */
     .post-body :global(h2)::before {
       content: '';
       position: absolute;
       top: 0; left: -2px;
-      width: 10px;
-      height: 2px;
+      width: 10px; height: 2px;
       background: var(--gold-dim);
     }
-    /* 左下コーナー角（控えめ） */
     .post-body :global(h2)::after {
       content: '';
       position: absolute;
       bottom: 0; left: -2px;
-      width: 6px;
-      height: 2px;
+      width: 6px; height: 2px;
       background: var(--gold-dim);
       opacity: 0.5;
     }
-
     .post-body :global(blockquote) {
       border-left: 3px solid var(--color-gold);
       margin: 1.5rem 0;
@@ -213,12 +238,7 @@ const { Content } = await post.render();
     }
     .back-link { font-size: 0.85rem; color: var(--color-muted); white-space: nowrap; }
     .back-link:hover { color: var(--color-gold); }
-    .next-link {
-      font-size: 0.85rem;
-      color: var(--color-muted);
-      text-align: right;
-      line-height: 1.6;
-    }
+    .next-link { font-size: 0.85rem; color: var(--color-muted); text-align: right; line-height: 1.6; }
     .next-link:hover { color: var(--color-gold); }
 
     .post-colophon {
@@ -236,6 +256,85 @@ const { Content } = await post.render();
       letter-spacing: 0.2em;
       opacity: 0.7;
       line-height: 1.5;
+    }
+
+    /* ── サイドバー ── */
+    .post-sidebar {
+      position: sticky;
+      top: 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      padding-top: 2rem;
+    }
+    .sidebar-widget {
+      border: 1px solid var(--color-navy);
+      padding: 1.1rem 1rem;
+      background: rgba(14, 22, 50, 0.55);
+    }
+    .sidebar-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      color: var(--color-gold);
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+      opacity: 0.75;
+    }
+    .sidebar-next-card {
+      display: block;
+      text-decoration: none;
+      padding: 0.6rem 0.5rem;
+      border: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .sidebar-next-card:hover { border-color: var(--gold-dim); }
+    .snc-title {
+      font-size: 0.82rem;
+      color: var(--color-moon);
+      line-height: 1.7;
+      margin-bottom: 0.4rem;
+    }
+    .snc-date { font-size: 0.63rem; color: var(--color-muted); font-family: monospace; }
+
+    .sidebar-chengyu-widget { text-align: center; }
+    .scw-chars {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.5rem;
+      color: var(--color-moon);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.4rem;
+    }
+    .scw-pinyin {
+      font-size: 0.68rem;
+      color: var(--color-gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.7rem;
+    }
+    .scw-rule {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,168,67,0.35), transparent);
+      margin: 0 1rem 0.7rem;
+    }
+    .scw-mean {
+      font-size: 0.76rem;
+      color: var(--color-muted);
+      line-height: 1.85;
+      margin-bottom: 0.9rem;
+    }
+    .scw-link {
+      font-size: 0.68rem;
+      color: var(--color-gold);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      opacity: 0.65;
+      transition: opacity 0.2s;
+    }
+    .scw-link:hover { opacity: 1; }
+
+    @media (max-width: 720px) {
+      .post-layout { grid-template-columns: 1fr; }
+      .post-sidebar { display: none; }
+      .blog-post { padding: 1.5rem 0 4rem; }
     }
   </style>
 </BaseLayout>

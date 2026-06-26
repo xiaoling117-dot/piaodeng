@@ -3,31 +3,47 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { STORIES } from '../../data/stories.js';
 ---
 <BaseLayout title="物語廊" description="同じ場面を4つの難易度で読む。中日対訳リーダー。">
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
   <div class="story-index">
 
-    <section class="index-hero">
-      <p class="index-eyebrow">物語廊</p>
-      <h1 class="index-title-zh">故事廊</h1>
-      <p class="index-title-jp">物語廊</p>
-      <p class="index-desc">同じ場面を、4つの難易度で読む。<br/>成語が生きた言葉になる場所。</p>
-    </section>
+    <div class="hero">
+      <img src="/piaodeng/images/header-enkonshi.png" alt="" class="hero-bg" />
+      <div class="hero-overlay"></div>
+      <div class="hero-body">
+        <p class="hero-pinyin">wù yǔ láng</p>
+        <h1 class="hero-title">物　語　廊</h1>
+        <div class="hero-rule-wrap">
+          <div class="hero-rule"></div>
+          <span class="hero-rule-star">✦</span>
+          <div class="hero-rule"></div>
+        </div>
+        <p class="hero-sub">同じ場面を、四つの難易度で読む。<br>成語が生きた言葉になる場所。</p>
+      </div>
+    </div>
 
     <ul class="story-list">
       {STORIES.map((story, i) => (
         <li class="story-card">
           <a href={`/piaodeng/story/${story.slug}/`} class="story-card-link">
-            <span class="card-num">0{i + 1}</span>
-            <div class="card-body">
-              <p class="card-chengyu">
+            <div class="card-left">
+              <span class="card-num">0{i + 1}</span>
+              <div class="card-chengyu-block">
                 <span class="card-chengyu-zh">{story.chengyu}</span>
                 <span class="card-chengyu-reading">{story.chengyu_reading}</span>
-                <span class="card-chengyu-meaning">{story.chengyu_meaning}</span>
-              </p>
+              </div>
+            </div>
+            <div class="card-body">
               <h2 class="card-title-zh">{story.zh_title}</h2>
               <p class="card-title-jp">{story.title}</p>
               <p class="card-desc">{story.desc}</p>
+              <p class="card-chengyu-meaning">{story.chengyu_meaning}</p>
             </div>
-            <span class="card-arrow">→</span>
+            <div class="card-right">
+              <span class="card-level-badge">4段階</span>
+              <span class="card-arrow">→</span>
+            </div>
           </a>
         </li>
       ))}
@@ -43,42 +59,71 @@ import { STORIES } from '../../data/stories.js';
     padding: 0 1.5rem 5rem;
   }
 
-  .index-hero {
+  /* ── ヒーロー（天燈報共通スタイル） ── */
+  .hero {
+    position: relative;
+    height: 240px;
+    overflow: hidden;
+    border-radius: 4px;
+    margin: 1.5rem 0 2.2rem;
+    border: 1px solid rgba(200,155,83,.22);
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(4,8,20,.88) 0%, rgba(4,8,20,.6) 60%, rgba(4,8,20,.78) 100%);
+  }
+  .hero-body {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
-    padding: 3.5rem 0 3rem;
-    border-bottom: 1px solid var(--border-dim);
-    margin-bottom: 2.5rem;
+    padding: 1.5rem;
   }
-  .index-eyebrow {
-    font-family: var(--mono);
-    font-size: 0.65rem;
-    letter-spacing: 0.35em;
-    color: var(--gold-dim);
-    text-transform: uppercase;
-    margin-bottom: 0.75rem;
+  .hero-pinyin {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: 0.82rem;
+    color: rgba(200,155,83,.6);
+    letter-spacing: 0.25em;
+    margin-bottom: 0.35rem;
   }
-  .index-title-zh {
-    font-family: var(--serif-zh);
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 900;
+  .hero-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
     color: var(--gold);
-    letter-spacing: 0.1em;
-    text-shadow: 0 0 30px var(--gold-glow);
-    margin-bottom: 0.4rem;
+    letter-spacing: 0.35em;
+    text-shadow: 0 0 40px var(--gold-glow);
+    margin-bottom: 0.7rem;
+    line-height: 1;
   }
-  .index-title-jp {
-    font-family: var(--serif-jp);
-    font-size: 1rem;
+  .hero-rule-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 160px;
+    margin: 0 auto 0.75rem;
+  }
+  .hero-rule { flex: 1; height: 1px; background: rgba(200,155,83,.45); }
+  .hero-rule-star { color: #c89b53; font-size: 9px; flex-shrink: 0; }
+  .hero-sub {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.72rem;
     color: var(--text-dim);
-    margin-bottom: 1rem;
-    letter-spacing: 0.08em;
-  }
-  .index-desc {
-    font-family: var(--serif-jp);
-    font-size: 0.85rem;
-    color: var(--text-faint);
-    line-height: 2;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.04em;
+    line-height: 1.9;
   }
 
   .story-list {
@@ -92,74 +137,71 @@ import { STORIES } from '../../data/stories.js';
 
   .story-card {
     border: 1px solid var(--border-dim);
-    border-radius: 4px;
-    margin-bottom: 0.75rem;
-    transition: border-color 0.2s;
+    margin-bottom: 0.6rem;
+    background: rgba(14, 22, 50, 0.3);
+    transition: border-color 0.2s, background 0.2s;
   }
   .story-card:hover {
     border-color: var(--gold-dim);
+    background: rgba(14, 22, 50, 0.55);
   }
   .story-card-link {
-    display: flex;
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
     align-items: center;
     gap: 1.5rem;
-    padding: 1.5rem;
+    padding: 1.4rem 1.5rem;
     text-decoration: none;
     color: inherit;
   }
 
-  .card-num {
-    font-family: var(--mono);
-    font-size: 1.4rem;
-    color: var(--gold-dim);
-    letter-spacing: 0.05em;
+  .card-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
     flex-shrink: 0;
-    width: 2.5rem;
     text-align: center;
   }
-
-  .card-body {
-    flex: 1;
+  .card-num {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.05em;
+    opacity: 0.7;
   }
-
-  .card-chengyu {
+  .card-chengyu-block {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin-bottom: 0.4rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
   }
   .card-chengyu-zh {
     font-family: var(--serif-zh);
     font-size: 1rem;
     color: var(--gold);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
   }
   .card-chengyu-reading {
     font-family: var(--mono);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: var(--jade-dim);
-    letter-spacing: 0.08em;
-  }
-  .card-chengyu-meaning {
-    font-family: var(--serif-jp);
-    font-size: 0.7rem;
-    color: var(--text-faint);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.06em;
   }
 
+  .card-body { flex: 1; }
   .card-title-zh {
     font-family: var(--serif-zh);
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: var(--text);
     letter-spacing: 0.05em;
     margin-bottom: 0.15rem;
   }
   .card-title-jp {
     font-family: var(--serif-jp);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     color: var(--text-dim);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
     letter-spacing: 0.05em;
   }
   .card-desc {
@@ -168,13 +210,34 @@ import { STORIES } from '../../data/stories.js';
     color: var(--text-faint);
     line-height: 1.8;
     letter-spacing: 0.03em;
+    margin-bottom: 0.3rem;
+  }
+  .card-chengyu-meaning {
+    font-family: var(--serif-jp);
+    font-size: 0.68rem;
+    color: rgba(212,168,67,0.5);
+    letter-spacing: 0.03em;
   }
 
+  .card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    flex-shrink: 0;
+  }
+  .card-level-badge {
+    font-family: var(--mono);
+    font-size: 0.58rem;
+    color: var(--jade-dim);
+    border: 1px solid rgba(80,160,120,0.3);
+    padding: 0.2rem 0.5rem;
+    letter-spacing: 0.1em;
+  }
   .card-arrow {
     font-family: var(--mono);
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--gold-dim);
-    flex-shrink: 0;
     transition: transform 0.2s, color 0.2s;
   }
   .story-card:hover .card-arrow {
@@ -183,7 +246,7 @@ import { STORIES } from '../../data/stories.js';
   }
 
   @media (max-width: 600px) {
-    .story-card-link { padding: 1.2rem 1rem; gap: 1rem; }
-    .card-num { font-size: 1.1rem; width: 2rem; }
+    .story-card-link { grid-template-columns: 70px 1fr; padding: 1.1rem 1rem; }
+    .card-right { display: none; }
   }
 </style>

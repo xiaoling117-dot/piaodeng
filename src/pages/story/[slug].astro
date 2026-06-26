@@ -12,6 +12,9 @@ export function getStaticPaths() {
 const { story } = Astro.props;
 ---
 <BaseLayout title={story.title} description={story.desc}>
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
   <div class="story-page">
 
     <nav class="story-breadcrumb">

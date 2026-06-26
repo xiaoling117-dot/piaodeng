@@ -4,150 +4,456 @@ import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
 
-const jigokuSeries = allPosts
-  .filter(p => p.data.tags?.includes('地獄シリーズ'))
-  .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+const SERIES = [
+  {
+    slug: 'jigoku',
+    tag: '地獄シリーズ',
+    title: '地獄シリーズ',
+    desc: '地獄という二文字を起点に、古典から現代までの「地獄」観の変遷をたどる。',
+    img: '/piaodeng/images/card-jigoku.png',
+  },
+  {
+    slug: 'enkonshi',
+    tag: '冤魂志より',
+    title: '冤魂志',
+    desc: '冤罪と亡霊の記録。5〜6世紀の中国から届く、忘れられた声を聴く。',
+    img: '/piaodeng/images/card-scene-thumb.png',
+  },
+  {
+    slug: 'joshi',
+    tag: '助詞が感情を作る',
+    title: '助詞が感情を作る',
+    desc: '了・吧・啊・嘛……助詞一字が、心の動きをどこまで変えるか。',
+    img: '/piaodeng/images/card-chengyu.png',
+  },
+  {
+    slug: 'chocho',
+    tag: '朝貢シリーズ',
+    title: '朝貢シリーズ',
+    desc: '絹と香料、そして物語の記録。日本人の見た唐を、やさしく問い直す。',
+    img: '/piaodeng/images/card-scene.png',
+  },
+];
 
-const featured = jigokuSeries[0]; // 序章：シリーズの入口
+const seriesData = SERIES.map(s => {
+  const posts = allPosts
+    .filter(p => p.data.tags?.includes(s.tag))
+    .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+  return { ...s, count: posts.length };
+});
 
-const recent = allPosts
-  .filter(p => p.slug !== featured.slug)
+const recent = [...allPosts]
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 4);
+  .slice(0, 8);
+
+const SERIES_TAGS = new Set(SERIES.map(s => s.tag));
 ---
 <BaseLayout title="天燈報">
-  <article class="home">
+  <div class="blog-home">
 
-    <!-- 特集：大型アイキャッチ -->
-    <section class="featured-section">
-      <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-img-link">
-        <div class="featured-img-wrap">
-          <img
-            src="/piaodeng/images/hero-featured.jpg"
-            alt={featured.data.title}
-            class="featured-img"
-          />
-          <div class="featured-img-overlay">
-            <span class="featured-eyebrow">特集</span>
-            <h2 class="featured-img-title">{featured.data.title}</h2>
-          </div>
+    <!-- ── ヒーロー ── -->
+    <div class="hero">
+      <img src="/piaodeng/images/card-scene.png" alt="" class="hero-bg" />
+      <div class="hero-overlay"></div>
+      <div class="hero-body">
+        <p class="hero-pinyin">tiāndēng bào</p>
+        <h1 class="hero-title">天　燈　報</h1>
+        <div class="hero-rule-wrap">
+          <div class="hero-rule"></div>
+          <span class="hero-rule-star">✦</span>
+          <div class="hero-rule"></div>
         </div>
-      </a>
-      <div class="featured-body">
-        <p class="featured-desc">{featured.data.description}</p>
-        <a href={`/piaodeng/blog/${featured.slug}/`} class="featured-cta">読む →</a>
+        <p class="hero-sub">名場面のことば、心を打つ一節、文化の背景。<br>言葉自身をより深く実感するための記事をお届けします。</p>
+      </div>
+    </div>
+
+    <!-- ── 特集シリーズ ── -->
+    <section class="series-sec">
+      <div class="sec-head">
+        <span class="sec-label">特集シリーズ</span>
+        <div class="sec-rule"></div>
+        <a href="/piaodeng/blog/all/" class="sec-all">すべてのシリーズを見る ⟶</a>
+      </div>
+      <div class="series-grid">
+        {seriesData.map(s => (
+          <a href={`/piaodeng/blog/tag/${s.slug}/`} class="series-card">
+            <div class="series-img-wrap">
+              <img src={s.img} alt="" class="series-img" />
+              <div class="series-img-grad"></div>
+              <span class="series-count-badge">{s.count}本</span>
+            </div>
+            <div class="series-body">
+              <h3 class="series-name">{s.title}</h3>
+              <p class="series-desc">{s.desc}</p>
+              <span class="series-cta">シリーズを読む ⟶</span>
+            </div>
+          </a>
+        ))}
       </div>
     </section>
 
-    <hr class="section-rule" />
-
-    <!-- 最新記事リスト -->
-    <section class="recent-section">
-      <h2 class="section-title">最新記事</h2>
-      <nav class="article-list">
-        {recent.map(post => (
-          <a href={`/piaodeng/blog/${post.slug}/`} class="article-row">
-            <span class="row-date">{post.data.date}</span>
-            <span class="row-title">{post.data.title}</span>
-            <span class="row-arrow">→</span>
-          </a>
-        ))}
-      </nav>
-      <a href="/piaodeng/blog/all/" class="more-link">特集一覧へ →</a>
+    <!-- ── 気分から読む ── -->
+    <section class="mood-sec">
+      <div class="sec-head">
+        <span class="sec-label">気分から読む</span>
+        <div class="sec-rule"></div>
+      </div>
+      <div class="mood-grid">
+        <a href="/piaodeng/blog/tag/jigoku/" class="mood-card mood--dark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c89b53" stroke-width="1.3"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+          <div><div class="mood-name">闇に浸る</div><div class="mood-sub">心の奥に触れる言葉を読む</div></div>
+          <span class="mood-arrow">⟶</span>
+        </a>
+        <a href="/piaodeng/blog/tag/enkonshi/" class="mood-card mood--red">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#c98a8c" stroke-width="1.2"><circle cx="8" cy="8" r="2.4"/><circle cx="16" cy="8" r="2.4"/><path d="M4 19c0-3 1.8-5 4-5s4 2 4 5"/><path d="M12 19c0-3 1.8-5 4-5s4 2 4 5"/></svg>
+          <div><div class="mood-name" style="color:#f3e2d8;">関係性を読む</div><div class="mood-sub" style="color:#b58c8c;">人と人のつながりを紐解く</div></div>
+          <span class="mood-arrow" style="color:#c98a8c;">⟶</span>
+        </a>
+        <a href="/piaodeng/blog/tag/genbun/" class="mood-card mood--teal">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8fc0c0" stroke-width="1.2"><path d="M12 6c-2-1.4-5-1.4-7 0v12c2-1.4 5-1.4 7 0M12 6c2-1.4 5-1.4 7 0v12c-2-1.4-5-1.4-7 0M12 6v12"/></svg>
+          <div><div class="mood-name" style="color:#e6f0ef;">原文を開く</div><div class="mood-sub" style="color:#86a3a3;">美しい原文に触れる</div></div>
+          <span class="mood-arrow" style="color:#8fc0c0;">⟶</span>
+        </a>
+        <a href="/piaodeng/blog/tag/chocho/" class="mood-card mood--gold">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d4b876" stroke-width="1.2"><path d="M3 9l9-5 9 5"/><path d="M5 9v9M19 9v9M9 9v9M15 9v9M3 19h18"/></svg>
+          <div><div class="mood-name" style="color:#f3ead2;">歴史を覗く</div><div class="mood-sub" style="color:#a99a73;">時代の温度に触れる</div></div>
+          <span class="mood-arrow" style="color:#d4b876;">⟶</span>
+        </a>
+      </div>
     </section>
 
-  </article>
+    <!-- ── 新着記事 ── -->
+    <section class="articles-sec">
+      <div class="sec-head">
+        <span class="sec-label">新着記事</span>
+        <div class="sec-rule"></div>
+      </div>
+      <nav class="article-list">
+        {recent.map(post => {
+          const seriesTag = post.data.tags?.find(t => SERIES_TAGS.has(t)) ?? null;
+          return (
+            <a href={`/piaodeng/blog/${post.slug}/`} class="article-row">
+              <span class="row-date">{post.data.date}</span>
+              <span class="row-body">
+                {seriesTag && <span class="row-tag">{seriesTag}</span>}
+                <span class="row-title">{post.data.title}</span>
+                {post.data.description && <span class="row-desc">{post.data.description}</span>}
+              </span>
+              <span class="row-arrow">⟶</span>
+            </a>
+          );
+        })}
+      </nav>
+      <a href="/piaodeng/blog/all/" class="more-link">もっと記事を見る ⟶</a>
+    </section>
+
+  </div>
+
+  <style is:global>
+    body { background-color: #070d1c !important; background-image: none !important; }
+  </style>
 
   <style>
-    .home { max-width: 800px; margin: 0 auto; padding: 0 1.5rem 5rem; }
+    .blog-home {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
 
-    .featured-section { padding-top: 2.5rem; }
-    .featured-img-link { display: block; text-decoration: none; }
-    .featured-img-wrap {
+    /* ── ヒーロー ── */
+    .hero {
       position: relative;
+      height: 240px;
       overflow: hidden;
-      border: 1px solid var(--border-dim);
+      border-radius: 4px;
+      margin: 1.5rem 0 2.2rem;
+      border: 1px solid rgba(200,155,83,.22);
     }
-    .featured-img {
-      width: 100%;
-      height: auto;
-      display: block;
-      transition: transform 0.4s ease;
-    }
-    .featured-img-link:hover .featured-img { transform: scale(1.02); }
-    .featured-img-overlay {
+    .hero-bg {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      top: 35%;
-      padding: 1.5rem 2rem;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(4,8,20,.88) 0%, rgba(4,8,20,.6) 60%, rgba(4,8,20,.78) 100%);
+    }
+    .hero-body {
+      position: relative;
+      z-index: 1;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;
-      background: linear-gradient(to top, oklch(0.15 0.12 263 / 0.95) 0%, oklch(0.15 0.12 263 / 0.65) 40%, transparent 100%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.5rem;
     }
-    .featured-eyebrow {
-      display: block;
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.35em;
+    .hero-pinyin {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: rgba(200,155,83,.6);
+      letter-spacing: 0.25em;
+      margin-bottom: 0.35rem;
+    }
+    .hero-title {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 2.4rem;
+      font-weight: 600;
       color: var(--gold);
+      letter-spacing: 0.35em;
+      text-shadow: 0 0 40px var(--gold-glow);
+      margin-bottom: 0.7rem;
+      line-height: 1;
+    }
+    .hero-rule-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 160px;
+      margin: 0 auto 0.75rem;
+    }
+    .hero-rule { flex: 1; height: 1px; background: rgba(200,155,83,.45); }
+    .hero-rule-star { color: #c89b53; font-size: 9px; flex-shrink: 0; }
+    .hero-lead {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.9rem;
+      color: #f3e8d2;
+      letter-spacing: 0.12em;
       margin-bottom: 0.4rem;
     }
-    .featured-img-title {
-      font-family: var(--serif-jp);
-      font-size: clamp(1rem, 2.5vw, 1.5rem);
-      color: var(--text);
-      letter-spacing: 0.05em;
-      line-height: 1.5;
+    .hero-sub {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      letter-spacing: 0.04em;
+      line-height: 1.9;
     }
-    .featured-body { padding: 1.5rem 0 0; }
-    .featured-desc { font-size: 0.88rem; color: var(--text-dim); line-height: 2; margin-bottom: 1rem; }
-    .featured-cta {
-      font-family: var(--mono);
+
+    /* ── セクション共通ヘッダー ── */
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 1rem;
+    }
+    .sec-label {
+      font-family: 'Shippori Mincho', serif;
       font-size: 0.78rem;
-      color: var(--gold);
-      letter-spacing: 0.1em;
-      border-bottom: 1px solid var(--gold-dim);
-      padding-bottom: 2px;
-    }
-    .featured-cta:hover { color: var(--text); border-color: var(--text); }
-
-    .section-rule { border: none; border-top: 1px solid var(--border-dim); margin: 2.5rem 0; }
-
-    .section-title {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      letter-spacing: 0.35em;
+      letter-spacing: 0.28em;
       color: var(--gold-dim);
-      text-transform: uppercase;
-      margin-bottom: 1.2rem;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
+    .sec-rule { flex: 1; height: 1px; background: var(--border-dim); }
+    .sec-all {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+    }
+    .sec-all:hover { color: var(--gold-dim); }
+
+    /* ── 特集シリーズ ── */
+    .series-sec { margin-bottom: 2.2rem; }
+    .series-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .series-card {
+      border: 1px solid rgba(200,155,83,.2);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      background: oklch(0.18 0.09 263 / 0.5);
+      transition: border-color 0.2s;
+    }
+    .series-card:hover { border-color: rgba(200,155,83,.5); }
+    .series-img-wrap {
+      position: relative;
+      height: 72px;
+      overflow: hidden;
+    }
+    .series-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      transition: transform 0.45s ease;
+    }
+    .series-card:hover .series-img { transform: scale(1.06); }
+    .series-img-grad {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(8,14,28,.8) 0%, rgba(8,14,28,.15) 65%, transparent 100%);
+    }
+    .series-count-badge {
+      position: absolute;
+      bottom: 6px;
+      right: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem;
+      color: var(--jade-dim);
+      letter-spacing: 0.06em;
+    }
+    .series-body {
+      padding: 10px 12px 13px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .series-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #f3e8d2;
+      letter-spacing: 0.06em;
+      margin-bottom: 5px;
+    }
+    .series-desc {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      line-height: 1.85;
+      flex: 1;
+      margin-bottom: 8px;
+    }
+    .series-cta {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── 気分から読む ── */
+    .mood-sec { margin-bottom: 2.2rem; }
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    .mood-card {
+      border: 1px solid rgba(200,155,83,.25);
+      border-radius: 5px;
+      padding: 10px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      background: linear-gradient(135deg, #0d1730, #0a1224);
+      transition: border-color 0.2s;
+      text-align: center;
+    }
+    .mood-card:hover { border-color: rgba(200,155,83,.5); }
+    .mood--red  { border-color: rgba(156,43,46,.35); background: linear-gradient(135deg,#2a0f17,#190a12); }
+    .mood--teal { border-color: rgba(120,170,170,.25); background: linear-gradient(135deg,#0c2228,#0a1a1e); }
+    .mood--gold { border-color: rgba(200,155,83,.3); background: linear-gradient(135deg,#24200f,#16130a); }
+    .mood-name {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.85rem;
+      color: #f3e8d2;
+    }
+    .mood-sub {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      margin-top: 2px;
+    }
+    .mood-arrow { color: #c89b53; font-size: 12px; margin-left: auto; flex-shrink: 0; }
+
+    /* ── 新着記事 ── */
     .article-list { display: flex; flex-direction: column; }
     .article-row {
-      display: grid;
-      grid-template-columns: 6.5rem 1fr auto;
-      align-items: baseline;
-      gap: 1rem;
-      padding: 0.9rem 0.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      padding: 0.8rem 0.5rem;
       border-bottom: 1px solid var(--border-dim);
       text-decoration: none;
-      transition: background 0.15s;
+      transition: background 0.15s, padding-left 0.15s;
     }
     .article-row:first-child { border-top: 1px solid var(--border-dim); }
-    .article-row:hover { background: var(--surface); }
-    .row-date { font-family: var(--mono); font-size: 0.62rem; color: var(--text-faint); letter-spacing: 0.04em; }
-    .row-title { font-size: 0.93rem; color: var(--text); letter-spacing: 0.03em; line-height: 1.5; }
+    .article-row:hover { background: oklch(0.27 0.12 263 / 0.4); padding-left: 1rem; }
+    .row-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text-faint);
+      white-space: nowrap;
+      flex-shrink: 0;
+      width: 5.8rem;
+      padding-top: 2px;
+    }
+    .row-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .row-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.56rem;
+      color: var(--jade-dim);
+      border: 1px solid oklch(0.52 0.06 175 / 0.38);
+      padding: 1px 5px;
+      border-radius: 2px;
+      align-self: flex-start;
+      letter-spacing: 0.04em;
+    }
+    .row-title {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.87rem;
+      color: var(--text);
+      letter-spacing: 0.03em;
+      line-height: 1.5;
+    }
     .article-row:hover .row-title { color: var(--gold); }
-    .row-arrow { font-family: var(--mono); font-size: 0.72rem; color: var(--text-faint); }
-    .article-row:hover .row-arrow { color: var(--gold); }
+    .row-desc {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      line-height: 1.7;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .row-arrow {
+      font-size: 0.7rem;
+      color: var(--text-faint);
+      flex-shrink: 0;
+      padding-top: 3px;
+      transition: transform 0.2s, color 0.2s;
+    }
+    .article-row:hover .row-arrow { color: var(--gold); transform: translateX(3px); }
+
     .more-link {
       display: inline-block;
       margin-top: 1.2rem;
-      font-family: var(--mono);
-      font-size: 0.68rem;
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.78rem;
       color: var(--text-faint);
       letter-spacing: 0.1em;
+      border-bottom: 1px solid rgba(200,155,83,.2);
+      padding-bottom: 2px;
     }
     .more-link:hover { color: var(--gold-dim); }
+
+    @media (max-width: 700px) {
+      .series-grid { grid-template-columns: repeat(2, 1fr); }
+      .mood-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .series-grid { grid-template-columns: 1fr; }
+      .mood-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </BaseLayout>
