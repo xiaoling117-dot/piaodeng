@@ -42,6 +42,37 @@ const { Content } = await post.render();
         <div class="colophon-seal">飄燈閣</div>
       </div>
 
+      <!-- 従者のおすすめ -->
+      <div class="char-picks">
+        <div class="char-picks-heading">
+          <div class="cp-line"></div>
+          <span class="cp-label">従者のおすすめ</span>
+          <div class="cp-line"></div>
+        </div>
+        <div class="char-picks-grid">
+          <a href="/piaodeng/blog/007-jigoku-4-enno-tabi/" class="char-pick lilian-pick">
+            <div class="cp-avatar">
+              <img src="/piaodeng/images/lilian-portrait.png" alt="黎蓮" />
+            </div>
+            <div class="cp-body">
+              <div class="cp-name lilian-name">黎蓮のひとこと</div>
+              <p class="cp-comment">三千年をかけて、ヤマは閻魔になった。旅の重さを感じてほしい。</p>
+              <span class="cp-title">閻王はどこから来たのか ⟶</span>
+            </div>
+          </a>
+          <a href="/piaodeng/blog/023-joshi-1-ryou/" class="char-pick lilan-pick">
+            <div class="cp-avatar">
+              <img src="/piaodeng/images/lilan-portrait.png" alt="麗蘭" />
+            </div>
+            <div class="cp-body">
+              <div class="cp-name lilan-name">麗蘭のひとこと</div>
+              <p class="cp-comment">感情の爆発が、一字に宿る——俺が書いた記事だから贔屓かもしれないけど、面白いと思う。</p>
+              <span class="cp-title">坏了、と天井を見る ⟶</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
       <footer class="post-footer">
         <a href="/piaodeng/blog/" class="back-link">← 天燈報へ</a>
         {nextPost && (
@@ -331,10 +362,84 @@ const { Content } = await post.render();
     }
     .scw-link:hover { opacity: 1; }
 
+    /* ── 従者のおすすめ ── */
+    .char-picks {
+      margin: 3rem 0 2.5rem;
+    }
+    .char-picks-heading {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.2rem;
+    }
+    .cp-line { flex: 1; height: 1px; background: var(--border-dim); }
+    .cp-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      color: var(--gold-dim);
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    .char-picks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .char-pick {
+      display: flex;
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid var(--border-dim);
+      border-radius: 4px;
+      background: oklch(0.20 0.10 263 / 0.4);
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .char-pick:hover { border-color: var(--border); background: oklch(0.23 0.11 263 / 0.5); }
+    .lilian-pick { border-top: 2px solid var(--jade-dim); }
+    .lilan-pick  { border-top: 2px solid var(--gold-dim); }
+    .cp-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1.5px solid var(--border-dim);
+    }
+    .lilian-pick .cp-avatar { border-color: var(--jade-dim); }
+    .lilan-pick  .cp-avatar { border-color: var(--gold-dim); }
+    .cp-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .cp-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .cp-name {
+      font-family: var(--serif-zh);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .lilian-name { color: var(--jade); }
+    .lilan-name  { color: var(--gold); }
+    .cp-comment {
+      font-family: var(--serif-jp);
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+      font-style: italic;
+    }
+    .cp-title {
+      font-family: var(--serif-jp);
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      margin-top: 2px;
+      transition: color 0.2s;
+    }
+    .char-pick:hover .cp-title { color: var(--gold); }
+
     @media (max-width: 720px) {
       .post-layout { grid-template-columns: 1fr; }
       .post-sidebar { display: none; }
       .blog-post { padding: 1.5rem 0 4rem; }
+      .char-picks-grid { grid-template-columns: 1fr; }
     }
   </style>
 </BaseLayout>

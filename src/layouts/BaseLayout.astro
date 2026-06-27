@@ -202,6 +202,21 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
         <div class="orn-line"></div>
       </div>
 
+      <!-- おすすめ -->
+      <div class="sidebar-picks">
+        <div class="sidebar-picks-heading">おすすめ</div>
+        <div class="sidebar-pick">
+          <span class="pick-char lilian-name">黎蓮</span>
+          <a href="/piaodeng/blog/007-jigoku-4-enno-tabi/" class="pick-title">閻王はどこから来たのか</a>
+          <p class="pick-comment">三千年をかけて、ヤマは閻魔になった</p>
+        </div>
+        <div class="sidebar-pick">
+          <span class="pick-char lilan-name">麗蘭</span>
+          <a href="/piaodeng/blog/023-joshi-1-ryou/" class="pick-title">坏了、と天井を見る</a>
+          <p class="pick-comment">感情の爆発が、一字に宿る</p>
+        </div>
+      </div>
+
       <div class="lunar-box">
         <div class="lunar-compact" id="lunar-compact"><span class="lunar-loading">…</span></div>
         <button class="lunar-toggle-btn" id="lunar-toggle-btn">暦 ▾</button>
@@ -444,6 +459,49 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
       background: var(--gold-dim);
       transform: rotate(45deg);
       flex-shrink: 0;
+    }
+
+    /* Picks */
+    .sidebar-picks { display: flex; flex-direction: column; gap: 10px; }
+    .sidebar-picks-heading {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      color: var(--gold-dim);
+      text-align: center;
+      text-transform: uppercase;
+    }
+    .sidebar-pick {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 9px 10px;
+      border: 1px solid var(--border-dim);
+      border-radius: 3px;
+      background: oklch(0.20 0.10 263 / 0.35);
+    }
+    .pick-char {
+      font-family: var(--serif-zh);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .pick-title {
+      font-family: var(--serif-jp);
+      font-size: 0.73rem;
+      color: var(--text);
+      line-height: 1.5;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .pick-title:hover { color: var(--gold); }
+    .pick-comment {
+      font-family: var(--serif-jp);
+      font-size: 0.64rem;
+      color: var(--text-faint);
+      font-style: italic;
+      line-height: 1.6;
+      margin-top: 1px;
     }
 
     /* Lunar calendar */
