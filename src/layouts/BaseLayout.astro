@@ -124,7 +124,8 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
         <span class="brand-pinyin">piāodēng gé</span>
       </a>
       <div class="header-divider" aria-hidden="true"></div>
-      <nav class="header-nav">
+      <button class="nav-hamburger" id="nav-hamburger" aria-label="メニューを開く">☰</button>
+      <nav class="header-nav" id="header-nav">
         <a href="/piaodeng/blog/" class="nav-item">
           <span class="nav-zh">天燈報</span>
         </a>
@@ -579,16 +580,67 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
         transform: translateX(0);
       }
     }
+    /* ── Hamburger button (hidden on desktop) ── */
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: 1px solid rgba(200,155,83,.38);
+      border-radius: 3px;
+      color: var(--gold);
+      font-size: 1.05rem;
+      line-height: 1;
+      padding: 0.28rem 0.6rem;
+      cursor: pointer;
+      margin-left: auto;
+      transition: background 0.2s, color 0.2s;
+      flex-shrink: 0;
+    }
+    .nav-hamburger:hover { background: rgba(200,155,83,.12); color: var(--text); }
+
     @media (max-width: 600px) {
-      .site-header { padding: 0 0.75rem; }
-      .nav-label { display: none; }
-      .nav-item { padding: 0.4rem 0.5rem; }
+      .header-inner { justify-content: space-between; }
+      .header-divider { display: none; }
       .brand-pinyin { display: none; }
       .header-brand { white-space: nowrap; }
+      .nav-hamburger { display: flex; align-items: center; }
+
+      /* nav は初期非表示、.open で展開 */
+      .header-nav {
+        display: none;
+        position: absolute;
+        top: 56px;
+        left: 0; right: 0;
+        background: oklch(0.13 0.07 263 / 0.98);
+        border-bottom: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        padding: 0.5rem 0.75rem 0.75rem;
+        z-index: 98;
+        gap: 0.15rem;
+      }
+      .header-nav.open { display: flex; }
+      .nav-item { padding: 0.65rem 0.75rem; }
+      .nav-servants-btn { margin-left: 0; margin-top: 0.25rem; justify-content: center; }
     }
   </style>
 
   <script>
+    // ハンバーガーメニュー開閉
+    const hamburger = document.getElementById('nav-hamburger');
+    const headerNav = document.getElementById('header-nav') as HTMLElement | null;
+    hamburger?.addEventListener('click', () => {
+      const isOpen = headerNav?.classList.toggle('open');
+      if (hamburger) hamburger.textContent = isOpen ? '✕' : '☰';
+      hamburger?.setAttribute('aria-label', isOpen ? 'メニューを閉じる' : 'メニューを開く');
+    });
+    // ナビリンクをタップしたら閉じる
+    headerNav?.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        headerNav.classList.remove('open');
+        if (hamburger) hamburger.textContent = '☰';
+      });
+    });
+
     // サイドバー開閉
     const toggleBtn  = document.getElementById('sidebar-toggle');
     const sidebar    = document.querySelector('.sidebar') as HTMLElement;
