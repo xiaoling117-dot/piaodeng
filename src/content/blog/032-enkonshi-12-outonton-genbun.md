@@ -34,7 +34,7 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 ピンイン：
 
-Hàn shí yǒu Wáng Wèn, zì Shǎolín, wéi Méi Xiàn lìng. Zhī xiàn, dào Lí Tíng, tíng cháng yǒu guǐ, shuò shuò shā rén.
+Hàn shí yǒu Wáng Tún, zì Shǎolín, wéi Méi Xiàn lìng. Zhī xiàn, dào Lí Tíng, tíng cháng yǒu guǐ, shuò shuò shā rén.
 
 語義：
 
@@ -64,13 +64,13 @@ Hàn shí yǒu Wáng Wèn, zì Shǎolín, wéi Méi Xiàn lìng. Zhī xiàn, dà
 
 ピンイン：
 
-Wèn sù lóu shàng, yè yǒu nǚzǐ, chēng: "Yù sù yuān, wú yī zì gài." Wèn yǐ yī yǔ zhī, nǎi jìn yuē: "Qiè běn Fú lìng qī yě. Yù zhī guān, guò cǐ tíng sù. Tíng zhǎng shā qiè dàxiǎo shí yú kǒu, mái zài lóu xià, duó qǔ yīcháng cáiwù. Tíng zhǎng jīn wéi xiàn mén xià yóujiào."
+Tún sù lóu shàng, yè yǒu nǚzǐ, chēng: "Yù sù yuān, wú yī zì gài." Tún yǐ yī yǔ zhī, nǎi jìn yuē: "Qiè běn Fú lìng qī yě. Yù zhī guān, guò cǐ tíng sù. Tíng zhǎng shā qiè dàxiǎo shí yú kǒu, mái zài lóu xià, duó qǔ yīcháng cáiwù. Tíng zhǎng jīn wéi xiàn mén xià yóujiào."
 
 語義：
 
 | 語 | 簡体字 | ピンイン | 意味 |
 |---|---|---|---|
-| 忳宿樓上 | 忳宿楼上 | Wèn sù lóu shàng | 王忳が2階に泊まった |
+| 忳宿樓上 | 忳宿楼上 | Tún sù lóu shàng | 王忳が2階に泊まった |
 | 欲訴冤 | 欲诉冤 | yù sù yuān | 冤（えん）を訴えたい |
 | 無衣自蓋 | 无衣自盖 | wú yī zì gài | 身を覆う衣がない |
 | 以衣與之 | 以衣与之 | yǐ yī yǔ zhī | 衣を与えた |
@@ -98,7 +98,7 @@ Wèn sù lóu shàng, yè yǒu nǚzǐ, chēng: "Yù sù yuān, wú yī zì gài.
 
 ピンイン：
 
-Wèn yuē: "Dāng wèi rǔ bào zhī, wù fù wàng shā liáng shàn yé!" Guǐ tóu yī ér qù. Wèn dàn shōu yóujiào, jiéwèn, jí fú. Shōu tóngmóu shí yú rén, bìng shā zhī. Jué qǔ zhū sāng, guī qí jiā bìnzàng, tíng yǒng qīng níng.
+Tún yuē: "Dāng wèi rǔ bào zhī, wù fù wàng shā liáng shàn yé!" Guǐ tóu yī ér qù. Tún dàn shōu yóujiào, jiéwèn, jí fú. Shōu tóngmóu shí yú rén, bìng shā zhī. Jué qǔ zhū sāng, guī qí jiā bìnzàng, tíng yǒng qīng níng.
 
 語義：
 
