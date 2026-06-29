@@ -36,6 +36,8 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 Hàn shí yǒu Wáng Tún, zì Shǎolín, wéi Méi Xiàn lìng. Zhī xiàn, dào Lí Tíng, tíng cháng yǒu guǐ, shuò shuò shā rén.
 
+※ 忳の読みは諸説あり（tún / dùn）、確定していない。
+
 語義：
 
 | 語 | 簡体字 | ピンイン | 意味 |
