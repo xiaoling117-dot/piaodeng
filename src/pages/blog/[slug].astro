@@ -183,14 +183,15 @@ const { Content } = await post.render();
       );
     }
     .post-body :global(hr)::after {
-      content: '◆';
+      content: '〔◆〕';
       position: absolute;
       left: 50%; top: 50%;
       transform: translate(-50%, -50%);
       background: var(--bg);
       color: var(--gold-dim);
-      font-size: 0.45rem;
-      padding: 0 1rem;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      padding: 0 0.8rem;
       line-height: 1;
     }
     .post-body :global(strong) { color: var(--color-gold); font-weight: 600; }
