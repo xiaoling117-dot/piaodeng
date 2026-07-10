@@ -253,6 +253,118 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"015-enkonshi-3-chutei.md": {
+	id: "015-enkonshi-3-chutei.md";
+  slug: "015-enkonshi-3-chutei";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"016-enkonshi-4-chutei-genbun.md": {
+	id: "016-enkonshi-4-chutei-genbun.md";
+  slug: "016-enkonshi-4-chutei-genbun";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"017-enkonshi-5-suga.md": {
+	id: "017-enkonshi-5-suga.md";
+  slug: "017-enkonshi-5-suga";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"018-enkonshi-6-suga-genbun.md": {
+	id: "018-enkonshi-6-suga-genbun.md";
+  slug: "018-enkonshi-6-suga-genbun";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"019-enkonshi-7-outon.md": {
+	id: "019-enkonshi-7-outon.md";
+  slug: "019-enkonshi-7-outon";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"020-enkonshi-8-outon-genbun.md": {
+	id: "020-enkonshi-8-outon-genbun.md";
+  slug: "020-enkonshi-8-outon-genbun";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"021-kotenyowa-1-roki.md": {
+	id: "021-kotenyowa-1-roki.md";
+  slug: "021-kotenyowa-1-roki";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"022-kotenyowa-2-roki-genbun.md": {
+	id: "022-kotenyowa-2-roki-genbun.md";
+  slug: "022-kotenyowa-2-roki-genbun";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"023-joshi-1-ryou.md": {
+	id: "023-joshi-1-ryou.md";
+  slug: "023-joshi-1-ryou";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"024-joshi-2-ji.md": {
+	id: "024-joshi-2-ji.md";
+  slug: "024-joshi-2-ji";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"025-joshi-3-a.md": {
+	id: "025-joshi-3-a.md";
+  slug: "025-joshi-3-a";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"026-joshi-4-ma.md": {
+	id: "026-joshi-4-ma.md";
+  slug: "026-joshi-4-ma";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"027-joshi-5-ne.md": {
+	id: "027-joshi-5-ne.md";
+  slug: "027-joshi-5-ne";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"028-shikashi-tabi.md": {
+	id: "028-shikashi-tabi.md";
+  slug: "028-shikashi-tabi";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"029-enkonshi-9-koki.md": {
+	id: "029-enkonshi-9-koki.md";
+  slug: "029-enkonshi-9-koki";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"030-enkonshi-10-koki-genbun.md": {
+	id: "030-enkonshi-10-koki-genbun.md";
+  slug: "030-enkonshi-10-koki-genbun";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 };
 
 	};
