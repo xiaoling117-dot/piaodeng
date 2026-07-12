@@ -159,14 +159,29 @@ const classic = CLASSIC_STORIES[word.w] || null;
   </style>
 
   <script>
+    // lang 指定だけでは中国語音声が無い/未ロードの端末で日本語音声に
+    // フォールバックし、漢字を日本語読みしてしまうため voice を明示選択する。
+    let zhVoice: SpeechSynthesisVoice | null = null;
+    function loadZhVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length) {
+        zhVoice = voices.find(v => v.lang.toLowerCase().startsWith('zh')) ?? null;
+      }
+    }
+    if ('speechSynthesis' in window) {
+      loadZhVoice();
+      window.speechSynthesis.addEventListener('voiceschanged', loadZhVoice);
+    }
+
     document.querySelectorAll('.audio-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        const text = btn.dataset.text;
-        const lang = btn.dataset.lang || 'zh-CN';
+        const text = (btn as HTMLElement).dataset.text;
+        const lang = (btn as HTMLElement).dataset.lang || 'zh-CN';
         if (!text) return;
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(text);
         utter.lang = lang;
+        if (lang.toLowerCase().startsWith('zh') && zhVoice) utter.voice = zhVoice;
         utter.rate = 0.85;
         btn.classList.add('playing');
         utter.onend = () => btn.classList.remove('playing');

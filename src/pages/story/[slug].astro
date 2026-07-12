@@ -195,6 +195,21 @@ const { story } = Astro.props;
   // ---- 音声再生 ----
   let speaking = false;
 
+  // lang='zh-CN' の指定だけでは、端末に中国語音声が無い/未ロードの場合に
+  // デフォルト（日本語）音声へフォールバックし、漢字を日本語読みしてしまう。
+  // voice を明示的に選ぶことでこれを防ぐ。
+  let zhVoice: SpeechSynthesisVoice | null = null;
+  function loadZhVoice() {
+    const voices = window.speechSynthesis.getVoices();
+    if (voices.length) {
+      zhVoice = voices.find(v => v.lang.toLowerCase().startsWith('zh')) ?? null;
+    }
+  }
+  if ('speechSynthesis' in window) {
+    loadZhVoice();
+    window.speechSynthesis.addEventListener('voiceschanged', loadZhVoice);
+  }
+
   document.getElementById('audio-play')?.addEventListener('click', () => {
     if (!('speechSynthesis' in window)) return;
 
@@ -211,6 +226,7 @@ const { story } = Astro.props;
 
     const utter = new SpeechSynthesisUtterance(text);
     utter.lang = 'zh-CN';
+    if (zhVoice) utter.voice = zhVoice;
     utter.rate = 0.85;
     utter.onend = () => {
       speaking = false;

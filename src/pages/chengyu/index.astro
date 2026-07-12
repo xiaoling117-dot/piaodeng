@@ -789,6 +789,20 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       if (!e.target.closest('.audio-btn')) flipCard();
     });
 
+    // lang='zh-CN' の指定だけでは中国語音声が無い/未ロードの端末で日本語
+    // 音声にフォールバックし、漢字を日本語読みしてしまうため voice を明示選択する。
+    let zhVoice = null;
+    function loadZhVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length) {
+        zhVoice = voices.find(v => v.lang.toLowerCase().startsWith('zh')) ?? null;
+      }
+    }
+    if ('speechSynthesis' in window) {
+      loadZhVoice();
+      window.speechSynthesis.addEventListener('voiceschanged', loadZhVoice);
+    }
+
     document.addEventListener('click', e => {
       const btn = e.target.closest('.audio-btn');
       if (!btn) return;
@@ -798,6 +812,7 @@ import { CHENGYU_DATA } from '../../data/chengyu.js';
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'zh-CN';
+      if (zhVoice) u.voice = zhVoice;
       u.rate = 0.85;
       window.speechSynthesis.speak(u);
     });
