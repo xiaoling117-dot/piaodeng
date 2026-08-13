@@ -6,7 +6,7 @@ export async function getStaticPaths() {
   const SERIES_DEFS = [
     {
       slug: 'jigoku',
-      tag: '地獄シリーズ',
+      tags: ['地獄シリーズ'],
       title: '地獄シリーズ',
       pinyin: 'dì yù xì liè',
       desc: '地獄という二文字を起点に、古典から現代までの「地獄」観の変遷をたどる。',
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
     },
     {
       slug: 'enkonshi',
-      tag: '冤魂志より',
+      tags: ['冤魂志より'],
       title: '冤　魂　志',
       pinyin: 'yuān hún zhì',
       desc: '冤罪と亡霊の記録。5〜6世紀の中国から届く、忘れられた声を聴く。',
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
     },
     {
       slug: 'joshi',
-      tag: '助詞が感情を作る',
+      tags: ['助詞が感情を作る'],
       title: '助詞が感情を作る',
       pinyin: 'zhù cí yǔ gǎn qíng',
       desc: '了・吧・啊・嘛……助詞一字が、心の動きをどこまで変えるか。',
@@ -30,7 +30,7 @@ export async function getStaticPaths() {
     },
     {
       slug: 'chocho',
-      tag: '朝貢シリーズ',
+      tags: ['朝貢シリーズ'],
       title: '朝　貢',
       pinyin: 'cháo gòng',
       desc: '絹と香料、そして物語の記録。日本人の見た唐を、やさしく問い直す。',
@@ -38,10 +38,34 @@ export async function getStaticPaths() {
     },
     {
       slug: 'genbun',
-      tag: '原文を読む',
+      tags: ['原文を読む'],
       title: '原文を開く',
       pinyin: 'yuán wén',
       desc: '古典の生テキストと向き合う。繁体字・簡体字・ピンインで、言葉の重さを味わう。',
+      img: '/piaodeng/images/header-enkonshi.png',
+    },
+    {
+      slug: 'yami',
+      tags: ['冤魂志より', '志怪', '地獄シリーズ'],
+      title: '闇に浸る',
+      pinyin: 'zhì guài',
+      desc: '冤罪、亡霊、地獄——心の奥に触れる、志怪の記録。',
+      img: '/piaodeng/images/header-enkonshi.png',
+    },
+    {
+      slug: 'rekishi',
+      tags: ['古典余話', '史記', '戦国策', '朝貢シリーズ'],
+      title: '歴史を覗く',
+      pinyin: 'lì shǐ',
+      desc: '正史と余話のあいだ。実在した人物と時代の温度に触れる。',
+      img: '/piaodeng/images/header-chocho.png',
+    },
+    {
+      slug: 'kankei',
+      tags: ['関係性を読む'],
+      title: '関係性を読む',
+      pinyin: 'rén jì guān xì',
+      desc: '記事をまたいで浮かび上がる、人と人のつながり。同じ名、同じ一族、遠くで交差する運命。',
       img: '/piaodeng/images/header-enkonshi.png',
     },
   ];
@@ -53,7 +77,7 @@ export async function getStaticPaths() {
     props: {
       series,
       posts: allPosts
-        .filter(p => p.data.tags?.includes(series.tag))
+        .filter(p => series.tags.some(t => p.data.tags?.includes(t)))
         .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime()),
     },
   }));
