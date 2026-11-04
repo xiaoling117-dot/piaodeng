@@ -1,0 +1,171 @@
+---
+// 新着記事の一覧（天燈報とトップページで共通）
+// ・本編と「原文で読む」は一行にまとめ、「本編／原文」の二つのリンクを出す
+// ・公開から7日以内の記事には NEW の印（見る人の端末の日付で判定。下の script）
+import type { RecentItem } from '../lib/recent';
+
+interface Props {
+  items: RecentItem[];
+  /** 説明文（description）を出すかどうか */
+  showDesc?: boolean;
+}
+const { items, showDesc = true } = Astro.props;
+
+// シリーズ名のタグ（天燈報の「特集シリーズ」と同じもの）
+const SERIES_TAGS = new Set(['地獄シリーズ', '冤魂志より', '助詞が感情を作る', '朝貢シリーズ']);
+
+const href = (slug: string) => `/piaodeng/blog/${slug}/`;
+const shortDate = (d: string) => d.replace(/-/g, '.');
+---
+<ul class="recent-list">
+  {items.map(({ main, genbun, newest }) => {
+    const seriesTag = main.data.tags?.find(t => SERIES_TAGS.has(t)) ?? null;
+    const title = main.data.title;
+    return (
+      <li class="recent-row">
+        <span class="recent-date">
+          <time datetime={newest.data.date}>{shortDate(newest.data.date)}</time>
+          <span class="recent-new" data-date={newest.data.date} hidden>NEW</span>
+        </span>
+        <span class="recent-body">
+          {seriesTag && <span class="recent-tag">{seriesTag}</span>}
+          <a href={href(main.slug)} class="recent-title">{title}</a>
+          {showDesc && main.data.description && <span class="recent-desc">{main.data.description}</span>}
+          {genbun && (
+            <span class="recent-links">
+              <a href={href(main.slug)}>本編</a>
+              <span class="recent-sep" aria-hidden="true">／</span>
+              <a href={href(genbun.slug)}>原文</a>
+            </span>
+          )}
+        </span>
+        <span class="recent-arrow" aria-hidden="true">⟶</span>
+      </li>
+    );
+  })}
+</ul>
+
+<script>
+  // 公開から7日以内なら NEW を表示（サイトは push したときしか作り直されないので、
+  // 作った時点ではなく、見ている人の今日の日付で判定する）
+  const DAY = 24 * 60 * 60 * 1000;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  document.querySelectorAll<HTMLElement>('.recent-new[data-date]').forEach(el => {
+    const [y, m, d] = (el.dataset.date ?? '').split('-').map(Number);
+    if (!y || !m || !d) return;
+    const days = (today.getTime() - new Date(y, m - 1, d).getTime()) / DAY;
+    if (days >= 0 && days <= 7) el.hidden = false;
+  });
+</script>
+
+<style>
+  .recent-list a { text-decoration: none; }
+  .recent-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+  .recent-row {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    padding: 0.8rem 0.5rem;
+    border-bottom: 1px solid var(--border-dim);
+    transition: background 0.15s, padding-left 0.15s;
+  }
+  .recent-row:first-child { border-top: 1px solid var(--border-dim); }
+  .recent-row:hover { background: oklch(0.27 0.12 263 / 0.4); padding-left: 1rem; }
+
+  .recent-date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    white-space: nowrap;
+    flex-shrink: 0;
+    width: 6.2rem;
+    padding-top: 1px;
+    letter-spacing: 0.02em;
+  }
+  .recent-new {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 0 5px;
+    line-height: 1.6;
+  }
+  .recent-new[hidden] { display: none; }
+
+  .recent-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .recent-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--jade-dim);
+    border: 1px solid oklch(0.52 0.06 175 / 0.38);
+    padding: 1px 5px;
+    border-radius: 2px;
+    align-self: flex-start;
+    letter-spacing: 0.04em;
+  }
+  .recent-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.87rem;
+    color: var(--text);
+    letter-spacing: 0.03em;
+    line-height: 1.5;
+  }
+  /* 行のどこを押しても本編へ（「原文」リンクだけは別） */
+  .recent-title::after { content: ''; position: absolute; inset: 0; }
+  .recent-row:hover .recent-title { color: var(--gold); }
+  .recent-desc {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .recent-links {
+    position: relative;
+    z-index: 1;
+    align-self: flex-start;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+  .recent-links a {
+    color: var(--gold-dim);
+    border-bottom: 1px solid rgba(200,155,83,.25);
+    padding: 2px 1px;
+  }
+  .recent-links a:hover { color: var(--gold); }
+  .recent-sep { color: var(--text-faint); margin: 0 0.35em; }
+  .recent-arrow {
+    font-size: 0.7rem;
+    color: var(--text-faint);
+    flex-shrink: 0;
+    padding-top: 3px;
+    transition: transform 0.2s, color 0.2s;
+  }
+  .recent-row:hover .recent-arrow { color: var(--gold); transform: translateX(3px); }
+
+  /* スマホ：日付をタイトルの上に置き、タイトルの幅を広く取る */
+  @media (max-width: 480px) {
+    .recent-row { flex-wrap: wrap; gap: 4px 10px; }
+    .recent-date { width: 100%; flex-direction: row; align-items: center; gap: 8px; }
+    .recent-body { flex: 1; }
+  }
+</style>

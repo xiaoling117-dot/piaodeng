@@ -52,6 +52,8 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
   <meta name="description" content={description} />
   <title>{title === '飄燈閣' ? title : `${title} | 飄燈閣`}</title>
   <link rel="icon" type="image/svg+xml" href="/piaodeng/favicon.svg" />
+  <link rel="alternate" type="application/rss+xml" title="飄燈閣 天燈報" href="/piaodeng/rss.xml" />
+  <link rel="sitemap" href="/piaodeng/sitemap-index.xml" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="飄燈閣" />
   <meta property="og:title" content={`${title} | 飄燈閣`} />
@@ -261,6 +263,16 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
       <span class="footer-pinyin">piāodēng gé</span>
     </div>
     <p class="footer-motto">月と灯り、中国語の世界へ</p>
+    <!-- 外へのリンク（新しいタブで開く） -->
+    <nav class="footer-links" aria-label="外部リンク">
+      <a href="https://x.com/xiaoxiao_1117" target="_blank" rel="noopener">X（しゃおしゃお）</a>
+      <a href="https://x.com/fengran1201" target="_blank" rel="noopener">X（枫染・中国語学習）</a>
+      <a href="https://www.youtube.com/@xiaoxiao_1117" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://note.com/xiaoxiao1117" target="_blank" rel="noopener">note</a>
+      <!-- Kindle の本のリンクはここに足す（例）：
+      <a href="https://www.amazon.co.jp/dp/XXXXXXXXXX" target="_blank" rel="noopener">Kindle</a>
+      -->
+    </nav>
   </footer>
 
   <style>
@@ -614,6 +626,18 @@ const lines = LINES[section as keyof typeof LINES] ?? LINES.home;
     .footer-zh { font-family: var(--serif-zh); font-size: 1rem; color: var(--gold-dim); letter-spacing: 0.1em; }
     .footer-pinyin { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); font-style: italic; }
     .footer-motto { font-family: var(--mono); font-size: 0.7rem; color: var(--text-faint); letter-spacing: 0.15em; }
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.4rem 1.4rem;
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+    }
+    .footer-links a { color: var(--text-faint); padding: 2px 0; text-decoration: none; }
+    .footer-links a:hover { color: var(--gold-dim); }
 
     /* sidebar-toggle-btn は nav-servants-btn に統合済み */
 
