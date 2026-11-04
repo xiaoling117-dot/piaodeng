@@ -4,7 +4,12 @@ import { getCollection } from 'astro:content';
 
 const allPosts = await getCollection('blog');
 
-const seriesLabels = ['序', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+// 回の番号（0＝序、10＝十、26＝二十六）。前は序〜九の10個しかなく、十回目から空欄だった
+const KANJI = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+const label = (n: number) =>
+  n === 0 ? '序'
+  : n < 10 ? KANJI[n]
+  : `${n >= 20 ? KANJI[Math.floor(n / 10)] : ''}十${n % 10 ? KANJI[n % 10] : ''}`;
 
 const jigokuSeries = allPosts
   .filter(p => p.data.tags?.includes('地獄シリーズ'))
@@ -17,6 +22,12 @@ const chochoSeries = allPosts
 const enkonshiSeries = allPosts
   .filter(p => p.data.tags?.includes('冤魂志より'))
   .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
+
+// 冤魂志は本編と「原文で読む」の二本一組。番号は本編だけに振る（原文は本編の続きなので番号なし）
+const isGenbun = (p: (typeof allPosts)[number]) => p.data.title.startsWith('原文で読む');
+let enkonshiEp = -1;
+const enkonshiLabels = enkonshiSeries.map(p => (isGenbun(p) ? '' : label(++enkonshiEp)));
+const enkonshiCount = enkonshiEp; // 序を除いた話の数
 
 const joshiSeries = allPosts
   .filter(p => p.data.tags?.includes('助詞が感情を作る'))
@@ -56,7 +67,7 @@ const standalone = allPosts
       <div class="series-list">
         {jigokuSeries.map((post, i) => (
           <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
-            <span class="episode-label">{seriesLabels[i]}</span>
+            <span class="episode-label">{label(i)}</span>
             <div class="item-body">
               <h3 class="item-title">{post.data.title}</h3>
               {post.data.description && (
@@ -87,7 +98,7 @@ const standalone = allPosts
       <div class="series-list">
         {chochoSeries.map((post, i) => (
           <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
-            <span class="episode-label">{seriesLabels[i]}</span>
+            <span class="episode-label">{label(i)}</span>
             <div class="item-body">
               <h3 class="item-title">{post.data.title}</h3>
               {post.data.description && (
@@ -109,7 +120,7 @@ const standalone = allPosts
         <div class="series-title-row">
           <h2 class="series-name">冤魂志より</h2>
           <div class="series-badges">
-            <span class="badge badge-count">全{enkonshiSeries.length}回</span>
+            <span class="badge badge-count">全{enkonshiCount}話</span>
           </div>
         </div>
         <p class="series-desc">5〜6世紀の中国に記録された、冤罪と亡霊の物語。顔之推『冤魂志（還冤記）』を原文から掘る。読み物と原文四層解説の二本一セット。</p>
@@ -118,7 +129,7 @@ const standalone = allPosts
       <div class="series-list">
         {enkonshiSeries.map((post, i) => (
           <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
-            <span class="episode-label">{seriesLabels[i]}</span>
+            <span class="episode-label">{enkonshiLabels[i]}</span>
             <div class="item-body">
               <h3 class="item-title">{post.data.title}</h3>
               {post.data.description && (
@@ -150,7 +161,7 @@ const standalone = allPosts
       <div class="series-list">
         {joshiSeries.map((post, i) => (
           <a href={`/piaodeng/blog/${post.slug}/`} class="series-item">
-            <span class="episode-label">{seriesLabels[i]}</span>
+            <span class="episode-label">{label(i)}</span>
             <div class="item-body">
               <h3 class="item-title">{post.data.title}</h3>
               {post.data.description && (
