@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import RecentList from '../components/RecentList.astro';
+import { getRecentItems } from '../lib/recent';
 
 const allPosts = await getCollection('blog');
 
@@ -9,6 +11,9 @@ const jigokuSeries = allPosts
   .sort((a, b) => new Date(a.data.date).getTime() - new Date(b.data.date).getTime());
 
 const featured = jigokuSeries[0];
+
+// 新着（天燈報と同じ並べ方。本編と原文は一行にまとめる）
+const recent = getRecentItems(allPosts, 5);
 ---
 <BaseLayout title="飄燈閣" fullWidth={true}>
 
@@ -56,6 +61,16 @@ const featured = jigokuSeries[0];
       が案内・執筆しています。
     </p>
   </div>
+
+  <!-- ── 新着 ── -->
+  <section class="recent-section">
+    <div class="mood-header">
+      <h2 class="mood-title">新着</h2>
+      <div class="mood-rule"></div>
+      <a href="/piaodeng/blog/" class="recent-more">天燈報へ ⟶</a>
+    </div>
+    <RecentList items={recent} showDesc={false} />
+  </section>
 
   <!-- ── カードグリッド ── -->
   <div class="card-grid">
@@ -323,6 +338,18 @@ const featured = jigokuSeries[0];
       font-family: 'Shippori Mincho', serif;
       font-size: 12px;
     }
+
+    /* ── 新着 ── */
+    .recent-section { padding: 16px 0 4px; }
+    .recent-more {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 12px;
+      color: var(--text-faint);
+      white-space: nowrap;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .recent-more:hover { color: var(--gold-dim); }
 
     /* ── カードグリッド ── */
     .card-grid {

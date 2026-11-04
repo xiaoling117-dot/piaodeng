@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import RecentList from '../../components/RecentList.astro';
+import { getRecentItems } from '../../lib/recent';
 
 const allPosts = await getCollection('blog');
 
@@ -42,11 +44,8 @@ const seriesData = SERIES.map(s => {
   return { ...s, count: posts.length };
 });
 
-const recent = [...allPosts]
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 8);
-
-const SERIES_TAGS = new Set(SERIES.map(s => s.tag));
+// 新着：本編と「原文で読む」は一行にまとめて数える（src/lib/recent.ts）
+const recent = getRecentItems(allPosts, 8);
 ---
 <BaseLayout title="天燈報">
   <div class="blog-home">
@@ -66,6 +65,16 @@ const SERIES_TAGS = new Set(SERIES.map(s => s.tag));
         <p class="hero-sub">名場面のことば、心を打つ一節、文化の背景。<br>言葉自身をより深く実感するための記事をお届けします。</p>
       </div>
     </div>
+
+    <!-- ── 新着記事（スマホでもすぐ見えるよう、見出し画像のすぐ下） ── -->
+    <section class="articles-sec">
+      <div class="sec-head">
+        <span class="sec-label">新着記事</span>
+        <div class="sec-rule"></div>
+      </div>
+      <RecentList items={recent} />
+      <a href="/piaodeng/blog/all/" class="more-link">もっと記事を見る ⟶</a>
+    </section>
 
     <!-- ── 特集シリーズ ── -->
     <section class="series-sec">
@@ -122,30 +131,6 @@ const SERIES_TAGS = new Set(SERIES.map(s => s.tag));
       </div>
     </section>
 
-    <!-- ── 新着記事 ── -->
-    <section class="articles-sec">
-      <div class="sec-head">
-        <span class="sec-label">新着記事</span>
-        <div class="sec-rule"></div>
-      </div>
-      <nav class="article-list">
-        {recent.map(post => {
-          const seriesTag = post.data.tags?.find(t => SERIES_TAGS.has(t)) ?? null;
-          return (
-            <a href={`/piaodeng/blog/${post.slug}/`} class="article-row">
-              <span class="row-date">{post.data.date}</span>
-              <span class="row-body">
-                {seriesTag && <span class="row-tag">{seriesTag}</span>}
-                <span class="row-title">{post.data.title}</span>
-                {post.data.description && <span class="row-desc">{post.data.description}</span>}
-              </span>
-              <span class="row-arrow">⟶</span>
-            </a>
-          );
-        })}
-      </nav>
-      <a href="/piaodeng/blog/all/" class="more-link">もっと記事を見る ⟶</a>
-    </section>
 
   </div>
 
@@ -370,71 +355,8 @@ const SERIES_TAGS = new Set(SERIES.map(s => s.tag));
     }
     .mood-arrow { color: #c89b53; font-size: 12px; margin-left: auto; flex-shrink: 0; }
 
-    /* ── 新着記事 ── */
-    .article-list { display: flex; flex-direction: column; }
-    .article-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      padding: 0.8rem 0.5rem;
-      border-bottom: 1px solid var(--border-dim);
-      text-decoration: none;
-      transition: background 0.15s, padding-left 0.15s;
-    }
-    .article-row:first-child { border-top: 1px solid var(--border-dim); }
-    .article-row:hover { background: oklch(0.27 0.12 263 / 0.4); padding-left: 1rem; }
-    .row-date {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.6rem;
-      color: var(--text-faint);
-      white-space: nowrap;
-      flex-shrink: 0;
-      width: 5.8rem;
-      padding-top: 2px;
-    }
-    .row-body {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .row-tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.56rem;
-      color: var(--jade-dim);
-      border: 1px solid oklch(0.52 0.06 175 / 0.38);
-      padding: 1px 5px;
-      border-radius: 2px;
-      align-self: flex-start;
-      letter-spacing: 0.04em;
-    }
-    .row-title {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 0.87rem;
-      color: var(--text);
-      letter-spacing: 0.03em;
-      line-height: 1.5;
-    }
-    .article-row:hover .row-title { color: var(--gold); }
-    .row-desc {
-      font-family: 'Noto Serif JP', serif;
-      font-size: 0.7rem;
-      color: var(--text-faint);
-      line-height: 1.7;
-      display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .row-arrow {
-      font-size: 0.7rem;
-      color: var(--text-faint);
-      flex-shrink: 0;
-      padding-top: 3px;
-      transition: transform 0.2s, color 0.2s;
-    }
-    .article-row:hover .row-arrow { color: var(--gold); transform: translateX(3px); }
-
+    /* ── 新着記事（一覧の見た目は src/components/RecentList.astro） ── */
+    .articles-sec { margin-bottom: 2.2rem; }
     .more-link {
       display: inline-block;
       margin-top: 1.2rem;
