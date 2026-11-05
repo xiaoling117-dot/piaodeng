@@ -4,6 +4,10 @@ date: "2026-05-09"
 authors: ["麗蘭"]
 description: 前回の記事「朱貞、約束の翌朝に死んだ」の原文全文を、繁体字・簡体字・ピンイン・語義の四層で開く。『還冤記』第五十五条。
 tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
+revisions:
+  - date: "2026-11-05"
+    note: "繁体字の「曰」→「日」（國家忌日）、ピンイン（曲阿 Qū'ē・內 nà）、語義（右丞＝尚書右丞ほか）を直した"
+    bump: true
 ---
 
 *麗蘭*
@@ -28,7 +32,9 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 繁体字（原文）：
 
-> 梁秣陵令朱貞，以罪下獄。廷尉平虞獻考覈其事，結正入重。貞遣相知謂獻曰：「我罪當死，不敢祈恩，但猶冀主上萬一弘宥耳。明日即是國家忌曰，乞得過此奏聞，可乎？」獻答曰：「此於理無爽，何謂不然？謹聞命矣，而朱事先入明日奏束。」
+> 梁秣陵令朱貞，以罪下獄。廷尉平虞獻考覈其事，結正入重。貞遣相知謂獻曰：「我罪當死，不敢祈恩，但猶冀主上萬一弘宥耳。明日即是國家忌日，乞得過此奏聞，可乎？」獻答曰：「此於理無爽，何謂不然？謹聞命矣，而朱事先入明日奏束。」
+
+（維基文庫に収録されている還冤記の本文は「國家忌曰」という表記になっている。形の似た「日」と「曰」を書き写す際に取り違えた誤字と見て、簡体字・ピンインと同じ「日」に改めた。）
 
 簡体字：
 
@@ -71,7 +77,7 @@ Liáng Mòlíng lìng Zhū Zhēn, yǐ zuì xià yù. Tíngwèi píng Yú Xiàn k
 
 ピンイン：
 
-Xiàn biàn yù kè gòng yǐn, pō zuì, suì wàng chōu wénshū. Dàn rì, jiārén hé shù, nèi yī xiāng zhōng, Xiàn fù bù jì. Bǐ zhì dì qián, dùn shù xiāng àn shàng, cì dì pī zhī, fāng jiàn cǐ shì, shì bù kě yǐn, biàn ěr shàng wén. Wǔdì yǐwéi hé sǐ. Fù wài xiáng jué.
+Xiàn biàn yù kè gòng yǐn, pō zuì, suì wàng chōu wénshū. Dàn rì, jiārén hé shù, nà yī xiāng zhōng, Xiàn fù bù jì. Bǐ zhì dì qián, dùn shù xiāng àn shàng, cì dì pī zhī, fāng jiàn cǐ shì, shì bù kě yǐn, biàn ěr shàng wén. Wǔdì yǐwéi hé sǐ. Fù wài xiáng jué.
 
 語義：
 
@@ -82,7 +88,7 @@ Xiàn biàn yù kè gòng yǐn, pō zuì, suì wàng chōu wénshū. Dàn rì, j
 | 忘抽文書 | 忘抽文书 | wàng chōu wénshū | 文書を抜き取るのを忘れた |
 | 旦日 | 旦日 | dàn rì | 翌朝 |
 | 家人合束 | 家人合束 | jiārén hé shù | 家人が書類をひとまとめにした |
-| 獻復不記 | 献复不记 | Xiàn fù bù jì | 虞獻もまた気づかなかった |
+| 獻復不記 | 献复不记 | Xiàn fù bù jì | 虞獻もまた思い出さなかった |
 | 比至帝前 | 比至帝前 | bǐ zhì dì qián | 帝の御前に至ると |
 | 頓束香案上 | 顿束香案上 | dùn shù xiāng àn shàng | 文書の束を香案（文机）の上に置いた |
 | 次第披之 | 次第披之 | cì dì pī zhī | 一枚一枚めくっていった |
@@ -121,13 +127,13 @@ Zhēn wén zhī, dà hèn yuē: "Yú xiǎozǐ, qī wǎng jiāng sǐ zhī rén. G
 | 固同灰土 | 固同灰土 | gù tóng huī tǔ | 灰土と変わらない（それで構わない） |
 | 儻其有識 | 倘其有识 | tǎng qí yǒu shí | もし鬼に識（知覚・意識）があるなら |
 | 必報之 | 必报之 | bì bào zhī | 必ずや報いを受けさせる |
-| 於市始當命絕 | 于市始当命绝 | yú shì shǐ dāng mìng jué | 市（刑場）で処刑された瞬間 |
+| 於市始當命絕 | 于市始当命绝 | yú shì shǐ dāng mìng jué | 市（刑場）でまさに命が絶えようとしたとき |
 | 自爾之後 | 自尔之后 | zì ěr zhī hòu | それ以来 |
 | 時時恆見 | 时时恒见 | shí shí héng jiàn | 繰り返し（朱貞の姿が）見え続けた |
 | 甚惡之 | 甚恶之 | shèn wù zhī | ひどく嫌悪した、おそれた |
 | 推石壓之 | 推石压之 | tuī shí yā zhī | 石を転がして（自分に）押しかけてくる |
 
-「儻（tǎng）」——「もしかしたら」という字だ。儻其有識——もし鬼に知覚があるなら。この一字に、朱貞の怒りと疑いの両方が入っている。死後の世界があるかどうかはわからない。それでも、もしあるなら必ず報いる、と言い切った。確信ではなく、問いかけだ。しかし「必報之」で終わる。
+「儻（tǎng）」——「もし〜なら」と、仮定を立てる字だ。儻其有識——もし鬼に知覚があるなら。その仮定が、後ろの「必報之（必ず報いる）」につながる。死後の世界があるかどうかはわからない。それでも、もしあるなら必ず報いる、と言い切った。
 
 ---
 
@@ -143,14 +149,14 @@ Zhēn wén zhī, dà hèn yuē: "Yú xiǎozǐ, qī wǎng jiāng sǐ zhī rén. G
 
 ピンイン：
 
-Jū yuè yú, Xiàn chú Qūā lìng, bài zhī míng rì. Yì xiè zhāng mén xià. Qí fù píngcháng, yú zhái bào zú, Xiàn lángbèi ér huán, rù shì kū fù, jǔ tóu jiàn Zhēn zài liáng shàng, Xiàn yuē: "Zhū Mòlíng zài cǐ, wǒ fù qǐ dé bù sǐ!" Yú shí wū wú gù hū bēng, Xiàn jí nánnǚ bì shǐ shí yú rén, yī shí bìng mìng. Yòuchéng Yú Zhì shì qí zōngshì, zhù sāng shì, jiàn Xiàn huán, zàn xià táng bì zhī, jǐn nǎi dé miǎn.
+Jū yuè yú, Xiàn chú Qū'ē lìng, bài zhī míng rì. Yì xiè zhāng mén xià. Qí fù píngcháng, yú zhái bào zú, Xiàn lángbèi ér huán, rù shì kū fù, jǔ tóu jiàn Zhēn zài liáng shàng, Xiàn yuē: "Zhū Mòlíng zài cǐ, wǒ fù qǐ dé bù sǐ!" Yú shí wū wú gù hū bēng, Xiàn jí nánnǚ bì shǐ shí yú rén, yī shí bìng mìng. Yòuchéng Yú Zhì shì qí zōngshì, zhù sāng shì, jiàn Xiàn huán, zàn xià táng bì zhī, jǐn nǎi dé miǎn.
 
 語義：
 
 | 語 | 簡体字 | ピンイン | 意味 |
 |---|---|---|---|
 | 居月餘 | 居月余 | jū yuè yú | 一ヶ月余り経って |
-| 除曲阿令 | 除曲阿令 | chú Qūā lìng | 曲阿の令（長官）に任命された |
+| 除曲阿令 | 除曲阿令 | chú Qū'ē lìng | 曲阿の令（長官）に任命された |
 | 拜之明日 | 拜之明日 | bài zhī míng rì | 拝礼（就任式）の翌日 |
 | 詣謝章門下 | 诣谢章门下 | yì xiè zhāng mén xià | 宮門への挨拶に赴いた |
 | 暴卒 | 暴卒 | bào zú | 突然死んだ |
@@ -161,7 +167,7 @@ Jū yuè yú, Xiàn chú Qūā lìng, bài zhī míng rì. Yì xiè zhāng mén 
 | 無故忽崩 | 无故忽崩 | wú gù hū bēng | 理由なく突然崩れ落ちた |
 | 男女婢使 | 男女婢使 | nánnǚ bì shǐ | 家の男女と奴婢 |
 | 一時併命 | 一时并命 | yī shí bìng mìng | 同時に命を失った |
-| 右丞 | 右丞 | yòuchéng | 廷尉右丞（官職名） |
+| 右丞 | 右丞 | yòuchéng | 尚書右丞（官職名） |
 | 宗室 | 宗室 | zōngshì | 同族 |
 | 暫下堂避之 | 暂下堂避之 | zàn xià táng bì zhī | しばらく堂を降りて避けた |
 | 僅乃得免 | 仅乃得免 | jǐn nǎi dé miǎn | ようやく難を免れた |

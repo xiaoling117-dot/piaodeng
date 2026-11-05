@@ -4,6 +4,10 @@ date: "2026-05-03"
 authors: ["麗蘭"]
 description: 前回の記事「楽人、琵琶を弾きながら死刑場へ向かった」の原文全文を、繁体字・簡体字・ピンイン・語義の四層で開く。『還冤記』第十二話。
 tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
+revisions:
+  - date: "2026-11-05"
+    note: "ピンイン（為 wéi・著 zhuó・不分 fèn）、繁体字の「曰」→「日」（將死之日・四日而亡）、語義（文書已行・訴天得理・有鬼必自陳訴ほか）を直した"
+    bump: true
 ---
 
 *麗蘭*
@@ -36,7 +40,7 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 ピンイン：
 
-Sòng Yuánjiā zhōng, Lǐ Lóng děng yè xíng jié lüè. Yú shí Dānyáng Táo Jìzhī wèi Mòlíng xiànlìng, wēimì xún bǔ, suì qín Lóng děng. Lóng suǒ yǐn yī rén shì Tàiyuè jì, wàng qí xìngmíng. Jié fā zhī yè, cǐ jì xié tóngbàn wǎng jiù rén sù, gòng zòu yīnshēng. Táo bù xiáng shěn, wèi zuò kuǎn yǐn, suí lì shēn shàng. Jí suǒ sù zhǔrén shì guì bīnkè, bìng xiāng míng zhèng. Táo zhī wǎng làn, dàn yǐ wénshū yǐ xíng, bù yù zì wèi tōng sè, suì bìng zhū jié shí rén, yú jùn mén zhǎn zhī.
+Sòng Yuánjiā zhōng, Lǐ Lóng děng yè xíng jié lüè. Yú shí Dānyáng Táo Jìzhī wéi Mòlíng xiànlìng, wēimì xún bǔ, suì qín Lóng děng. Lóng suǒ yǐn yī rén shì Tàiyuè jì, wàng qí xìngmíng. Jié fā zhī yè, cǐ jì xié tóngbàn wǎng jiù rén sù, gòng zòu yīnshēng. Táo bù xiáng shěn, wèi zuò kuǎn yǐn, suí lì shēn shàng. Jí suǒ sù zhǔrén shì guì bīnkè, bìng xiāng míng zhèng. Táo zhī wǎng làn, dàn yǐ wénshū yǐ xíng, bù yù zì wéi tōng sè, suì bìng zhū jié shí rén, yú jùn mén zhǎn zhī.
 
 語義：
 
@@ -56,7 +60,7 @@ Sòng Yuánjiā zhōng, Lǐ Lóng děng yè xíng jié lüè. Yú shí Dānyáng
 | 郡門 | 郡门 | jùn mén | 郡の門前 |
 | 斬 | 斩 | zhǎn | 斬首する |
 
-「文書已行（wénshū yǐ xíng）」——この四文字がこの話の核心だ。一文字ずつ見ると、文（wén）＝文書、書（shū）＝書類、已（yǐ）＝すでに、行（xíng）＝実行された。書類はすでに動いてしまった。それだけの理由で、陶は何もしなかった。
+「文書已行（wénshū yǐ xíng）」——この四文字がこの話の核心だ。句で見ると、文書（wénshū）＝役所の文書、已行（yǐ xíng）＝すでに出されて動いている。書類はすでに動いてしまった。それだけの理由で、陶は何もしなかった。
 
 ---
 
@@ -64,7 +68,9 @@ Sòng Yuánjiā zhōng, Lǐ Lóng děng yè xíng jié lüè. Yú shí Dānyáng
 
 繁体字（原文）：
 
-> 此妓聲藝精能，又殊辯慧，將死之曰，親鄰知識看者甚眾。妓曰：「我雖賤隸，少懷慕善，未嘗為非，實不作劫。陶令已當具知，枉見殺害。若死無鬼則已，有鬼必自陳訴。」因彈琵琶，歌曲而就死。眾知其枉，莫不殞泣。
+> 此妓聲藝精能，又殊辯慧，將死之日，親鄰知識看者甚眾。妓曰：「我雖賤隸，少懷慕善，未嘗為非，實不作劫。陶令已當具知，枉見殺害。若死無鬼則已，有鬼必自陳訴。」因彈琵琶，歌曲而就死。眾知其枉，莫不殞泣。
+
+（維基文庫に収録されている還冤記の本文は「將死之曰」という表記になっている。形の似た「日」と「曰」を書き写す際に取り違えた誤字と見て、簡体字・ピンインと同じ「日」に改めた。）
 
 簡体字：
 
@@ -85,9 +91,9 @@ Cǐ jì shēng yì jīng néng, yòu shū biàn huì, jiāng sǐ zhī rì, qīn 
 | 未嘗為非 | 未尝为非 | wèi cháng wéi fēi | かつて悪いことをしたことはない |
 | 枉見殺害 | 枉见杀害 | wǎng jiàn shā hài | 冤罪のまま殺される |
 | 若死無鬼則已 | 若死无鬼则已 | ruò sǐ wú guǐ zé yǐ | 死んで魂がないならそれでよし |
-| 有鬼必自陳訴 | 有鬼必自陈诉 | yǒu guǐ bì zì chén sù | 魂があるなら必ずや天に訴え出る |
+| 有鬼必自陳訴 | 有鬼必自陈诉 | yǒu guǐ bì zì chén sù | 魂があるなら必ず自ら訴え出る |
 | 彈琵琶 | 弹琵琶 | tán pípá | 琵琶を弾く |
-| 就死 | 就死 | jiù sǐ | 死刑に赴く、刑場へ向かう |
+| 就死 | 就死 | jiù sǐ | 死に赴く（処刑に臨む） |
 | 莫不殞泣 | 莫不殒泣 | mò bù yǔn qì | 涙をこぼさなかった者はいない |
 
 「就死（jiù sǐ）」——死に就く、と書く。逃げるのではなく、向かっていく。その方向を示す一字が「就」だ。琵琶を弾きながら「就死」した、という五文字の密度を、しばらく手のなかで転がしてみてほしい。
@@ -106,7 +112,7 @@ Cǐ jì shēng yì jīng néng, yòu shū biàn huì, jiāng sǐ zhī rì, qīn 
 
 ピンイン：
 
-Jīng yuè yú rì, Táo suì yè mèng jì lái zhì àn qián, yún: "Xī wǎng jiàn shā, shí suǒ bù fēn; sù tiān dé lǐ, jīn gù qǔ jūn." Biàn rù Táo kǒu, réng luò fù zhōng. Táo jí jīng wù, é ér dǎo jué, zhuàng ruò fēng diān, liáng jiǔ fāng xǐng.
+Jīng yuè yú rì, Táo suì yè mèng jì lái zhì àn qián, yún: "Xī wǎng jiàn shā, shí suǒ bù fèn; sù tiān dé lǐ, jīn gù qǔ jūn." Biàn rù Táo kǒu, réng luò fù zhōng. Táo jí jīng wù, é ér dǎo jué, zhuàng ruò fēng diān, liáng jiǔ fāng xǐng.
 
 語義：
 
@@ -115,7 +121,7 @@ Jīng yuè yú rì, Táo suì yè mèng jì lái zhì àn qián, yún: "Xī wǎn
 | 經月餘日 | 经月余日 | jīng yuè yú rì | 一月あまりが経って |
 | 案前 | 案前 | àn qián | 机の前 |
 | 昔枉見殺 | 昔枉见杀 | xī wǎng jiàn shā | かつて冤罪で殺された |
-| 實所不分 | 实所不分 | shí suǒ bù fēn | 実際のところ、納得できなかった |
+| 實所不分 | 实所不分 | shí suǒ bù fèn | 実際のところ、納得できなかった |
 | 訴天得理 | 诉天得理 | sù tiān dé lǐ | 天に訴えて、道理が通った |
 | 今故取君 | 今故取君 | jīn gù qǔ jūn | だから今、お前を取りに来た |
 | 驚寤 | 惊寤 | jīng wù | はっと目覚める |
@@ -123,7 +129,7 @@ Jīng yuè yú rì, Táo suì yè mèng jì lái zhì àn qián, yún: "Xī wǎn
 | 狀若風顛 | 状若风颠 | zhuàng ruò fēng diān | 癲癇のような発作を起こす様子 |
 | 良久方醒 | 良久方醒 | liáng jiǔ fāng xǐng | しばらく経ってようやく正気に戻る |
 
-「訴天得理（sù tiān dé lǐ）」——天に訴えて、理（ことわり）を得た。「理」という字は、道理・筋道・正しい秩序を意味する。楽人が求めたのは復讐ではなく、まず「理」だった。
+「訴天得理（sù tiān dé lǐ）」——天に訴えて、理（ことわり）を得た。訴えの場で「理を得る」は、訴えが認められること、正しい裁きを得ることだ。楽人は、まず天に訴えて、その正しさを認められた。
 
 ---
 
@@ -131,15 +137,17 @@ Jīng yuè yú rì, Táo suì yè mèng jì lái zhì àn qián, yún: "Xī wǎn
 
 繁体字（原文）：
 
-> 有時而發，發輒天矯頭反著背，四曰而亡。亡後家便貧顇，一兒早死，餘有一孫，窮寒路次。
+> 有時而發，發輒天矯頭反著背，四日而亡。亡後家便貧顇，一兒早死，餘有一孫，窮寒路次。
+
+（維基文庫に収録されている還冤記の本文は「四曰而亡」という表記になっている。形の似た「日」と「曰」を書き写す際に取り違えた誤字と見て、簡体字・ピンインと同じ「日」に改めた。）
 
 簡体字：
 
-> 有时而发，发辄天矫头反著背，四日而亡。亡后家便贫悴，一儿早死，余有一孙，穷寒路次。
+> 有时而发，发辄天矫头反着背，四日而亡。亡后家便贫悴，一儿早死，余有一孙，穷寒路次。
 
 ピンイン：
 
-Yǒu shí ér fā, fā zhé tiān jiǎo tóu fǎn zhù bèi, sì rì ér wáng. Wáng hòu jiā biàn pín cuì, yī ér zǎo sǐ, yú yǒu yī sūn, qióng hán lù cì.
+Yǒu shí ér fā, fā zhé tiān jiǎo tóu fǎn zhuó bèi, sì rì ér wáng. Wáng hòu jiā biàn pín cuì, yī ér zǎo sǐ, yú yǒu yī sūn, qióng hán lù cì.
 
 語義：
 
@@ -147,12 +155,12 @@ Yǒu shí ér fā, fā zhé tiān jiǎo tóu fǎn zhù bèi, sì rì ér wáng. 
 |---|---|---|---|
 | 有時而發 | 有时而发 | yǒu shí ér fā | 折にふれて発作が起きる |
 | 發輒 | 发辄 | fā zhé | 起きるたびに |
-| 天矯頭反著背 | 天矫头反著背 | tiān jiǎo tóu fǎn zhù bèi | 頭が反り返って背中につく（後弓反張） |
+| 天矯頭反著背 | 天矫头反着背 | tiān jiǎo tóu fǎn zhuó bèi | 頭が反り返って背中につく（後弓反張） |
 | 四日而亡 | 四日而亡 | sì rì ér wáng | 四日後に死んだ |
-| 貧顇 | 贫悴 | pín cuì | 貧しく憔悴する、困窮する |
+| 貧顇 | 贫悴 | pín cuì | 貧しく憔悴する、困窮する（顇は悴と同じ字として、簡体字は悴にした） |
 | 一兒早死 | 一儿早死 | yī ér zǎo sǐ | 息子の一人が早世した |
 | 餘有一孫 | 余有一孙 | yú yǒu yī sūn | 残された孫が一人 |
-| 窮寒路次 | 穷寒路次 | qióng hán lù cì | 寒さに震えて路傍をさまよう |
+| 窮寒路次 | 穷寒路次 | qióng hán lù cì | 道ばたで困窮する |
 
 「亡後家便貧顇、一兒早死、餘有一孫、窮寒路次。」
 

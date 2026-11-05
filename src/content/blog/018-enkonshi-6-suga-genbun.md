@@ -4,6 +4,10 @@ date: "2026-05-11"
 authors: ["麗蘭"]
 description: 前回の記事「蘇娥、鵲奔亭の夜に証言した」の原文全文を、繁体字・簡体字・ピンイン・語義の四層で開く。『還冤記』第二十七条。
 tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
+revisions:
+  - date: "2026-11-05"
+    note: "ピンインの声調・読み（刺史 cìshǐ・乘 shèng・為 wéi ほか）、簡体字（著→着）、語義の表を直した"
+    bump: true
 ---
 
 *麗蘭*
@@ -36,31 +40,31 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 ピンイン：
 
-Hàn shì Hé Chǎng wèi Jiāozhǐ císhǐ, xíng bù dào Cāngwú jùn Gāoyào xiàn, mù sù Quèbēn tíng. Yè yóu wèi bàn, yǒu yī nǚzǐ cóng lóu xià chū, zì yún: "Qiè xìng Sū míng É, zì Shǐzhū, běn Guǎngxìn xiàn Xiū lǐ rén, zǎo shī fùmǔ, yòu wú xiōngdì, fū yì jiǔ wáng, yǒu zá zēng bǎi èrshí pǐ, jí bì yī rén, míng Zhìfù. Qiè gū qióng léiruò, bù néng zì zhèn, yù wǎng páng xiàn mài zēng, jiù tóng xiàn rén Wáng Bó lìn chē niú yī chéng, zhí qián wàn èrqiān, zài qiè bìng zēng, lìng Zhìfù zhí pèi."
+Hàn shì Hé Chǎng wéi Jiāozhǐ cìshǐ, xíng bù dào Cāngwú jùn Gāoyào xiàn, mù sù Quèbēn tíng. Yè yóu wèi bàn, yǒu yī nǚzǐ cóng lóu xià chū, zì yún: "Qiè xìng Sū míng É, zì Shǐzhū, běn Guǎngxìn xiàn Xiū lǐ rén, zǎo shī fùmǔ, yòu wú xiōngdì, fū yì jiǔ wáng, yǒu zá zēng bǎi èrshí pǐ, jí bì yī rén, míng Zhìfù. Qiè gū qióng léiruò, bù néng zì zhèn, yù wǎng páng xiàn mài zēng, jiù tóng xiàn rén Wáng Bó lìn chē niú yī shèng, zhí qián wàn èrqiān, zài qiè bìng zēng, lìng Zhìfù zhí pèi."
 
 語義：
 
 | 語 | 簡体字 | ピンイン | 意味 |
 |---|---|---|---|
 | 漢世 | 汉世 | Hàn shì | 漢の世、漢代 |
-| 交阯刺史 | 交阯刺史 | Jiāozhǐ císhǐ | 交阯（現在の北ベトナム近辺）の監察長官 |
+| 交阯刺史 | 交阯刺史 | Jiāozhǐ cìshǐ | 交阯（現在の北ベトナム近辺）の監察長官 |
 | 行部 | 行部 | xíng bù | 任地を巡察する |
 | 暮宿 | 暮宿 | mù sù | 日暮れに宿泊する |
 | 夜猶未半 | 夜犹未半 | yè yóu wèi bàn | 夜はまだ半ばにも至っていない |
 | 從樓下出 | 从楼下出 | cóng lóu xià chū | 床下（建物の下）から出てきた |
 | 自云 | 自云 | zì yún | 自ら語った |
 | 妾 | 妾 | qiè | わたくし（女性の謙称） |
-| 早失父母 | 早失父母 | zǎo shī fùmǔ | 幼くして父母を亡くした |
+| 早失父母 | 早失父母 | zǎo shī fùmǔ | 早くに父母を亡くした |
 | 夫亦久亡 | 夫亦久亡 | fū yì jiǔ wáng | 夫も久しく亡くなった |
 | 雜繒 | 杂缯 | zá zēng | 様々な絹織物 |
 | 疋 | 疋 | pǐ | 布の単位（匹） |
 | 孤窮羸弱 | 孤穷羸弱 | gū qióng léiruò | 孤独で貧しく身体が弱い |
 | 不能自振 | 不能自振 | bù néng zì zhèn | 自立できない、自分では立て直せない |
-| 賃車牛一乘 | 赁车牛一乘 | lìn chē niú yī chéng | 牛車一台を借りる |
+| 賃車牛一乘 | 赁车牛一乘 | lìn chē niú yī shèng | 牛車一台を借りる |
 | 直錢萬二千 | 直钱万二千 | zhí qián wàn èrqiān | 代金は一万二千銭 |
 | 執轡 | 执辔 | zhí pèi | 手綱を取る |
 
-「從樓下出（cóng lóu xià chū）」——床下から出てきた、という描写だ。楼下（lóu xià）は「建物の下・床下」を指す。ここで読者は初めて、女がどこから来たかを知る。一年間、床下にいた。その事実は、このあとの証言が終わってから初めて理解される。
+「從樓下出（cóng lóu xià chū）」——床下から出てきた、という描写だ。楼下（lóu xià）は下の階・建物の下のこと。この話では床下と読む。ここで読者は初めて、女がどこから来たかを知る。一年間、床下にいた。その事実は、このあとの証言が終わってから初めて理解される。
 
 ---
 
@@ -76,7 +80,7 @@ Hàn shì Hé Chǎng wèi Jiāozhǐ císhǐ, xíng bù dào Cāngwú jùn Gāoy�
 
 ピンイン：
 
-Nǎi yǐ qián nián sì yuè shí rì, dào cǐ tíng wài. Yú shí rì mù, xíngrén jì jué, bù gǎn qián xíng, yīn jí liú zhǐ. Zhìfù bào dé fùtòng, qiè wǎng tíng zhǎng shě qǐ jiāng qǔ huǒ, tíng zhǎng Gōng Shòu cāo dāo chí jǐ, lái zhì chē páng, wèn qiè yuē: "Fūrén cóng hé suǒ lái? Chē shàng hé zài? Zhàngfū ān zài? Hégù dú xíng?" Qiè yìng zhī yuē: "Hégù wèn zhī?" Shòu yīn zhuō qiè bì yuē: "Shǎo ài yǒu sè, níng kě xiānglè yē?" Qiè shí bùjù, bù kěn tīng cóng. Shòu yīn yǐ dāo cì xié, yī chuāng lì sǐ; yòu shā Zhìfù. Shòu jué lóu xià, mái qiè bìng bì, qǔ cáiwù qù; shā niú shāo chē, chē gāng jí niú gǔ chǔ tíng dōng kōng jǐng zhōng. Qiè sǐ tòng kù, wú suǒ gàosù, gù lái zì guī yú míng shǐjūn.
+Nǎi yǐ qián nián sì yuè shí rì, dào cǐ tíng wài. Yú shí rì mù, xíngrén jì jué, bù gǎn qián xíng, yīn jí liú zhǐ. Zhìfù bào dé fùtòng, qiè wǎng tíng zhǎng shè qǐ jiāng qǔ huǒ, tíng zhǎng Gōng Shòu cāo dāo chí jǐ, lái zhì chē páng, wèn qiè yuē: "Fūrén cóng hé suǒ lái? Chē shàng hé zài? Zhàngfū ān zài? Hégù dú xíng?" Qiè yìng zhī yuē: "Hégù wèn zhī?" Shòu yīn zhuō qiè bì yuē: "Shǎo ài yǒu sè, níng kě xiānglè yé?" Qiè shí bùjù, bù kěn tīng cóng. Shòu yīn yǐ dāo cì xié, yī chuāng lì sǐ; yòu shā Zhìfù. Shòu jué lóu xià, mái qiè bìng bì, qǔ cáiwù qù; shā niú shāo chē, chē gāng jí niú gǔ chǔ tíng dōng kōng jǐng zhōng. Qiè sǐ tòng kù, wú suǒ gàosù, gù lái zì guī yú míng shǐjūn.
 
 語義：
 
@@ -90,7 +94,7 @@ Nǎi yǐ qián nián sì yuè shí rì, dào cǐ tíng wài. Yú shí rì mù, x
 | 乞漿取火 | 乞浆取火 | qǐ jiāng qǔ huǒ | 水（漿）と火をもらいに行く |
 | 操刀持戟 | 操刀持戟 | cāo dāo chí jǐ | 刀を携え戟（ほこ）を持った |
 | 少愛有色 | 少爱有色 | shǎo ài yǒu sè | 若くて美しい |
-| 寧可相樂耶 | 宁可相乐耶 | níng kě xiānglè yē | ともに楽しまないか |
+| 寧可相樂耶 | 宁可相乐耶 | níng kě xiānglè yé | ともに楽しまないか |
 | 怖懼 | 怖惧 | bùjù | 怖れる |
 | 一創立死 | 一创立死 | yī chuāng lì sǐ | 一撃で即死した |
 | 掘樓下 | 掘楼下 | jué lóu xià | 床下を掘った |
@@ -100,7 +104,7 @@ Nǎi yǐ qián nián sì yuè shí rì, dào cǐ tíng wài. Yú shí rì mù, x
 | 無所告訴 | 无所告诉 | wú suǒ gàosù | 訴える場所・方法がない |
 | 自歸於明使君 | 自归于明使君 | zì guī yú míng shǐjūn | 自ら聡明な使君（刺史）のもとへ参った |
 
-「無所告訴（wú suǒ gàosù）」——訴える（告訴）ところが（所）ない（無）。この四字が蘇娥の状況をすべて言っている。現代中国語でも「告诉（gàosù）」は「伝える・告げる」という意味で生きている普通の動詞だ。1500年以上前の文章の中で、すでにこの言葉が使われていた。
+「無所告訴（wú suǒ gàosù）」——訴える（告訴）ところが（所）ない（無）。この四字が蘇娥の状況をすべて言っている。現代中国語でも「告诉」は「伝える・知らせる」という意味で生きている普通の動詞だ（話し言葉では gàosu と、二字目を軽く読む）。1500年以上前の文章の中で、すでにこの言葉が使われていた。
 
 ---
 
@@ -112,7 +116,7 @@ Nǎi yǐ qián nián sì yuè shí rì, dào cǐ tíng wài. Yú shí rì mù, x
 
 簡体字：
 
-> 敞曰：「今欲发汝尸骸，以何为验？」女子曰：「妾上下皆著白衣，青丝履犹未朽也。」掘之，果然。敞乃遣吏捕寿，拷问具服；下广信县验问，与娥语同。收寿父母兄弟，皆系狱。
+> 敞曰：「今欲发汝尸骸，以何为验？」女子曰：「妾上下皆着白衣，青丝履犹未朽也。」掘之，果然。敞乃遣吏捕寿，拷问具服；下广信县验问，与娥语同。收寿父母兄弟，皆系狱。
 
 ピンイン：
 
@@ -124,13 +128,13 @@ Chǎng yuē: "Jīn yù fā rǔ shīhái, yǐ hé wéi yàn?" Nǚzǐ yuē: "Qiè 
 |---|---|---|---|
 | 發汝屍骸 | 发汝尸骸 | fā rǔ shīhái | おまえの遺体を掘り起こす |
 | 以何為驗 | 以何为验 | yǐ hé wéi yàn | 何を証明とするか |
-| 上下皆著白衣 | 上下皆著白衣 | shàngxià jiē zhuó bái yī | 上下ともに白衣を着ている |
-| 青絲履 | 青丝履 | qīng sī lǚ | 青い絹の履（くつ） |
+| 上下皆著白衣 | 上下皆着白衣 | shàngxià jiē zhuó bái yī | 上下ともに白衣を着ている |
+| 青絲履 | 青丝履 | qīng sī lǚ | 青い絹の履（くつ）（古典の「青」は黒っぽい色も指す） |
 | 猶未朽 | 犹未朽 | yóu wèi xiǔ | まだ腐っていない |
 | 果然 | 果然 | guǒrán | 果たして（その通りであった） |
 | 遣吏捕壽 | 遣吏捕寿 | qiǎn lì bǔ Shòu | 役人を遣わして龔壽を逮捕した |
-| 拷問具服 | 拷问具服 | kǎowèn jù fú | 取り調べるとすべて白状した |
-| 下廣信縣驗問 | 下广信县验问 | xià Guǎngxìn xiàn yàn wèn | 廣信県で確認・尋問した |
+| 拷問具服 | 拷问具服 | kǎowèn jù fú | 拷問にかけると、すべて白状した |
+| 下廣信縣驗問 | 下广信县验问 | xià Guǎngxìn xiàn yàn wèn | 廣信県に命じて、確かめ尋ねさせた |
 | 與娥語同 | 与娥语同 | yǔ É yǔ tóng | 蘇娥の語ったこととすべて一致した |
 | 收壽父母兄弟 | 收寿父母兄弟 | shōu Shòu fùmǔ xiōngdì | 龔壽の父母・兄弟を捕らえた |
 | 皆繫獄 | 皆系狱 | jiē xì yù | みな獄に繋いだ |
@@ -151,7 +155,7 @@ Chǎng yuē: "Jīn yù fā rǔ shīhái, yǐ hé wéi yàn?" Nǚzǐ yuē: "Qiè 
 
 ピンイン：
 
-Chǎng biǎo: "Shòu shā rén, yú cháng lǜ bù zhì zú zhū, dàn Shòu wèi è yǐnmì jīng nián, wáng fǎ suǒ bù néng dé; guǐshén zì sù, qiān zǎi wú yī, qǐng jiē zhǎn zhī, yǐ zhù yīn jiào." Shàng bào, tīng zhī.
+Chǎng biǎo: "Shòu shā rén, yú cháng lǜ bù zhì zú zhū, dàn Shòu wéi è yǐnmì jīng nián, wáng fǎ suǒ bù néng dé; guǐshén zì sù, qiān zǎi wú yī, qǐng jiē zhǎn zhī, yǐ zhù yīn jiào." Shàng bào, tīng zhī.
 
 語義：
 
@@ -159,16 +163,16 @@ Chǎng biǎo: "Shòu shā rén, yú cháng lǜ bù zhì zú zhū, dàn Shòu wè
 |---|---|---|---|
 | 常律 | 常律 | cháng lǜ | 通常の法律 |
 | 族誅 | 族诛 | zú zhū | 一族を皆殺しにする刑 |
-| 為惡隱密 | 为恶隐密 | wèi è yǐnmì | 悪事を秘密裏に行った |
-| 經年 | 经年 | jīng nián | 年月を重ねて、長年にわたって |
+| 為惡隱密 | 为恶隐密 | wéi è yǐnmì | 悪事を秘密裏に行った |
+| 經年 | 经年 | jīng nián | 年を経て（事件は前年のこと） |
 | 王法所不能得 | 王法所不能得 | wáng fǎ suǒ bù néng dé | 王法（国の法律）の手が届かなかった |
 | 鬼神自訴 | 鬼神自诉 | guǐshén zì sù | 鬼神が自ら訴え出た |
 | 千載無一 | 千载无一 | qiān zǎi wú yī | 千年に一つもない（極めて稀なこと） |
 | 請皆斬之 | 请皆斩之 | qǐng jiē zhǎn zhī | 請うらくは全員を斬刑に処されたい |
-| 以助陰教 | 以助阴教 | yǐ zhù yīn jiào | 陰教（地下世界の道徳秩序）を助けるために |
-| 上報，聽之 | 上报，听之 | shàng bào, tīng zhī | 上（帝）に報告し、許可された |
+| 以助陰教 | 以助阴教 | yǐ zhù yīn jiào | 陰教（鬼神による、目に見えない教え）を助けるために |
+| 上報，聽之 | 上报，听之 | shàng bào, tīng zhī | 帝が返答し、これを許した |
 
-「千載無一（qiān zǎi wú yī）」——千年（千載）に一つ（無一）。四字だ。何敞はこの四字を使って、通常の法律では認められない族誅を要請した。「これほどのことが起きたなら、法もそれに応じなければならない」という論理の核心が、この四字に入っている。
+「千載無一（qiān zǎi wú yī）」——千年（千載）に一つも無い（無一）。四字だ。何敞はこの四字を使って、通常の法律では認められない族誅を要請した。「これほどのことが起きたなら、法もそれに応じなければならない」という論理の核心が、この四字に入っている。
 
 ---
 

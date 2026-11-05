@@ -13,6 +13,16 @@ export async function getStaticPaths() {
 
 const { post, nextPost } = Astro.props;
 const { Content } = await post.render();
+
+// 版と訂正履歴：中国語の直し（bump: true）で版が上がる。日本語だけの直しは履歴のみ
+const revisions = [...(post.data.revisions ?? [])].sort((a, b) => a.date.localeCompare(b.date));
+let edition = 1;
+const revisionRows = revisions.map(r => {
+  if (r.bump) edition += 1;
+  return { ...r, edition: r.bump ? edition : null };
+});
+const lastBump = [...revisionRows].reverse().find(r => r.edition);
+const editionLabel = (n: number) => `第${n}版`;
 ---
 <BaseLayout title={post.data.title} description={post.data.description}>
   <style is:global>
@@ -31,12 +41,31 @@ const { Content } = await post.render();
           <span class="post-authors">{post.data.authors.join(' & ')}</span>
         </div>
         <h1>{post.data.title}</h1>
+        {lastBump && (
+          <p class="post-edition">
+            <a href="#revisions">{editionLabel(edition)}（{lastBump.date} 訂正）</a>
+          </p>
+        )}
         {post.data.description && <p class="post-desc">{post.data.description}</p>}
       </header>
 
       <div class="post-body">
         <Content />
       </div>
+
+      {revisionRows.length > 0 && (
+        <section class="revisions" id="revisions" aria-label="訂正履歴">
+          <p class="revisions-label">訂正履歴</p>
+          <ul class="revisions-list">
+            {revisionRows.map(r => (
+              <li>
+                <span class="rev-date">{r.date}</span>
+                <span class="rev-note">{r.note}{r.edition && <span class="rev-edition">（{editionLabel(r.edition)}）</span>}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div class="post-colophon" aria-hidden="true">
         <div class="colophon-seal">飄燈閣</div>
@@ -155,6 +184,49 @@ const { Content } = await post.render();
       margin-bottom: 1rem;
     }
     .post-desc { color: var(--color-muted); font-size: 0.9rem; line-height: 1.8; }
+
+    /* ── 版・訂正履歴 ── */
+    .post-edition {
+      margin: -0.4rem 0 0.9rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.06em;
+    }
+    .post-edition a {
+      color: var(--gold-dim);
+      border: 1px solid var(--border-dim);
+      border-radius: 2px;
+      padding: 1px 7px;
+      text-decoration: none;
+    }
+    .post-edition a:hover { color: var(--gold); border-color: var(--border); }
+    .revisions {
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-dim);
+      scroll-margin-top: 80px;
+    }
+    .revisions-label {
+      font-family: 'Shippori Mincho', serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.28em;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
+    }
+    .revisions-list { list-style: none; margin: 0; padding: 0; }
+    .revisions-list li {
+      display: flex;
+      gap: 0.9rem;
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--text-faint);
+      padding: 0.15rem 0;
+    }
+    .rev-date { font-family: var(--mono); white-space: nowrap; flex-shrink: 0; }
+    .rev-edition { color: var(--gold-dim); }
+    @media (max-width: 480px) {
+      .revisions-list li { flex-direction: column; gap: 0; padding: 0.35rem 0; }
+    }
 
     .post-body {
       font-size: 0.95rem;

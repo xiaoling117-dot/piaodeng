@@ -4,6 +4,10 @@ date: "2026-07-11"
 authors: ["麗蘭"]
 description: "前回の記事「王奐妾、一羽の烏が落とした梅の実から死んだ」の原文全文を、繁体字・簡体字・ピンイン・語義の四層で開く。加えて、この話の出典をめぐる小さな謎——『冥祥記』という別の書物の名前——にも触れる。『還冤記（冤魂志）』所収。"
 tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
+revisions:
+  - date: "2026-11-05"
+    note: "ピンイン（甚 shèn・汙媟 wūxiè・枉橫 wǎnghèng・女婿 nǚxù ほか）、語義の表（令官知）、簡体字（斩）を直した。底本の書き方も直した"
+    bump: true
 ---
 
 *麗蘭*
@@ -16,7 +20,7 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 今回は、その原文を一緒に開いていこう。そのあとで、この話の出典をめぐる、ちょっと面白い話もしたい。
 
-繁体字（原文）・簡体字・ピンイン・語義の順で読んでいく。全文を四段に分けた。出典は『還冤記（かんえんき）』——別名『冤魂志（えんこんし）』——所収「王奐妾」。維基文庫（Wikisource）所収テキストより。★★★
+繁体字（原文）・簡体字・ピンイン・語義の順で読んでいく。全文を四段に分けた。底本は、維基文庫（Wikisource）所収の『還冤記（かんえんき）』——別名『冤魂志（えんこんし）』——の「王奐妾」条。★★★ ただし、この話がもともと冤魂志の話だったのかには疑いがあって、それは最後に話すね。
 
 前の記事「[王奐妾、一羽の烏が落とした梅の実から死んだ](/piaodeng/blog/072-enkonshi-29-oukan-shou/)」もあわせて読んでみてほしい。
 
@@ -34,7 +38,7 @@ tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
 
 ピンイン：
 
-Shén xìn shìdiǎn, ér dùjì zhī shēn, biàn wàng hóngshù. Cháng zài zhāi nèi shǐ àiqiè zhì zī, hū yǒu wū xián huángméi guò tíng ér zhuì. Huàn cāi qiè yǒu mìqī, zhì guǒ wéi xì, shǐ nú chū wài chān. Yù jiàn yī shì, xiàng lí sī yóu, nú jí wǎng qínzhuō. Cǐ rén yán chēn wūmiè, biàn ěr bèngzǒu. Nú huán bái zhī.
+Shèn xìn shìdiǎn, ér dùjì zhī shēn, biàn wàng hóngshù. Cháng zài zhāi nèi shǐ àiqiè zhì zī, hū yǒu wū xián huángméi guò tíng ér zhuì. Huàn cāi qiè yǒu mìqī, zhì guǒ wéi xì, shǐ nú chū wài chān. Yù jiàn yī shì, xiàng lí sī yóu, nú jí wǎng qínzhuō. Cǐ rén yán chēn wūxiè, biàn ěr bèngzǒu. Nú huán bái zhī.
 
 語義：
 
@@ -46,7 +50,7 @@ Shén xìn shìdiǎn, ér dùjì zhī shēn, biàn wàng hóngshù. Cháng zài 
 | 密期 | 密期 | mìqī | 密かな約束 |
 | 擲果為戲 | 掷果为戏 | zhì guǒ wéi xì | 果物を投げて合図の遊びとする |
 | 出外覘 | 出外觇 | chū wài chān | 外に出て密かに見張る |
-| 言瞋汙媟 | 言瞋污媟 | yán chēn wūmiè | 怒って汚い言葉を吐く |
+| 言瞋汙媟 | 言瞋污媟 | yán chēn wūxiè | 怒って汚い言葉を吐く |
 | 迸走 | 迸走 | bèngzǒu | 飛ぶように逃げ去る |
 
 「烏銜黃梅過庭而墜（wū xián huángméi guò tíng ér zhuì）」——ここがこの話の出発点だ。
@@ -69,7 +73,7 @@ Shén xìn shìdiǎn, ér dùjì zhī shēn, biàn wàng hóngshù. Cháng zài 
 
 ピンイン：
 
-Huàn wèi mí yòng yǒushí, kǔ jiā héwèn; qiè bèi zì chén. Zhōng bù jiàn chá. Jí qiǎn xiàjiē chī shā zhī. Qiè jiě yī shì yuē: "Jīnrì zhī sǐ, shí wéi wǎnghéng. Ruò yǒu rén tiāndào, dāng lìng guān zhī." Ěrhòu shù jiàn qiè lái sù yuàn.
+Huàn wèi mí yòng yǒushí, kǔ jiā héwèn; qiè bèi zì chén. Zhōng bù jiàn chá. Jí qiǎn xiàjiē chī shā zhī. Qiè jiě yī shì yuē: "Jīnrì zhī sǐ, shí wéi wǎnghèng. Ruò yǒu rén tiāndào, dāng lìng guān zhī." Ěrhòu shuò jiàn qiè lái sù yuàn.
 
 語義：
 
@@ -79,11 +83,11 @@ Huàn wèi mí yòng yǒushí, kǔ jiā héwèn; qiè bèi zì chén. Zhōng bù
 | 妾備自陳 | 妾备自陈 | qiè bèi zì chén | 妾は自分の言葉で詳しく説明した |
 | 終不見察 | 终不见察 | zhōng bù jiàn chá | 最後まで理解されなかった |
 | 下階笞殺 | 下阶笞杀 | xiàjiē chī shā | 階下に引き出して笞で打ち殺す |
-| 枉橫 | 枉横 | wǎnghéng | 理不尽な横死 |
+| 枉橫 | 枉横 | wǎnghèng | 理不尽な横死 |
 | 若有人天道 | 若有人天道 | ruò yǒu rén tiāndào | もし人と天の道理があるなら |
-| 當令官知 | 当令官知 | dāng lìng guān zhī | 必ず役所に知られるところまで至るはずだ |
+| 當令官知 | 当令官知 | dāng lìng guān zhī | 必ず役所に知らせてみせる（「令」は〜させる） |
 
-「若有人天道，當令官知（ruò yǒu rén tiāndào, dāng lìng guān zhī）」——ここ、日本語にするとき一番気をつけたい箇所だ。「若有（もし……があるなら）」という仮定から始まっている。妾は「天道は必ずある」と断言していない。「あるなら」という条件をつけた上で、「そうであれば、役所に知られるはずだ」と言っている。断定の呪いじゃなくて、条件付きの祈りなんだよ。
+「若有人天道，當令官知（ruò yǒu rén tiāndào, dāng lìng guān zhī）」——ここ、日本語にするとき一番気をつけたい箇所だ。「若有（もし……があるなら）」という仮定から始まっている。妾は「天道は必ずある」と断言していない。「あるなら」という条件をつけた上で、「そうであれば、必ず役所に知らせてみせる」と言っている。「令官知」の「令」は「〜させる」で、官に知らせる、という意味だ。断定の呪いじゃなくて、条件付きの誓いなんだよ。
 
 ---
 
@@ -123,11 +127,11 @@ Huàn wèi mí yòng yǒushí, kǔ jiā héwèn; qiè bèi zì chén. Zhōng bù
 
 簡体字：
 
-> 奂子彪，素称凶剽，及女婿殷叡遂劝奂曰：「曹、吕今来，不见真敕，恐为奸变。政宜录取，驰以奏闻。」奂纳之，便配千余人仗，闭门拒守。彪遂辄与官军战。彪败而走。宁蛮长史裴叔业于城内举兵攻奂，斬之。时人以为妾之报也。
+> 奂子彪，素称凶剽，及女婿殷叡遂劝奂曰：「曹、吕今来，不见真敕，恐为奸变。政宜录取，驰以奏闻。」奂纳之，便配千余人仗，闭门拒守。彪遂辄与官军战。彪败而走。宁蛮长史裴叔业于城内举兵攻奂，斩之。时人以为妾之报也。
 
 ピンイン：
 
-Huàn zǐ Biāo, sù chēng xiōngpiāo, jí nǔxù Yīn Ruì suì quàn Huàn yuē: "Cáo, Lǚ jīn lái, bù jiàn zhēn chì, kǒng wéi jiānbiàn. Zhèng yí lùqǔ, chí yǐ zòuwén." Huàn nà zhī, biàn pèi qiānyú rénzhàng, bìmén jùshǒu. Biāo suì zhé yǔ guānjūn zhàn. Biāo bài ér zǒu. Níngmán zhǎngshǐ Péi Shúyè yú chéngnèi jǔbīng gōng Huàn, zhǎn zhī. Shí rén yǐwéi qiè zhī bào yě.
+Huàn zǐ Biāo, sù chēng xiōngpiāo, jí nǚxù Yīn Ruì suì quàn Huàn yuē: "Cáo, Lǚ jīn lái, bù jiàn zhēn chì, kǒng wéi jiānbiàn. Zhèng yí lùqǔ, chí yǐ zòuwén." Huàn nà zhī, biàn pèi qiānyú rén zhàng, bìmén jùshǒu. Biāo suì zhé yǔ guānjūn zhàn. Biāo bài ér zǒu. Níngmán zhǎngshǐ Péi Shúyè yú chéngnèi jǔbīng gōng Huàn, zhǎn zhī. Shí rén yǐwéi qiè zhī bào yě.
 
 語義：
 
@@ -169,7 +173,7 @@ Huàn zǐ Biāo, sù chēng xiōngpiāo, jí nǔxù Yīn Ruì suì quàn Huàn y
 
 二つの言葉を持っていってくれ。
 
-「若有人天道，當令官知（ruò yǒu rén tiāndào, dāng lìng guān zhī）」——もし天道があるなら、役所に知られるはずだ。断定ではなく、条件付きの祈り。
+「若有人天道，當令官知（ruò yǒu rén tiāndào, dāng lìng guān zhī）」——もし天道があるなら、必ず役所に知らせてみせる。断定ではなく、条件付きの誓い。
 
 「時人以為妾之報也（shí rén yǐwéi qiè zhī bào yě）」——当時の人はそう考えた。書物自身が、最後まで言い切らなかった一文。
 
