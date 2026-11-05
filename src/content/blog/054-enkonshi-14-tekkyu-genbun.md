@@ -4,6 +4,10 @@ date: "2026-07-07"
 authors: ["麗蘭"]
 description: "前回の記事「鐵臼、屋根裏に棲んで歌い続けた」の原文全文を、繁体字・簡体字・ピンイン・語義の四層で開く。『還冤記（冤魂志）』所収。"
 tags: ["読み物", "冤魂志より", "中国語", "原文を読む", "志怪"]
+revisions:
+  - date: "2026-11-05"
+    note: "ピンインの声調（揰 chòng・横 hèng・甚 shèn）、簡体字（黡）、繁体字の「曰」→「日」（日日罵詈）を直した。「鬼」の説明も直した"
+    bump: true
 ---
 
 *麗蘭*
@@ -67,13 +71,13 @@ Sòng Dōnghǎi Xú mǒujiǎ, qián qī Xǔshì, shēng yī nán míng Tiějiù,
 
 ピンイン：
 
-Yúshì chōng dǎ Tiějiù, bèi zhū kǔ dú. Jī bù jǐ shí, hán bù jiā xù. Mǒujiǎ xìng ànruò, yòu duō bùzài, hòuqī zìyì xíng qí bàokù. Tiějiù jìng yǐ dòng è bèi zhàng ér sǐ, shí nián shíliù.
+Yúshì chòng dǎ Tiějiù, bèi zhū kǔ dú. Jī bù jǐ shí, hán bù jiā xù. Mǒujiǎ xìng ànruò, yòu duō bùzài, hòuqī zìyì xíng qí bàokù. Tiějiù jìng yǐ dòng è bèi zhàng ér sǐ, shí nián shíliù.
 
 語義：
 
 | 語 | 簡体字 | ピンイン | 意味 |
 |---|---|---|---|
-| 揰打 | 揰打 | chōng dǎ | 打ちすえる |
+| 揰打 | 揰打 | chòng dǎ | 打ちすえる |
 | 備諸苦毒 | 备诸苦毒 | bèi zhū kǔ dú | あらゆる苦しみを与えた |
 | 饑不給食 | 饥不给食 | jī bù jǐ shí | 飢えても食べさせなかった |
 | 寒不加絮 | 寒不加絮 | hán bù jiā xù | 寒くても綿入れを与えなかった |
@@ -99,7 +103,7 @@ Yúshì chōng dǎ Tiějiù, bèi zhū kǔ dú. Jī bù jǐ shí, hán bù jiā 
 
 ピンイン：
 
-Wáng hòu xún yú, guǐ hū huán jiā, dēng Chén chuáng yuē: "Wǒ Tiějiù yě. Shí wú piàn zuì, héng jiàn cánhài. Wǒ mǔ sù yuàn yú tiān, jīn dé tiāncáo fú lái qǔ Tiěchǔ. Dāng lìng Tiěchǔ jíbìng, yǔ wǒ zāo kǔ shí tóng. Jiāng qù zì yǒu qīrì. Wǒ jīn tíng cǐ dài zhī." Shēng rú shēng shí, jiārén bīnkè, bù jiàn qí xíng, jiē wén qí yǔ. Yúshì héng zài wū liáng shàng zhù.
+Wáng hòu xún yú, guǐ hū huán jiā, dēng Chén chuáng yuē: "Wǒ Tiějiù yě. Shí wú piàn zuì, hèng jiàn cánhài. Wǒ mǔ sù yuàn yú tiān, jīn dé tiāncáo fú lái qǔ Tiěchǔ. Dāng lìng Tiěchǔ jíbìng, yǔ wǒ zāo kǔ shí tóng. Jiāng qù zì yǒu qīrì. Wǒ jīn tíng cǐ dài zhī." Shēng rú shēng shí, jiārén bīnkè, bù jiàn qí xíng, jiē wén qí yǔ. Yúshì héng zài wū liáng shàng zhù.
 
 語義：
 
@@ -109,14 +113,14 @@ Wáng hòu xún yú, guǐ hū huán jiā, dēng Chén chuáng yuē: "Wǒ Tiěji�
 | 鬼 | 鬼 | guǐ | 死者の霊、幽霊（日本語の「鬼」＝角の生えたオニとは別の言葉） |
 | 登陳牀 | 登陈床 | dēng Chén chuáng | 陳氏の寝台に上がった |
 | 實無片罪 | 实无片罪 | shí wú piàn zuì | 本当に何の罪もない |
-| 橫見殘害 | 横见残害 | héng jiàn cánhài | 理不尽に殺された |
+| 橫見殘害 | 横见残害 | hèng jiàn cánhài | 理不尽に殺された |
 | 訴怨於天 | 诉怨于天 | sù yuàn yú tiān | 天に怨みを訴えた |
 | 天曹符 | 天曹符 | tiāncáo fú | 天の役所からの令状・許し |
 | 聲如生時 | 声如生时 | shēng rú shēng shí | 声は生きていたときのままだった |
 | 不見其形 | 不见其形 | bù jiàn qí xíng | その姿は見えない |
 | 屋梁 | 屋梁 | wū liáng | 屋根の梁 |
 
-「鬼（guǐ）」——ここで注意したい一字だ。日本語で「鬼」といえば、角の生えた鬼（おに）を思い浮かべやすい。だが古典中国語の「鬼」は、死者の霊、幽霊を指す。角も牙もない。鐵臼は、死んでそのまま「鬼」になった——つまり、幽霊になった、ということだ。
+「鬼（guǐ）」——ここで注意したい一字だ。日本語で「鬼」といえば、角の生えた鬼（おに）を思い浮かべやすい。だが古典中国語の「鬼」は、多くの場合、死者の霊、幽霊を指す。この話の鬼も鐵臼の亡霊で、角の生えたオニを思い浮かべなくていい。鐵臼は、死んでそのまま「鬼」になった——つまり、幽霊になった、ということだ。
 
 「天曹符（tiāncáo fú）」——天の役所からの令状・許し。今でいうなら、逮捕状のようなものにあたる。この符を得たからこそ、鐵臼は堂々と鐵杵を連れに来られる。
 
@@ -165,27 +169,29 @@ Chénshì guì xiè bó jiá, wèi shè jìdiàn, guǐ yún: "Bù xū rúcǐ. È
 
 繁体字（原文）：
 
-> 曰曰罵詈，時復歌謠，歌云：「桃李華，嚴霜落柰何？桃李子，嚴霜早落已。」聲甚傷切，似是自悼不得成長也。於是鐵杵六歲，鬼至便病，體痛腹大，上氣妨食，鬼屢打之，處處青黶，月餘而死。鬼便寂然。
+> 日日罵詈，時復歌謠，歌云：「桃李華，嚴霜落柰何？桃李子，嚴霜早落已。」聲甚傷切，似是自悼不得成長也。於是鐵杵六歲，鬼至便病，體痛腹大，上氣妨食，鬼屢打之，處處青黶，月餘而死。鬼便寂然。
+
+（維基文庫に収録されている還冤記の本文は「曰曰罵詈」という表記になっている。形の似た「日」と「曰」を書き写す際に取り違えた誤字と見て、簡体字・ピンインと同じ「日」に改めた。）
 
 簡体字：
 
-> 日日骂詈，时复歌谣，歌云：「桃李华，严霜落柰何？桃李子，严霜早落已。」声甚伤切，似是自悼不得成长也。于是铁杵六岁，鬼至便病，体痛腹大，上气妨食，鬼屡打之，处处青黶，月余而死。鬼便寂然。
+> 日日骂詈，时复歌谣，歌云：「桃李华，严霜落柰何？桃李子，严霜早落已。」声甚伤切，似是自悼不得成长也。于是铁杵六岁，鬼至便病，体痛腹大，上气妨食，鬼屡打之，处处青黡，月余而死。鬼便寂然。
 
 ピンイン：
 
-Rìrì màlì, shí fù gēyáo, gē yún: "Táo lǐ huā, yán shuāng luò nàihé? Táo lǐ zǐ, yán shuāng zǎo luò yǐ." Shēng shén shāng qiè, sì shì zì dào bù dé chéngzhǎng yě. Yúshì Tiěchǔ liù suì, guǐ zhì biàn bìng, tǐ tòng fù dà, shàng qì fáng shí, guǐ lǚ dǎ zhī, chùchù qīng yǎn, yuè yú ér sǐ. Guǐ biàn jìrán.
+Rìrì màlì, shí fù gēyáo, gē yún: "Táo lǐ huā, yán shuāng luò nàihé? Táo lǐ zǐ, yán shuāng zǎo luò yǐ." Shēng shèn shāng qiè, sì shì zì dào bù dé chéngzhǎng yě. Yúshì Tiěchǔ liù suì, guǐ zhì biàn bìng, tǐ tòng fù dà, shàng qì fáng shí, guǐ lǚ dǎ zhī, chùchù qīng yǎn, yuè yú ér sǐ. Guǐ biàn jìrán.
 
 語義：
 
 | 語 | 簡体字 | ピンイン | 意味 |
 |---|---|---|---|
-| 曰曰罵詈 | 日日骂詈 | rìrì màlì | 日々罵り続けた |
+| 日日罵詈 | 日日骂詈 | rìrì màlì | 日々罵り続けた |
 | 桃李華 | 桃李华 | táo lǐ huā | 桃李の花 |
 | 嚴霜早落已 | 严霜早落已 | yán shuāng zǎo luò yǐ | 厳しい霜に早くに落とされてしまった |
-| 聲甚傷切 | 声甚伤切 | shēng shén shāng qiè | 声はひどく傷ついて痛切だった |
+| 聲甚傷切 | 声甚伤切 | shēng shèn shāng qiè | 声はひどく傷ついて痛切だった |
 | 自悼不得成長 | 自悼不得成长 | zì dào bù dé chéngzhǎng | 育ちきれなかった自分を悼んでいる |
 | 上氣妨食 | 上气妨食 | shàng qì fáng shí | 息が上がって食事もままならない |
-| 處處青黶 | 处处青黶 | chùchù qīng yǎn | 体じゅうに青あざができた |
+| 處處青黶 | 处处青黡 | chùchù qīng yǎn | 体じゅうに青あざができた |
 | 鬼便寂然 | 鬼便寂然 | guǐ biàn jìrán | 鬼はそれきり静かになった |
 
 「桃李子（táo lǐ zǐ）」——桃と李（すもも）の実。まだ熟していない果実が、季節外れの霜に打たれて落ちる。原文はこの比喩だけで、十六年で終わった命を描いている。「嚴霜（yán shuāng）」は厳しい霜。誰が降らせたかは、歌の中では言われない。
